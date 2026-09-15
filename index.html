@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="build-version" content="v20260915-signs1">
+<title>Signs: An Instrument for Taking Texts Apart</title>
+<meta name="description" content="Inscribe a text. The instrument dissects it in Peirce's terms: the vehicle, the object, the interpretant, then names the species.">
+<meta property="og:title" content="Signs: An Instrument for Taking Texts Apart">
+<meta property="og:description" content="Every text is a machine of signs. This instrument takes yours apart and names the species.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23f4f1e8'/%3E%3Cg stroke='%231b1d20' stroke-width='1.6'%3E%3Cline x1='16' y1='8' x2='8' y2='23'/%3E%3Cline x1='16' y1='8' x2='24' y2='23'/%3E%3Cline x1='8' y1='23' x2='24' y2='23'/%3E%3C/g%3E%3Ccircle cx='16' cy='8' r='3.4' fill='%232f5d7d'/%3E%3Ccircle cx='8' cy='23' r='3.4' fill='%23a63d22'/%3E%3Ccircle cx='24' cy='23' r='3.4' fill='%236b5a1e'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f4f1e8; --paper-2:#eae5d3; --paper-3:#e2dcc6;
+  --ink:#1b1d20; --ink-soft:rgba(27,29,32,.64); --ink-faint:rgba(27,29,32,.42);
+  --hairline:rgba(27,29,32,.16); --hairline-soft:rgba(27,29,32,.09);
+  --vehicle:#2f5d7d; --object:#a63d22; --interpretant:#6b5a1e;
+  --t-instant:90ms; --t-quick:180ms; --t-standard:280ms; --t-expressive:450ms;
+  --e-out:cubic-bezier(.16,1,.3,1); --e-in:cubic-bezier(.7,0,.84,0);
+  --font-display:"Fraunces",Georgia,"Times New Roman",serif;
+  --font-body:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+*{box-sizing:border-box}
+html{overflow-x:clip;scroll-behavior:smooth}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--font-body);font-size:17px;line-height:1.65;
+  overflow-x:clip;-webkit-text-size-adjust:100%;
+}
+::selection{background:var(--ink);color:var(--paper)}
+.wrap{max-width:1120px;margin:0 auto;padding:0 28px}
+.visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+header.site{
+  position:sticky;top:0;z-index:50;height:64px;
+  background:rgba(244,241,232,.94);backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--hairline);
+}
+header.site .wrap{height:64px;display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink)}
+.brand svg{display:block}
+.brand .word{font-family:var(--font-mono);font-weight:700;font-size:15px;letter-spacing:.22em}
+nav.main{display:flex;gap:26px}
+nav.main a{
+  font-family:var(--font-mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink-soft);text-decoration:none;padding:8px 2px;position:relative;
+}
+nav.main a::after{
+  content:"";position:absolute;left:0;bottom:2px;height:2px;width:100%;
+  background:var(--ink);transform:scaleX(0);transform-origin:left;
+  transition:transform var(--t-quick) var(--e-out);
+}
+nav.main a:hover{color:var(--ink)}
+nav.main a:hover::after{transform:scaleX(1)}
+a:focus-visible,button:focus-visible,textarea:focus-visible,input:focus-visible,summary:focus-visible{
+  outline:2px solid var(--ink);outline-offset:2px;
+}
+
+.hero{padding:104px 0 72px;border-bottom:1px solid var(--hairline)}
+.eyebrow{
+  font-family:var(--font-mono);font-size:12px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--ink-soft);margin:0 0 22px;
+}
+.hero h1{
+  font-family:var(--font-display);font-weight:600;font-size:76px;line-height:1.02;
+  letter-spacing:-.01em;margin:0 0 26px;
+}
+.hero .lede{font-size:20px;line-height:1.6;max-width:640px;margin:0 0 36px;color:var(--ink)}
+.hero-actions{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.hero .note{font-family:var(--font-mono);font-size:12px;color:var(--ink-faint);letter-spacing:.06em}
+
+.btn{
+  font-family:var(--font-mono);font-size:13px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+  background:var(--ink);color:var(--paper);border:1px solid var(--ink);border-radius:2px;
+  padding:15px 26px;cursor:pointer;min-height:48px;
+  transition:transform var(--t-instant) var(--e-out),background var(--t-instant) var(--e-out);
+}
+.btn:hover{background:#000}
+.btn:active{transform:translateY(1px)}
+.btn:disabled{opacity:.45;cursor:default;transform:none}
+.btn-ghost{background:transparent;color:var(--ink)}
+.btn-ghost:hover{background:var(--paper-2)}
+
+section.block{padding:72px 0;border-bottom:1px solid var(--hairline)}
+section.block h2{
+  font-family:var(--font-display);font-weight:600;font-size:38px;line-height:1.15;margin:0 0 14px;
+}
+section.block .sub{color:var(--ink-soft);max-width:660px;margin:0 0 40px;font-size:17px}
+.col-narrow{max-width:780px}
+
+.specimen-label,.field-label{
+  font-family:var(--font-mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--ink-soft);display:block;margin:0 0 10px;
+}
+textarea.specimen{
+  width:100%;min-height:110px;resize:vertical;
+  font-family:var(--font-mono);font-size:15px;line-height:1.7;color:var(--ink);
+  background:var(--paper-2);border:1px solid var(--hairline);border-radius:3px;
+  padding:16px 18px;
+}
+textarea.specimen::placeholder{color:var(--ink-faint)}
+.studies{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0 26px;align-items:center}
+.studies .field-label{margin:0 4px 0 0}
+.chip{
+  font-family:var(--font-mono);font-size:12px;letter-spacing:.08em;
+  background:transparent;border:1px solid var(--hairline);border-radius:2px;color:var(--ink);
+  padding:10px 14px;min-height:44px;cursor:pointer;
+  transition:border-color var(--t-instant) var(--e-out),background var(--t-instant) var(--e-out);
+}
+.chip:hover{border-color:var(--ink);background:var(--paper-2)}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+
+.predict{
+  border:1px solid var(--hairline);border-radius:3px;background:var(--paper-2);
+  padding:26px;margin:30px 0;display:none;
+}
+.predict.on{display:block;animation:rise var(--t-standard) var(--e-out)}
+.predict h3{font-family:var(--font-display);font-size:24px;margin:0 0 8px;font-weight:600}
+.predict p{margin:0 0 20px;color:var(--ink-soft);font-size:15px}
+.predict-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.predict-btn{
+  text-align:left;background:var(--paper);border:1px solid var(--hairline);border-radius:2px;
+  padding:16px;cursor:pointer;min-height:88px;
+  transition:border-color var(--t-instant) var(--e-out),transform var(--t-instant) var(--e-out);
+}
+.predict-btn:hover{border-color:var(--ink)}
+.predict-btn:active{transform:scale(.98)}
+.predict-btn .k{font-family:var(--font-mono);font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:6px}
+.predict-btn .d{font-size:13px;color:var(--ink-soft);line-height:1.5;display:block}
+.predict-btn[data-v="icon"] .k{color:var(--vehicle)}
+.predict-btn[data-v="index"] .k{color:var(--object)}
+.predict-btn[data-v="symbol"] .k{color:var(--interpretant)}
+.predict-btn.locked{opacity:.45;pointer-events:none}
+.predict-btn.chosen{opacity:1;border:2px solid var(--ink);padding:15px}
+.predict-verdict{
+  display:none;margin-top:18px;padding:14px 16px;border-radius:2px;
+  font-family:var(--font-mono);font-size:13px;line-height:1.6;
+  background:var(--paper);border:1px solid var(--hairline);
+}
+.predict-verdict.on{display:block}
+.predict-verdict .match{color:var(--interpretant);font-weight:700}
+.predict-verdict .miss{color:var(--object);font-weight:700}
+
+.plates{margin-top:8px}
+.plate{
+  background:var(--paper-2);border:1px solid var(--hairline);border-radius:3px;
+  padding:30px;margin:0 0 22px;
+  opacity:0;transform:translateY(12px);
+  transition:opacity var(--t-standard) var(--e-out),transform var(--t-standard) var(--e-out);
+}
+.plate.on{opacity:1;transform:none}
+.plate-head{display:flex;gap:18px;align-items:baseline;margin-bottom:6px;flex-wrap:wrap}
+.plate-num{font-family:var(--font-display);font-size:30px;font-weight:600;color:var(--ink-faint);min-width:52px}
+.plate-head h3{font-family:var(--font-display);font-size:26px;font-weight:600;margin:0}
+.plate-head .slot{font-family:var(--font-mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft)}
+.plate-intro{color:var(--ink-soft);font-size:15px;margin:0 0 22px;max-width:640px}
+.kv{display:grid;grid-template-columns:190px 1fr;gap:8px 18px;margin:0 0 18px}
+.kv dt{
+  font-family:var(--font-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink-soft);padding-top:4px;
+}
+.kv dd{margin:0;font-size:15px;line-height:1.65}
+.kv dd .q{color:var(--ink-faint);font-size:13px;display:block;margin-top:4px}
+.verdict-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:6px}
+.verdict-chip{
+  font-family:var(--font-mono);font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  border:1.5px solid;border-radius:2px;padding:9px 14px;background:var(--paper);
+}
+.verdict-chip.v-vehicle{color:var(--vehicle);border-color:var(--vehicle)}
+.verdict-chip.v-object{color:var(--object);border-color:var(--object)}
+.verdict-chip.v-interpretant{color:var(--interpretant);border-color:var(--interpretant)}
+.verdict-chip.v-verdict{color:var(--object);border-color:var(--object);font-size:13px}
+.verdict-why{font-size:14px;color:var(--ink-soft);max-width:560px;line-height:1.6}
+
+.triad-wrap{display:grid;grid-template-columns:1fr 280px;gap:28px;align-items:start}
+.triad-svg{width:100%;height:auto;display:block;background:var(--paper);border:1px solid var(--hairline);border-radius:3px}
+.triad-controls{font-size:14px}
+.triad-controls .field-label{margin:18px 0 8px}
+.triad-controls .field-label:first-child{margin-top:0}
+.toggle-row{display:flex;align-items:center;gap:10px;min-height:44px;cursor:pointer;font-size:14px}
+.toggle-row input{width:20px;height:20px;accent-color:var(--ink)}
+input[type="range"].peel{width:100%;min-height:44px;-webkit-appearance:none;appearance:none;background:transparent;cursor:pointer}
+input[type="range"].peel::-webkit-slider-runnable-track{height:2px;background:var(--ink)}
+input[type="range"].peel::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:18px;height:18px;margin-top:-8px;background:var(--paper);border:2px solid var(--ink);border-radius:0}
+input[type="range"].peel::-moz-range-track{height:2px;background:var(--ink)}
+input[type="range"].peel::-moz-range-thumb{width:14px;height:14px;background:var(--paper);border:2px solid var(--ink);border-radius:0}
+.triad-svg text{paint-order:stroke;stroke:var(--paper);stroke-width:5px}
+.peel-marks{display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint)}
+.triad-svg .node{opacity:0;transform-box:fill-box;transform-origin:center;transition:opacity var(--t-standard) var(--e-out),transform var(--t-expressive) var(--e-out)}
+.triad-svg.revealed .node{opacity:1}
+.triad-svg .edge{transition:opacity var(--t-standard) var(--e-out)}
+.triad-svg.revealed[data-peel="0"] .node-o,.triad-svg.revealed[data-peel="0"] .node-i,
+.triad-svg.revealed[data-peel="0"] .edge-oi,.triad-svg.revealed[data-peel="0"] .edge-vi{opacity:.1}
+.triad-svg.revealed[data-peel="1"] .node-i,.triad-svg.revealed[data-peel="1"] .edge-oi,.triad-svg.revealed[data-peel="1"] .edge-vi{opacity:.1}
+.triad-svg.revealed[data-peel="2"] .edge-oi{opacity:.1}
+.triad-svg.exploded .node-v{transform:translate(0,-34px)}
+.triad-svg.exploded .node-o{transform:translate(-46px,30px)}
+.triad-svg.exploded .node-i{transform:translate(46px,30px)}
+.triad-svg.exploded .edge{opacity:.18}
+.triad-svg .draw{stroke-dasharray:1;stroke-dashoffset:1}
+.triad-svg.revealed .draw{animation:drawline .7s var(--e-out) forwards}
+@keyframes drawline{to{stroke-dashoffset:0}}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+.ledger{margin:26px 0 0;border-top:1px solid var(--hairline)}
+.ledger-row{
+  display:grid;grid-template-columns:150px 1fr;gap:6px 18px;
+  padding:13px 0;border-bottom:1px solid var(--hairline-soft);
+  font-family:var(--font-mono);font-size:13px;line-height:1.6;
+}
+.ledger-row .lk{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);padding-top:3px}
+.ledger-row .lv .test{display:block;color:var(--ink-faint);font-size:12px;margin-top:3px}
+.ledger-row .lv .flag{color:var(--object)}
+
+.chain{margin:22px 0 0;padding:0;list-style:none;counter-reset:step}
+.chain li{
+  counter-increment:step;position:relative;padding:0 0 18px 44px;font-size:15px;
+}
+.chain li::before{
+  content:counter(step);position:absolute;left:0;top:2px;
+  width:28px;height:28px;border:1px solid var(--hairline);border-radius:50%;
+  font-family:var(--font-mono);font-size:12px;display:flex;align-items:center;justify-content:center;
+  color:var(--ink-soft);background:var(--paper);
+}
+.chain li::after{
+  content:"";position:absolute;left:14px;top:34px;bottom:2px;width:1px;background:var(--hairline);
+}
+.chain li:last-child::after{display:none}
+.chain li .cs{font-family:var(--font-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);display:block;margin-bottom:4px}
+
+details.margin-note{
+  border:1px solid var(--hairline);border-radius:2px;background:var(--paper);
+  margin:10px 0;font-size:14px;
+}
+details.margin-note summary{
+  cursor:pointer;min-height:48px;display:flex;align-items:center;gap:10px;
+  padding:12px 16px;font-family:var(--font-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink-soft);list-style:none;
+}
+details.margin-note summary::-webkit-details-marker{display:none}
+details.margin-note summary::before{content:"+";font-size:16px;color:var(--ink)}
+details.margin-note[open] summary::before{content:"\2013"}
+details.margin-note .note-body{padding:0 16px 16px 38px;color:var(--ink);font-size:14px;line-height:1.7}
+.provenance{font-family:var(--font-mono);font-size:12px;color:var(--ink-faint);margin-top:26px;line-height:1.8}
+.provenance a{color:var(--ink-soft)}
+
+.species{margin:6px 0 4px}
+.species .kicker{font-family:var(--font-mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft)}
+.species h4{font-family:var(--font-display);font-size:34px;font-weight:600;margin:8px 0 6px;color:var(--object)}
+.species .classno{font-family:var(--font-mono);font-size:13px;color:var(--ink-soft)}
+
+.table-scroll{overflow-x:auto;border:1px solid var(--hairline);border-radius:3px;background:var(--paper-2)}
+table.classes{width:100%;border-collapse:collapse;min-width:680px;font-size:13px}
+table.classes th{
+  font-family:var(--font-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+  text-align:left;color:var(--ink-soft);padding:14px 16px;border-bottom:1px solid var(--hairline);
+  white-space:nowrap;
+}
+table.classes td{padding:13px 16px;border-bottom:1px solid var(--hairline-soft);vertical-align:top;line-height:1.6}
+table.classes tr:last-child td{border-bottom:none}
+table.classes tbody tr{transition:background var(--t-instant) var(--e-out)}
+table.classes tbody tr:hover{background:rgba(27,29,32,.035)}
+table.classes .cnum{font-family:var(--font-mono);font-weight:700;color:var(--ink-faint);white-space:nowrap}
+table.classes .cname{font-family:var(--font-mono);font-weight:700;white-space:nowrap}
+table.classes .cex{color:var(--ink-soft);font-family:var(--font-mono);font-size:12px}
+
+.primer-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;margin-top:34px}
+.primer-card{background:var(--paper-2);border:1px solid var(--hairline);border-radius:3px;padding:26px}
+.primer-card .pnum{font-family:var(--font-display);font-size:26px;color:var(--ink-faint)}
+.primer-card h3{font-family:var(--font-display);font-size:22px;font-weight:600;margin:8px 0 10px}
+.primer-card p{font-size:15px;margin:0 0 12px;color:var(--ink)}
+.primer-card p:last-child{margin-bottom:0}
+.primer-card code{font-family:var(--font-mono);font-size:13px;background:var(--paper-3);padding:2px 7px;border-radius:2px}
+.tri-mini{font-family:var(--font-mono);font-size:12px;line-height:2;color:var(--ink-soft)}
+.tri-mini b{font-weight:700}
+.tri-mini .tv{color:var(--vehicle)} .tri-mini .to{color:var(--object)} .tri-mini .ti{color:var(--interpretant)}
+
+.colophon-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px}
+.colophon-grid h3{font-family:var(--font-mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft);margin:0 0 14px}
+.colophon-grid p{font-size:15px;margin:0 0 12px}
+.colophon-grid a{color:var(--ink);text-decoration:underline;text-decoration-color:var(--hairline);text-underline-offset:3px}
+.colophon-grid a:hover{text-decoration-color:var(--ink)}
+.wit{
+  margin-top:34px;padding:20px 22px;border-left:3px solid var(--object);
+  background:var(--paper-2);font-size:15px;font-style:italic;max-width:640px;
+}
+footer.site{padding:40px 0 56px}
+footer.site .wrap{display:flex;align-items:center;gap:14px;justify-content:space-between;flex-wrap:wrap}
+footer.site .fbrand{display:flex;align-items:center;gap:12px}
+footer.site .word{font-family:var(--font-mono);font-size:13px;letter-spacing:.22em;font-weight:700}
+footer.site .fnote{font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;color:var(--ink-faint);text-transform:uppercase}
+
+@media (max-width:900px){
+  .triad-wrap{grid-template-columns:1fr}
+  .primer-grid,.colophon-grid{grid-template-columns:1fr}
+  .predict-grid{grid-template-columns:1fr}
+}
+@media (max-width:720px){
+  .wrap{padding:0 18px}
+  .hero{padding:72px 0 52px}
+  .hero h1{font-size:46px}
+  .hero .lede{font-size:17px}
+  section.block{padding:52px 0}
+  section.block h2{font-size:30px}
+  .plate{padding:22px 18px}
+  .kv{grid-template-columns:1fr;gap:2px}
+  .kv dt{padding-top:10px}
+  .kv dd{margin-bottom:6px}
+  .ledger-row{grid-template-columns:1fr;gap:2px}
+  nav.main{gap:16px}
+  nav.main a{font-size:11px;white-space:nowrap}
+  header.site .wrap{padding-left:18px;padding-right:0}
+  nav.main{
+    overflow-x:auto;scrollbar-width:none;max-width:64vw;flex-shrink:1;
+    -webkit-mask-image:linear-gradient(to right,#000 86%,transparent);
+    mask-image:linear-gradient(to right,#000 86%,transparent);
+  }
+  nav.main::-webkit-scrollbar{display:none}
+  .species h4{font-size:27px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+  .plate{opacity:1;transform:none}
+  .predict{display:none}
+  .predict.on{display:block}
+  .triad-svg .draw{stroke-dashoffset:0}
+  .triad-svg .node{opacity:1}
+}
+</style>
+</head>
+<body>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Signs home">
+      <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true">
+        <g stroke="#1b1d20" stroke-width="1.6">
+          <line x1="16" y1="8" x2="8" y2="23"/><line x1="16" y1="8" x2="24" y2="23"/><line x1="8" y1="23" x2="24" y2="23"/>
+        </g>
+        <circle cx="16" cy="8" r="3.4" fill="#2f5d7d"/>
+        <circle cx="8" cy="23" r="3.4" fill="#a63d22"/>
+        <circle cx="24" cy="23" r="3.4" fill="#6b5a1e"/>
+      </svg>
+      <span class="word">SIGNS</span>
+    </a>
+    <nav class="main" aria-label="Sections">
+      <a href="#instrument">Instrument</a>
+      <a href="#classes">Classes</a>
+      <a href="#primer">Primer</a>
+      <a href="#colophon">Colophon</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <div class="hero">
+    <div class="wrap">
+      <p class="eyebrow">An instrument in three parts</p>
+      <h1>Signs</h1>
+      <p class="lede">Every text is a machine of signs. This instrument takes yours apart: <strong>the marks themselves</strong>, <strong>what they stand for</strong>, <strong>what they grow in the mind</strong>. Then it names the species.</p>
+      <div class="hero-actions">
+        <a class="btn" href="#instrument" style="text-decoration:none;display:inline-block">Begin a dissection</a>
+        <span class="note">Built from Peirce's 1903 classification. Ten species, no more.</span>
+      </div>
+    </div>
+  </div>
+
+  <section class="block" id="instrument" aria-labelledby="instrument-h">
+    <div class="wrap">
+      <div class="col-narrow">
+        <p class="eyebrow">The instrument</p>
+        <h2 id="instrument-h">Inscribe a specimen</h2>
+        <p class="sub">One text at a time. The instrument reads it four ways, then shows every decision it made.</p>
+
+        <label class="specimen-label" for="specimen">Specimen text</label>
+        <textarea class="specimen" id="specimen" rows="3" maxlength="600"
+          placeholder="Inscribe a sentence, a name, a line. The instrument takes it apart: vehicle, object, interpretant."></textarea>
+
+        <div class="studies" role="group" aria-label="Worked studies">
+          <span class="field-label">Or take a study:</span>
+          <button class="chip" type="button" data-study="0" aria-pressed="false">A name</button>
+          <button class="chip" type="button" data-study="1" aria-pressed="false">A forecast</button>
+          <button class="chip" type="button" data-study="2" aria-pressed="false">A command</button>
+          <button class="chip" type="button" data-study="3" aria-pressed="false">A poem line</button>
+          <button class="chip" type="button" data-study="4" aria-pressed="false">A proof step</button>
+        </div>
+
+        <button class="btn" id="dissect" type="button">Dissect</button>
+
+        <div class="predict" id="predict" aria-live="polite">
+          <h3>Before the instrument speaks</h3>
+          <p>What does the signifying work in your text? Commit to an answer; the instrument will confirm or correct you.</p>
+          <div class="predict-grid">
+            <button class="predict-btn" type="button" data-v="icon">
+              <span class="k">Resemblance</span>
+              <span class="d">It signifies by looking or sounding like its object.</span>
+            </button>
+            <button class="predict-btn" type="button" data-v="index">
+              <span class="k">Pointing</span>
+              <span class="d">It signifies by touching its object: a name, a pronoun, a finger.</span>
+            </button>
+            <button class="predict-btn" type="button" data-v="symbol">
+              <span class="k">Convention</span>
+              <span class="d">It signifies by agreement: the word would mean nothing without the habit.</span>
+            </button>
+          </div>
+          <div class="predict-verdict" id="predict-verdict"></div>
+        </div>
+
+        <div class="plates" id="plates" aria-live="polite"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="classes" aria-labelledby="classes-h">
+    <div class="wrap">
+      <p class="eyebrow">The manual</p>
+      <h2 id="classes-h">The ten species</h2>
+      <p class="sub">Three trichotomies of three make twenty seven combinations. The admissibility rule throws out seventeen. These ten remain.</p>
+      <div class="table-scroll">
+        <table class="classes">
+          <thead>
+            <tr><th scope="col">No.</th><th scope="col">Species</th><th scope="col">In plain terms</th><th scope="col">Example</th></tr>
+          </thead>
+          <tbody id="class-rows"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="primer" aria-labelledby="primer-h">
+    <div class="wrap">
+      <p class="eyebrow">The primer</p>
+      <h2 id="primer-h">How the instrument thinks</h2>
+      <p class="sub">Start concrete, then abstract. Every term below is earned before it is used above.</p>
+      <div class="primer-grid">
+        <div class="primer-card">
+          <div class="pnum">1</div>
+          <h3>Start with a molehill</h3>
+          <p>A gardener sees a fresh mound of earth and reads it: moles. The mound does not look like a mole, and no one agreed that mounds mean moles. It signifies by brute connection, the way smoke means fire.</p>
+          <p>Three parts, always. The <code>mound</code> is the vehicle, the thing doing the signifying. The <code>moles</code> are the object, what it stands for. The <code>gardener's understanding</code> is the interpretant, what it grows in the mind.</p>
+        </div>
+        <div class="primer-card">
+          <div class="pnum">2</div>
+          <h3>The triad</h3>
+          <p>A sign is not a thing but a three-place relation. Remove any corner and the rest goes silent: marks without an object are noise, an object with no interpretant is never read.</p>
+          <div class="tri-mini">
+            <b class="tv">Vehicle</b> (representamen): the marks themselves<br>
+            <b class="to">Object</b>: what the marks stand for<br>
+            <b class="ti">Interpretant</b>: the understanding produced
+          </div>
+          <p style="margin-top:12px">The instrument keeps two refinements. The <b>immediate object</b> is what the text presents; the <b>dynamic object</b> is the real state of affairs, which the text may misdescribe. The <b>immediate interpretant</b> is the meaning the form allows; the <b>dynamic</b> is the reading actually produced; the <b>final</b> is what inquiry would converge on, with no latitude left.</p>
+        </div>
+        <div class="primer-card">
+          <div class="pnum">3</div>
+          <h3>Three questions</h3>
+          <p>Ask three questions of any sign, in this order.</p>
+          <p><b>In itself, what is it?</b> A mere quality (<code>qualisign</code>), a particular occurrence (<code>sinsign</code>), or a repeatable type (<code>legisign</code>). Most written text is the third: word forms you have seen a thousand times, this inscription their replica.</p>
+          <p><b>To its object, how does it point?</b> By resemblance (<code>icon</code>), by brute connection (<code>index</code>), or by convention (<code>symbol</code>). Few signs are pure; the instrument names the dominant relation and lists the subordinates.</p>
+          <p><b>To its interpretant, what does it deliver?</b> A qualitative possibility (<code>rheme</code>), an assertion about an actual fact (<code>dicent</code>, pronounced dye-sent), or a reasoned inference (<code>delome</code>).</p>
+        </div>
+        <div class="primer-card">
+          <div class="pnum">4</div>
+          <h3>Ten species, and semiosis</h3>
+          <p>The admissibility rule: a sign's dependents cannot outrank it. Order each trichotomy by quality (1), brute fact (2), convention (3); the interpretant's level may not exceed the object's, and the object's may not exceed the vehicle's. Seventeen of twenty seven combinations fail this test.</p>
+          <p>What survives is ten species, from the rhematic iconic qualisign (a mere feeling of red) to the delomic symbolic legisign (a full proof). The instrument checks the rule and demotes, visibly, when a reading would break it.</p>
+          <p>Finally: every interpretant becomes a new sign. Reading never terminates; it chains. The instrument shows two links of the chain and leaves the rest as open questions, which is where inquiry begins.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="colophon" aria-labelledby="colophon-h">
+    <div class="wrap">
+      <p class="eyebrow">Colophon</p>
+      <h2 id="colophon-h">An honest instrument</h2>
+      <div class="colophon-grid" style="margin-top:34px">
+        <div>
+          <h3>Method</h3>
+          <p>This instrument is heuristic, not an oracle. It reads surface markers: pronouns, names, tenses, similes, moods, inference words. It cannot know your context, and it says so in the plates.</p>
+          <p>Mixture is the norm. Almost every text does iconic, indexical, and symbolic work at once; the instrument names the dominant relation and lists the subordinates rather than forcing purity.</p>
+          <p>Peirce later sketched a 66-class extension. It was never finished, and scholars dispute it. This instrument implements the completed 1903 system of ten, plus the immediate and dynamic refinements.</p>
+        </div>
+        <div>
+          <h3>Sources</h3>
+          <p>The taxonomy follows the <a href="https://plato.stanford.edu/entries/peirce-semiotics/">Stanford Encyclopedia of Philosophy: Peirce's Theory of Signs</a>: the sign triad, the three trichotomies, the ten admissible classes, and the semiosis chain.</p>
+          <p>The ten species and their glosses follow Peirce's 1903 Syllabus; the qualisign, sinsign, legisign, rheme, dicent, and delome (argument) definitions follow the same source.</p>
+          <p>The working method, staged dissection, exploded views, margin questions, and visible revision, follows the study habits of Leonardo's journals, without a drop of pastiche.</p>
+        </div>
+      </div>
+      <p class="wit">First compositions always err; every sound reading begins by correcting the page. Where this instrument misreads your words, amend the record: the ledger shows exactly which test failed.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="fbrand">
+      <svg width="24" height="24" viewBox="0 0 32 32" aria-hidden="true">
+        <g stroke="#1b1d20" stroke-width="1.6">
+          <line x1="16" y1="8" x2="8" y2="23"/><line x1="16" y1="8" x2="24" y2="23"/><line x1="8" y1="23" x2="24" y2="23"/>
+        </g>
+        <circle cx="16" cy="8" r="3.4" fill="#2f5d7d"/>
+        <circle cx="8" cy="23" r="3.4" fill="#a63d22"/>
+        <circle cx="24" cy="23" r="3.4" fill="#6b5a1e"/>
+      </svg>
+      <span class="word">SIGNS</span>
+    </div>
+    <span class="fnote">An experimental instrument. Ten species, no more.</span>
+  </div>
+</footer>
+<script>
+"use strict";
+/* SIGNS engine: heuristic classifier implementing the 1903 ten-class system.
+   Every input receives exactly one value per trichotomy; tie-breaks are
+   deterministic and every decision carries its test in the ledger. */
+
+var LVL = {qualisign:1, sinsign:2, legisign:3, icon:1, index:2, symbol:3, rheme:1, dicent:2, delome:3};
+
+var CLASS_OF = {
+  "rheme|icon|qualisign":1, "rheme|icon|sinsign":2, "rheme|index|sinsign":3,
+  "dicent|index|sinsign":4, "rheme|icon|legisign":5, "rheme|index|legisign":6,
+  "dicent|index|legisign":7, "rheme|symbol|legisign":8, "dicent|symbol|legisign":9,
+  "delome|symbol|legisign":10
+};
+
+var CLASSES = [
+  {n:1, name:"Rhematic iconic qualisign", plain:"A bare quality that may signify by resemblance; asserts nothing.", example:"a feeling of red"},
+  {n:2, name:"Rhematic iconic sinsign", plain:"A single occurrence signifying by resemblance; a likeness that happens once.", example:"an unrepeatable cry that sounds like its cause"},
+  {n:3, name:"Rhematic indexical sinsign", plain:"A single occurrence that points; a term anchored to the occasion.", example:"a spontaneous pointing cry"},
+  {n:4, name:"Dicentic indexical sinsign", plain:"A single occurrence asserting an actual fact about what it points to.", example:"a hail identifying a ship"},
+  {n:5, name:"Rhematic iconic legisign", plain:"A repeatable type signifying by resemblance; a likeness by convention.", example:"a diagram"},
+  {n:6, name:"Rhematic indexical legisign", plain:"A repeatable type that points; a proper name.", example:"a proper name"},
+  {n:7, name:"Dicentic indexical legisign", plain:"A repeatable type asserting an actual fact about what it points to.", example:"a street cry"},
+  {n:8, name:"Rhematic symbolic legisign", plain:"A repeatable type carrying conventional meaning, taken as a term.", example:"a common noun"},
+  {n:9, name:"Dicentic symbolic legisign", plain:"A repeatable type asserting, by convention, an actual fact.", example:"a proposition"},
+  {n:10, name:"Delomic symbolic legisign", plain:"A repeatable type that reasons: premises visibly working to a conclusion.", example:"a syllogism"}
+];
+
+var STUDIES = [
+  {label:"A name", text:"Montaigne"},
+  {label:"A forecast", text:"It will rain in Princeton tomorrow."},
+  {label:"A command", text:"A red octagon reading STOP at the intersection."},
+  {label:"A poem line", text:"I wandered lonely as a cloud."},
+  {label:"A proof step", text:"Since ABCD is a square, its diagonals bisect each other; therefore AO = OC."}
+];
+
+var ONOM = {buzz:1,hiss:1,bang:1,pop:1,sizzle:1,murmur:1,whisper:1,whirr:1,clang:1,thud:1,splash:1,drip:1,hum:1,crackle:1,rustle:1,shhh:1,zzz:1,brrr:1,achoo:1,meow:1,woof:1,moo:1,hush:1,psst:1};
+var INTERJ = {ouch:1,wow:1,hey:1,oh:1,ah:1,alas:1,hurrah:1,oops:1,ugh:1,phew:1,bravo:1,amen:1,eureka:1};
+var PRON = {i:1,you:1,he:1,she:1,it:1,we:1,they:1,me:1,him:1,her:1,us:1,them:1,my:1,your:1,his:1,its:1,our:1,their:1,mine:1,yours:1,hers:1,ours:1,theirs:1,this:1,that:1,these:1,those:1};
+var DEICTIC = {"here":1,there:1,now:1,today:1,tomorrow:1,yesterday:1,tonight:1};
+var STOPW = {a:1,an:1,the:1,and:1,or:1,but:1,if:1,then:1,else:1,of:1,at:1,by:1,for:1,with:1,about:1,into:1,through:1,during:1,before:1,after:1,above:1,below:1,to:1,from:1,up:1,down:1,in:1,out:1,on:1,off:1,over:1,under:1,again:1,further:1,once:1,here:1,there:1,when:1,where:1,why:1,how:1,all:1,any:1,both:1,each:1,few:1,more:1,most:1,other:1,some:1,such:1,no:1,nor:1,not:1,only:1,own:1,same:1,so:1,than:1,too:1,very:1,can:1,will:1,just:1,don:1,should:1,now:1,is:1,are:1,was:1,were:1,be:1,been:1,being:1,has:1,have:1,had:1,do:1,does:1,did:1,would:1,shall:1,may:1,might:1,must:1,as:1,it:1,its:1,i:1,you:1,he:1,she:1,we:1,they:1,this:1,that:1,these:1,those:1,my:1,your:1,his:1,her:1,our:1,their:1};
+
+function wordsOf(t){ return t.trim().split(/\s+/).filter(Boolean); }
+function clean(w){ return String(w).replace(/^[^A-Za-z0-9']+|[^A-Za-z0-9']+$/g,""); }
+function trunc(s,n){ s=String(s); return s.length>n ? s.slice(0,n-1)+"..." : s; }
+
+function analyze(raw){
+  var t = String(raw||"").trim().replace(/\s+/g," ");
+  if(!t) return null;
+  var ledger = [];
+  var ws = wordsOf(t);
+  var lows = ws.map(function(w){ return clean(w).toLowerCase(); });
+  var single = ws.length===1;
+  var bare = clean(ws[0]||"").toLowerCase();
+
+  /* ---- D1: the sign in itself ---- */
+  var alpha = t.replace(/[^A-Za-z]/g,"");
+  var upperRatio = alpha.length ? (t.replace(/[^A-Z]/g,"").length/alpha.length) : 0;
+  var elongated = /(.)\1\1/.test(t);
+  var vehicle, vehicleWhy, vehicleTest;
+  if(single && (ONOM[bare] || /^(sh+h+|z+z+|br+r+|hm+m+)$/.test(bare))){
+    vehicle="qualisign";
+    vehicleWhy="A bare quality does the signifying: the sound-shape itself, apart from any particular thing it might attach to.";
+    vehicleTest="Is the signifying element a mere quality? Yes: a single sound token with no lexical content.";
+  }else if((single && (INTERJ[bare] || /!$/.test(t))) || (alpha.length>3 && upperRatio>0.6) || elongated){
+    vehicle="sinsign";
+    vehicleWhy="This particular occurrence does the work: its force lives in the token, unrepeatable as an event, not in a repeatable type.";
+    vehicleTest="Is the signifying element a particular occurrence? Yes: token features (case, spelling, force) carry the meaning.";
+  }else{
+    vehicle="legisign";
+    vehicleWhy="A repeatable type does the work: word and sentence forms recognized by convention. This inscription is one sinsign replica of that type.";
+    vehicleTest="Is the signifying element a repeatable type? Yes: conventional word forms; this inscription is their replica.";
+  }
+  ledger.push({k:"Vehicle", v:vehicle, test:vehicleTest});
+
+  /* ---- markers for D2 ---- */
+  var sents = t.split(/(?<=[.!?])\s+/);
+  var proper = [];
+  function addProper(p){ if(proper.indexOf(p)<0) proper.push(p); }
+  sents.forEach(function(s){
+    var sws = wordsOf(s);
+    sws.forEach(function(w,i){
+      var c = clean(w);
+      if(i>0 && /^[A-Z][a-z]+$/.test(c) && c!=="I") addProper(c);
+      if(/^[A-Z]{2,}$/.test(c) && c.length>1 && !PRON[c.toLowerCase()]) addProper(c);
+    });
+  });
+  if(single && /^[A-Z][a-z]*$/.test(clean(ws[0]))) addProper(clean(ws[0]));
+  var pronHits = lows.filter(function(w){ return PRON[w]; });
+  var deicticHits = lows.filter(function(w){ return DEICTIC[w]; });
+  var indexCount = pronHits.length + deicticHits.length + proper.length;
+
+  var tNoLikeVerb = t.replace(/\b(would|will|do|does|did)\s+like\b/i,"").replace(/\blikes\b/i,"");
+  var simileM = t.match(/\b([A-Za-z]+)\s+as\s+an?\s+([A-Za-z]+)/);
+  var simileWord = (simileM && !/^(is|are|was|were|be|been|being|has|have|had|do|does|did|as)$/i.test(simileM[1])) ? simileM[0] : null;
+  var hasSimile = /\blike\b/i.test(tNoLikeVerb) || /\bas if\b/i.test(t) || /\bas though\b/i.test(t) ||
+                  /looks like|sounds like|reads like/i.test(t) || /\bas\s+\w+\s+as\b/i.test(t) || !!simileWord;
+  var onomHits = lows.filter(function(w){ return ONOM[w]; });
+  var contentWords = lows.filter(function(w){ return w.length>3 && !STOPW[w]; });
+
+  /* ---- D2: the sign to its object ---- */
+  var isBareReferring = ws.length<=3 && (proper.length>0 || pronHits.length>0 || INTERJ[bare]);
+  var dominant, domWhy, domTest, subordinates=[];
+  function markerList(){
+    var m = [];
+    pronHits.slice(0,3).forEach(function(p){ m.push("'"+p+"'"); });
+    deicticHits.slice(0,2).forEach(function(d){ m.push("'"+d+"'"); });
+    proper.slice(0,3).forEach(function(p){ m.push("'"+p+"'"); });
+    return m.join(", ");
+  }
+  if(hasSimile){
+    dominant="icon";
+    domWhy="A simile frame makes resemblance do the work: the text asks to be read as like something else.";
+    domTest="Does it signify by resemblance? Yes: "+(simileWord ? "the frame \""+simileWord+"\"" : "a likeness marker (like, as if, looks like)")+".";
+    if(indexCount>0) subordinates.push("indexical ("+markerList()+")");
+    subordinates.push("symbolic (the conventional words that carry the likeness)");
+  }else if(isBareReferring || (indexCount>0 && contentWords.length<3)){
+    dominant="index";
+    domWhy="The text points by brute connection: a name, a pronoun, or a deictic anchored to the occasion.";
+    domTest="Does it signify by existential connection? Yes: "+(markerList()||"a pointing form")+".";
+    subordinates.push("symbolic (conventional word forms)");
+  }else{
+    dominant="symbol";
+    domWhy="Convention does the work: the claim is built from word types whose meanings live in habit, not in resemblance or pointing.";
+    domTest="Does it signify by resemblance or pointing? No dominant marker of either; the work is conventional predication.";
+    if(indexCount>0) subordinates.push("indexical anchoring ("+markerList()+")");
+    if(onomHits.length>0) subordinates.push("iconic ("+onomHits.slice(0,2).join(", ")+")");
+  }
+  ledger.push({k:"Object relation", v:dominant+" (dominant)", test:domTest});
+  subordinates.forEach(function(s){ ledger.push({k:"Subordinate", v:s, test:"Mixture is the norm; subordinate work is named, not forced into the dominant slot."}); });
+
+  /* ---- D3: the sign to its interpretant ---- */
+  var hasInfer = /\b(therefore|hence|it follows|q\.?\s?e\.?\s?d\.?|prove[sd]? that)\b/i.test(t) ||
+                 (/\bsince\b/i.test(t) && /,/.test(t)) ||
+                 (/\bif\b/i.test(t) && /\bthen\b/i.test(t)) ||
+                 (/\bbecause\b/i.test(t) && /\b(therefore|so|thus)\b/i.test(t));
+  var endsQ = /\?\s*$/.test(t);
+  var endsBang = /!\s*$/.test(t);
+  var imperative = /^(stop|go|come|look|listen|do|don'?t|never|always|please|let'?s|let|consider|take|note|mark|read)\b/i.test(t);
+  var hasVerb = /\b(am|is|are|was|were|be|been|being|has|have|had|do|does|did|will|would|shall|should|can|could|may|might|must)\b/i.test(t) ||
+                /\b[a-z]{2,}(ed|ing)\b/i.test(t);
+  var isFragment = (ws.length<=3 && !hasVerb) || (single && proper.length>0);
+  var interp, interpWhy, interpTest;
+  if(hasInfer){
+    interp="delome";
+    interpWhy="Inference markers carry the text: premises visibly work toward a conclusion.";
+    interpTest="Does it present a reasoned inference? Yes: "+(/therefore/i.test(t)?"\"therefore\"":/\bsince\b/i.test(t)?"\"since\" with a conclusion":"an inference frame")+".";
+  }else if(dominant==="icon" && hasSimile){
+    interp="rheme";
+    interpWhy="The line's work is qualitative: it presents a likeness to contemplate and asserts no verifiable fact. A dicentic reading is available but unwarranted.";
+    interpTest="Does it assert an actual fact? No: the simile frame offers a qualitative possibility, not a claim to check.";
+  }else if(endsQ){
+    interp="dicent";
+    interpWhy="The question form puts an actual state of affairs at issue.";
+    interpTest="Does it engage an actual fact? Yes: the interrogative demands an answer about how things are.";
+  }else if(imperative || (endsBang && ws.length<=6)){
+    interp="dicent";
+    interpWhy="The command or exclamation form addresses an actual occasion: someone, somewhere, now.";
+    interpTest="Does it engage an actual fact? Yes: it acts on an occasion, not on a mere possibility.";
+  }else if(isFragment){
+    interp="rheme";
+    interpWhy="No assertion is made: a term is presented for contemplation, with no claim about any fact.";
+    interpTest="Does it assert anything? No: a fragment presents a term without a proposition.";
+  }else{
+    interp="dicent";
+    interpWhy="A complete assertion is put forward about an actual state of affairs.";
+    interpTest="Does it assert an actual fact? Yes: a declarative proposition is put forward.";
+  }
+  ledger.push({k:"Interpretant", v:interp, test:interpTest});
+
+  /* ---- D4: the admissibility gate ---- */
+  var V=vehicle, O=dominant, R=interp;
+  function demoteR(){ if(R==="delome") R="dicent"; else if(R==="dicent") R="rheme"; }
+  function demoteO(){ if(O==="symbol") O="index"; else if(O==="index") O="icon"; }
+  function gateNote(before, after, slot){
+    ledger.push({k:"Admissibility", v:before+" demoted to "+after,
+      test:"Dependents never outrank what they depend on: the rule demotes the "+slot+", visibly, instead of forcing the reading."});
+  }
+  var b0=R; while(LVL[R] > LVL[O]) demoteR(); if(R!==b0) gateNote(b0,R,"interpretant");
+  var b1=O; while(LVL[O] > LVL[V]) demoteO(); if(O!==b1) gateNote(b1,O,"object relation");
+  var b2=R; while(LVL[R] > LVL[O]) demoteR(); if(R!==b2) gateNote(b2,R,"interpretant");
+  ledger.push({k:"Admissibility", v:LVL[R]+" <= "+LVL[O]+" <= "+LVL[V]+" : admissible",
+    test:"Dependents never outrank what they depend on: interpretant <= object <= vehicle."});
+
+  var classNo = CLASS_OF[R+"|"+O+"|"+V];
+  var classInfo = CLASSES[classNo-1];
+
+  /* ambiguity worth recording */
+  if(dominant==="symbol" && /\b(at|in|on)\s+the\s+\w+\s*[.!?]?\s*$/.test(t) && /(reading|says|reads|marked|labeled)/i.test(t)){
+    ledger.push({k:"Open question", v:"class 7 reading available",
+      test:"The text describes a located sign; foregrounding the this-place directing function would give dicentic indexical legisign (7)."});
+  }
+
+  /* ---- objects ---- */
+  var topic = proper[0] || (t.match(/\bthe\s+([a-z]+)/i)||[])[0] || "this";
+  var refs = [];
+  proper.forEach(function(p){ refs.push(p); });
+  var defNPs = (t.match(/\bthe\s+[a-z]+/gi)||[]).slice(0,3);
+  defNPs.forEach(function(d){ if(refs.indexOf(d)<0) refs.push(d); });
+  var uniqPron = [];
+  pronHits.forEach(function(p){ if(uniqPron.indexOf(p)<0) uniqPron.push(p); });
+  uniqPron.slice(0,3).forEach(function(p){ refs.push("'"+p+"'"); });
+
+  var immediateObj = refs.length
+    ? "What the text presents: "+refs.join("; ")+"."
+    : ("No determinate referent is presented; the text offers "+(dominant==="icon"?"a likeness to contemplate":(R==="rheme"?"a term for contemplation":"a claim awaiting a referent"))+".");
+  var future = /\b(will|shall|going to)\b/i.test(t);
+  var counterfactual = /\bif\b.*\bwould\b/i.test(t) || /\bwere\b/i.test(t) && /\bif\b/i.test(t) || /\bwould have\b/i.test(t);
+  var dynamicObj, epistemic;
+  if(counterfactual){
+    dynamicObj="Possibly no dynamic object at all: the text may present what never was.";
+    epistemic="Counterfactual; nothing to verify.";
+  }else if(future){
+    dynamicObj="A future state of affairs: real, but not yet fixed.";
+    epistemic="Verifiable only after the fact; unknown now.";
+  }else if(proper.length){
+    dynamicObj="The actual bearer of the name, whatever inquiry finds there.";
+    epistemic="Fixed by inquiry, not by this text.";
+  }else{
+    dynamicObj="Whatever real state of affairs would satisfy the claim.";
+    epistemic="Not fixed by the text alone.";
+  }
+  var mismatch = counterfactual ? "The immediate object may misdescribe the dynamic object: the text presents what never was." : null;
+
+  /* ---- interpretants ---- */
+  var immI, dynI;
+  if(endsQ){ immI="Any competent reader takes this as a question about "+topic+"."; dynI="the speaker seeks an answer about "+topic+"."; }
+  else if(imperative || (endsBang && ws.length<=6)){ immI="The form presents a directive: someone is to do something."; dynI="the speaker directs action here and now."; }
+  else if(isFragment){ immI="A term is presented for contemplation, with no assertion attached."; dynI="attention is directed to "+topic+" as a qualitative possibility."; }
+  else { immI="A claim is put forward about "+topic+"; any reader takes it as asserted."; dynI="the speaker asserts the text's claim about "+topic+"."; }
+
+  var questions=[];
+  uniqPron.forEach(function(p){ questions.push("Who or what is '"+p+"'? The text does not say."); });
+  proper.forEach(function(p){ questions.push("Which "+p+", exactly, and how is the bearer fixed?"); });
+  if(future) questions.push("What observation would settle the claim?");
+  if(hasSimile) questions.push("What precisely is likened to what, and in which respect?");
+  if(!questions.length) questions.push("What would all competent inquiry converge on, with no latitude left?");
+  else questions.push("What would all competent inquiry converge on, with no latitude left?");
+
+  var crosscut;
+  if(R==="delome") crosscut="logical: the text works by giving reasons.";
+  else if(dominant==="icon") crosscut="emotional: the text works by stirring a quality of feeling.";
+  else if(imperative || endsBang) crosscut="energetic: the text works by moving someone to act.";
+  else crosscut="logical: the text works by conveying a thought.";
+
+  var chain=[
+    {slot:"Sign 1", text:"The specimen: \""+trunc(t,90)+"\" Its immediate object: "+trunc(immediateObj,110)},
+    {slot:"Interpretant becomes sign 2", text:"This reading ("+dynI+") is itself a new sign. Its refined immediate object: "+trunc(dynamicObj,110)},
+    {slot:"Final interpretant", text:"Inquiry converges when: "+questions[0]}
+  ];
+
+  var tokenLine, replicaLine;
+  if(V==="legisign"){
+    tokenLine="Types used: "+ws.length+" word tokens drawn from conventional word types.";
+    replicaLine="This inscription is a sinsign replica of those types: one more occurrence of forms you have seen a thousand times.";
+  }else if(V==="sinsign"){
+    tokenLine="Tokens: "+ws.length+" word token(s); the force lives in this occurrence.";
+    replicaLine="As an event it is unrepeatable; as a type it borrows its shape from convention.";
+  }else{
+    tokenLine="A single quality token; no type, no occurrence, only the sound-shape.";
+    replicaLine="Nothing to replicate: the quality itself does the work.";
+  }
+
+  return {
+    text:t, vehicle:V, vehicleWhy:vehicleWhy, tokenLine:tokenLine, replicaLine:replicaLine,
+    objectRelation:O, objectWhy:domWhy, subordinates:subordinates,
+    immediateObj:immediateObj, dynamicObj:dynamicObj, epistemic:epistemic, mismatch:mismatch,
+    interp:R, interpWhy:interpWhy, immI:immI, dynI:dynI, questions:questions, crosscut:crosscut,
+    classNo:classNo, className:classInfo.name, classPlain:classInfo.plain,
+    ledger:ledger, chain:chain
+  };
+}
+
+window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
+/* Rendering and interaction for SIGNS. The classifier lives in the block above;
+   window.__signs.analyze is the seam the tests drive. */
+(function(){
+  var SIGNS = window.__signs;
+  function $(id){ return document.getElementById(id); }
+  function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+  function reducedMotion(){ return window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches; }
+
+  /* the ten species table */
+  $("class-rows").innerHTML = SIGNS.CLASSES.map(function(c){
+    return '<tr><td class="cnum">'+c.n+'</td><td class="cname">'+esc(c.name)+
+      '</td><td>'+esc(c.plain)+'</td><td class="cex">'+esc(c.example)+'</td></tr>';
+  }).join("");
+
+  var chips = Array.prototype.slice.call(document.querySelectorAll(".chip"));
+  var specimen = $("specimen"), dissectBtn = $("dissect"),
+      predict = $("predict"), predictVerdict = $("predict-verdict"),
+      plates = $("plates");
+  var state = {guess:null, result:null};
+
+  function resetAnalysis(){
+    state.guess = null; state.result = null;
+    predict.classList.remove("on");
+    predictVerdict.classList.remove("on"); predictVerdict.innerHTML = "";
+    Array.prototype.forEach.call(document.querySelectorAll(".predict-btn"), function(b){
+      b.classList.remove("locked","chosen");
+    });
+    plates.innerHTML = "";
+  }
+
+  chips.forEach(function(ch){
+    ch.addEventListener("click", function(){
+      chips.forEach(function(c){ c.setAttribute("aria-pressed","false"); });
+      ch.setAttribute("aria-pressed","true");
+      specimen.value = SIGNS.STUDIES[+ch.getAttribute("data-study")].text;
+      resetAnalysis();
+      specimen.focus();
+    });
+  });
+  specimen.addEventListener("input", resetAnalysis);
+
+  dissectBtn.addEventListener("click", function(){
+    var t = specimen.value.trim();
+    if(!t){ specimen.focus(); return; }
+    state.result = SIGNS.analyze(t);
+    state.guess = null;
+    Array.prototype.forEach.call(document.querySelectorAll(".predict-btn"), function(b){
+      b.classList.remove("locked","chosen");
+    });
+    predictVerdict.classList.remove("on"); predictVerdict.innerHTML = "";
+    predict.classList.add("on");
+    predict.scrollIntoView({behavior: reducedMotion() ? "auto" : "smooth", block:"nearest"});
+  });
+
+  Array.prototype.forEach.call(document.querySelectorAll(".predict-btn"), function(b){
+    b.addEventListener("click", function(){
+      if(state.guess || !state.result) return;
+      state.guess = b.getAttribute("data-v");
+      Array.prototype.forEach.call(document.querySelectorAll(".predict-btn"), function(x){
+        x.classList.add("locked");
+        if(x===b) x.classList.add("chosen");
+      });
+      reveal(state.result, state.guess);
+    });
+  });
+
+  function kvRow(k, v, note){
+    return '<dt>'+esc(k)+'</dt><dd>'+esc(v)+(note ? '<span class="q">'+esc(note)+'</span>' : '')+'</dd>';
+  }
+
+  function triadSVG(){
+    return ''+
+    '<svg class="triad-svg" id="triad" data-peel="3" viewBox="0 0 400 340" role="img" aria-label="Triadic diagram: vehicle, object, interpretant">'+
+      '<defs><marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">'+
+      '<path d="M0,0 L10,5 L0,10 z" fill="#1b1d20" opacity="0.55"/></marker></defs>'+
+      '<line class="edge edge-vi draw" x1="217.4" y1="99.2" x2="294.6" y2="228.8" stroke="#1b1d20" stroke-width="1.4" opacity="0.6" marker-end="url(#arr)" pathLength="1" style="animation-delay:.55s"/>'+
+      '<line class="edge edge-vo draw" x1="105.4" y1="228.8" x2="182.6" y2="99.2" stroke="#1b1d20" stroke-width="1.4" opacity="0.6" marker-end="url(#arr)" pathLength="1" style="animation-delay:.7s"/>'+
+      '<line class="edge edge-oi draw" x1="122" y1="258" x2="278" y2="258" stroke="#1b1d20" stroke-width="1.2" opacity="0.45" stroke-dasharray="5 5" pathLength="1" style="animation-delay:.85s"/>'+
+      '<g class="node node-v" style="transition-delay:.1s">'+
+        '<circle cx="200" cy="70" r="30" fill="#f4f1e8" stroke="#2f5d7d" stroke-width="2.5"/>'+
+        '<circle cx="200" cy="70" r="6" fill="#2f5d7d"/>'+
+        '<text x="200" y="120" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" letter-spacing="2" fill="rgba(27,29,32,.64)">VEHICLE</text>'+
+      '</g>'+
+      '<g class="node node-o" style="transition-delay:.25s">'+
+        '<circle cx="88" cy="258" r="30" fill="#f4f1e8" stroke="#a63d22" stroke-width="2.5"/>'+
+        '<circle cx="88" cy="258" r="6" fill="#a63d22"/>'+
+        '<text x="88" y="308" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" letter-spacing="2" fill="rgba(27,29,32,.64)">OBJECT</text>'+
+      '</g>'+
+      '<g class="node node-i" style="transition-delay:.4s">'+
+        '<circle cx="312" cy="258" r="30" fill="#f4f1e8" stroke="#6b5a1e" stroke-width="2.5"/>'+
+        '<circle cx="312" cy="258" r="6" fill="#6b5a1e"/>'+
+        '<text x="312" y="308" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" letter-spacing="2" fill="rgba(27,29,32,.64)">INTERPRETANT</text>'+
+      '</g>'+
+    '</svg>';
+  }
+
+  function plateHTML(r){
+    var sub = r.subordinates.length
+      ? '<dl class="kv">'+kvRow("Subordinate work", r.subordinates.join("; "),
+          "Mixture is the norm; the instrument names subordinates rather than forcing purity.")+'</dl>' : "";
+    var mis = r.mismatch ? '<dl class="kv">'+kvRow("Mismatch flag", r.mismatch)+'</dl>' : "";
+    var ledgerRows = r.ledger.map(function(e){
+      return '<div class="ledger-row"><div class="lk">'+esc(e.k)+'</div><div class="lv">'+esc(e.v)+
+        '<span class="test">'+esc(e.test)+'</span></div></div>';
+    }).join("");
+    var chainItems = r.chain.map(function(c){
+      return '<li><span class="cs">'+esc(c.slot)+'</span>'+esc(c.text)+'</li>';
+    }).join("");
+    var questions = r.questions.map(function(q){ return '<li>'+esc(q)+'</li>'; }).join("");
+
+    return ''+
+    '<article class="plate" id="plate-1">'+
+      '<div class="plate-head"><span class="plate-num">I</span><h3>The Vehicle</h3><span class="slot">the sign in itself</span></div>'+
+      '<p class="plate-intro">First the material: what kind of thing is doing the signifying, before asking what it points at.</p>'+
+      '<dl class="kv">'+kvRow("Token and type", r.tokenLine)+kvRow("Replicas", r.replicaLine)+'</dl>'+
+      '<div class="verdict-row"><span class="verdict-chip v-vehicle">'+esc(r.vehicle)+'</span>'+
+      '<span class="verdict-why">'+esc(r.vehicleWhy)+'</span></div>'+
+    '</article>'+
+
+    '<article class="plate" id="plate-2">'+
+      '<div class="plate-head"><span class="plate-num">II</span><h3>The Object</h3><span class="slot">the sign to its object</span></div>'+
+      '<p class="plate-intro">What the text presents is not always what is really there. The instrument keeps the two apart.</p>'+
+      '<dl class="kv">'+kvRow("Immediate object", r.immediateObj)+kvRow("Dynamic object", r.dynamicObj)+kvRow("Epistemic status", r.epistemic)+'</dl>'+mis+
+      '<div class="verdict-row"><span class="verdict-chip v-object">'+esc(r.objectRelation)+' (dominant)</span>'+
+      '<span class="verdict-why">'+esc(r.objectWhy)+'</span></div>'+sub+
+    '</article>'+
+
+    '<article class="plate" id="plate-3">'+
+      '<div class="plate-head"><span class="plate-num">III</span><h3>The Interpretant</h3><span class="slot">the sign to its interpretant</span></div>'+
+      '<p class="plate-intro">What the text grows in the mind: what the form allows, what this reading produces, and what inquiry would converge on.</p>'+
+      '<dl class="kv">'+kvRow("Immediate interpretant", r.immI)+kvRow("Dynamic interpretant", "This instrument's situated reading: "+r.dynI)+
+      kvRow("Cross-cut", r.crosscut, "Emotional, energetic, and logical readings cut across the three interpretants; they are not a fourth slot.")+'</dl>'+
+      '<div class="verdict-row"><span class="verdict-chip v-interpretant">'+esc(r.interp)+'</span>'+
+      '<span class="verdict-why">'+esc(r.interpWhy)+'</span></div>'+
+    '</article>'+
+
+    '<article class="plate" id="plate-4">'+
+      '<div class="plate-head"><span class="plate-num">IV</span><h3>The Species</h3><span class="slot">the whole, assembled</span></div>'+
+      '<div class="species"><div class="kicker">The species</div><h4>'+esc(r.className)+'</h4>'+
+      '<div class="classno">Class '+r.classNo+' of 10 &middot; '+esc(r.classPlain)+'</div></div>'+
+      '<div class="triad-wrap" style="margin-top:22px">'+
+        '<div>'+triadSVG()+'</div>'+
+        '<div class="triad-controls">'+
+          '<span class="field-label">Dissection</span>'+
+          '<label class="toggle-row"><input type="checkbox" id="explode"> Exploded view</label>'+
+          '<span class="field-label">Layer peel</span>'+
+          '<input type="range" class="peel" id="peel" min="0" max="3" value="3" aria-label="Layer peel: vehicle, object, interpretant, whole">'+
+          '<div class="peel-marks"><span>Vehicle</span><span>Object</span><span>Interpr.</span><span>Whole</span></div>'+
+        '</div>'+
+      '</div>'+
+      '<div class="ledger" aria-label="Derivation ledger">'+ledgerRows+'</div>'+
+      '<h3 style="font-family:var(--font-display);font-size:22px;margin:30px 0 4px">Semiosis: the chain</h3>'+
+      '<p style="font-size:14px;color:var(--ink-soft);margin:0 0 6px">Every interpretant becomes a new sign. Two links shown; the rest is inquiry.</p>'+
+      '<ol class="chain">'+chainItems+'</ol>'+
+      '<h3 style="font-family:var(--font-display);font-size:22px;margin:30px 0 10px">Open questions</h3>'+
+      '<ul style="margin:0 0 6px;padding-left:22px;font-size:15px;line-height:1.8">'+questions+'</ul>'+
+      '<div style="margin-top:26px">'+
+        '<details class="margin-note"><summary>Why three parts and not two?</summary>'+
+        '<div class="note-body">Because a sign is not a pair but a relation: the marks, what they stand for, and what they grow in the mind. Drop any corner and the other two go silent.</div></details>'+
+        '<details class="margin-note"><summary>Why only ten species?</summary>'+
+        '<div class="note-body">Twenty seven combinations are possible; the admissibility rule rejects seventeen. A dependent cannot outrank what it depends on: quality under brute fact under convention.</div></details>'+
+        '<details class="margin-note"><summary>What is semiosis?</summary>'+
+        '<div class="note-body">The chaining of signs: every interpretant becomes a new sign for a further interpretant. Reading never terminates; it only converges, and the final interpretant is the limit of inquiry.</div></details>'+
+      '</div>'+
+      '<p class="provenance">Taxonomy: <a href="https://plato.stanford.edu/entries/peirce-semiotics/">SEP: Peirce\'s Theory of Signs</a> (the triad; the three trichotomies; the ten classes). Engine: surface-marker heuristics; every decision above carries its test. Build v20260915-signs1.</p>'+
+    '</article>';
+  }
+
+  function wireTriad(svg){
+    var explode = $("explode"), peel = $("peel");
+    if(explode) explode.addEventListener("change", function(){
+      svg.classList.toggle("exploded", explode.checked);
+    });
+    if(peel) peel.addEventListener("input", function(){
+      svg.setAttribute("data-peel", peel.value);
+    });
+  }
+
+  function reveal(r, guess){
+    var gname = {icon:"resemblance", index:"pointing", symbol:"convention"}[guess];
+    var rname = {icon:"resemblance", index:"pointing", symbol:"convention"}[r.objectRelation];
+    if(guess === r.objectRelation){
+      predictVerdict.innerHTML = 'You said <b>'+gname+'</b>. The instrument says <b>'+rname+'</b>: <span class="match">confirmed</span>.';
+    }else{
+      predictVerdict.innerHTML = 'You said <b>'+gname+'</b>. The instrument says <b>'+rname+'</b>: <span class="miss">corrected</span>. The ledger in Plate IV shows why.';
+    }
+    predictVerdict.classList.add("on");
+    plates.innerHTML = plateHTML(r);
+    var ps = plates.querySelectorAll(".plate");
+    requestAnimationFrame(function(){
+      requestAnimationFrame(function(){
+        for(var i=0;i<ps.length;i++){
+          ps[i].style.transitionDelay = (i*110)+"ms";
+          ps[i].classList.add("on");
+        }
+        var svg = $("triad");
+        if(svg){
+          svg.classList.add("revealed");
+          wireTriad(svg);
+          setTimeout(function(){
+            var nodes = svg.querySelectorAll(".node");
+            for(var j=0;j<nodes.length;j++) nodes[j].style.transitionDelay = "0ms";
+            for(var k=0;k<ps.length;k++) ps[k].style.transitionDelay = "0ms";
+          }, 1400);
+        }
+      });
+    });
+    plates.scrollIntoView({behavior: reducedMotion() ? "auto" : "smooth", block:"start"});
+  }
+})();
+</script>
+</body>
+</html>
