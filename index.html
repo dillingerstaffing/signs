@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<meta name="build-version" content="v20260915-signs1">
+<meta name="build-version" content="v20260915-signs2">
 <title>Signs: An Instrument for Taking Texts Apart</title>
 <meta name="description" content="Inscribe a text. The instrument dissects it in Peirce's terms: the vehicle, the object, the interpretant, then names the species.">
 <meta property="og:title" content="Signs: An Instrument for Taking Texts Apart">
@@ -114,37 +114,6 @@ textarea.specimen::placeholder{color:var(--ink-faint)}
 }
 .chip:hover{border-color:var(--ink);background:var(--paper-2)}
 .chip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
-
-.predict{
-  border:1px solid var(--hairline);border-radius:3px;background:var(--paper-2);
-  padding:26px;margin:30px 0;display:none;
-}
-.predict.on{display:block;animation:rise var(--t-standard) var(--e-out)}
-.predict h3{font-family:var(--font-display);font-size:24px;margin:0 0 8px;font-weight:600}
-.predict p{margin:0 0 20px;color:var(--ink-soft);font-size:15px}
-.predict-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.predict-btn{
-  text-align:left;background:var(--paper);border:1px solid var(--hairline);border-radius:2px;
-  padding:16px;cursor:pointer;min-height:88px;
-  transition:border-color var(--t-instant) var(--e-out),transform var(--t-instant) var(--e-out);
-}
-.predict-btn:hover{border-color:var(--ink)}
-.predict-btn:active{transform:scale(.98)}
-.predict-btn .k{font-family:var(--font-mono);font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:6px}
-.predict-btn .d{font-size:13px;color:var(--ink-soft);line-height:1.5;display:block}
-.predict-btn[data-v="icon"] .k{color:var(--vehicle)}
-.predict-btn[data-v="index"] .k{color:var(--object)}
-.predict-btn[data-v="symbol"] .k{color:var(--interpretant)}
-.predict-btn.locked{opacity:.45;pointer-events:none}
-.predict-btn.chosen{opacity:1;border:2px solid var(--ink);padding:15px}
-.predict-verdict{
-  display:none;margin-top:18px;padding:14px 16px;border-radius:2px;
-  font-family:var(--font-mono);font-size:13px;line-height:1.6;
-  background:var(--paper);border:1px solid var(--hairline);
-}
-.predict-verdict.on{display:block}
-.predict-verdict .match{color:var(--interpretant);font-weight:700}
-.predict-verdict .miss{color:var(--object);font-weight:700}
 
 .plates{margin-top:8px}
 .plate{
@@ -298,7 +267,6 @@ footer.site .fnote{font-family:var(--font-mono);font-size:11px;letter-spacing:.1
 @media (max-width:900px){
   .triad-wrap{grid-template-columns:1fr}
   .primer-grid,.colophon-grid{grid-template-columns:1fr}
-  .predict-grid{grid-template-columns:1fr}
 }
 @media (max-width:720px){
   .wrap{padding:0 18px}
@@ -327,8 +295,6 @@ footer.site .fnote{font-family:var(--font-mono);font-size:11px;letter-spacing:.1
   *,*::before,*::after{animation:none!important;transition:none!important}
   html{scroll-behavior:auto}
   .plate{opacity:1;transform:none}
-  .predict{display:none}
-  .predict.on{display:block}
   .triad-svg .draw{stroke-dashoffset:0}
   .triad-svg .node{opacity:1}
 }
@@ -391,26 +357,6 @@ footer.site .fnote{font-family:var(--font-mono);font-size:11px;letter-spacing:.1
         </div>
 
         <button class="btn" id="dissect" type="button">Dissect</button>
-
-        <div class="predict" id="predict" aria-live="polite">
-          <h3>Before the instrument speaks</h3>
-          <p>What does the signifying work in your text? Commit to an answer; the instrument will confirm or correct you.</p>
-          <div class="predict-grid">
-            <button class="predict-btn" type="button" data-v="icon">
-              <span class="k">Resemblance</span>
-              <span class="d">It signifies by looking or sounding like its object.</span>
-            </button>
-            <button class="predict-btn" type="button" data-v="index">
-              <span class="k">Pointing</span>
-              <span class="d">It signifies by touching its object: a name, a pronoun, a finger.</span>
-            </button>
-            <button class="predict-btn" type="button" data-v="symbol">
-              <span class="k">Convention</span>
-              <span class="d">It signifies by agreement: the word would mean nothing without the habit.</span>
-            </button>
-          </div>
-          <div class="predict-verdict" id="predict-verdict"></div>
-        </div>
 
         <div class="plates" id="plates" aria-live="polite"></div>
       </div>
@@ -804,17 +750,11 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
 
   var chips = Array.prototype.slice.call(document.querySelectorAll(".chip"));
   var specimen = $("specimen"), dissectBtn = $("dissect"),
-      predict = $("predict"), predictVerdict = $("predict-verdict"),
       plates = $("plates");
-  var state = {guess:null, result:null};
+  var state = {result:null};
 
   function resetAnalysis(){
-    state.guess = null; state.result = null;
-    predict.classList.remove("on");
-    predictVerdict.classList.remove("on"); predictVerdict.innerHTML = "";
-    Array.prototype.forEach.call(document.querySelectorAll(".predict-btn"), function(b){
-      b.classList.remove("locked","chosen");
-    });
+    state.result = null;
     plates.innerHTML = "";
   }
 
@@ -831,27 +771,9 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
 
   dissectBtn.addEventListener("click", function(){
     var t = specimen.value.trim();
-    if(!t){ specimen.focus(); return; }
+    if(!t){ resetAnalysis(); specimen.focus(); return; }
     state.result = SIGNS.analyze(t);
-    state.guess = null;
-    Array.prototype.forEach.call(document.querySelectorAll(".predict-btn"), function(b){
-      b.classList.remove("locked","chosen");
-    });
-    predictVerdict.classList.remove("on"); predictVerdict.innerHTML = "";
-    predict.classList.add("on");
-    predict.scrollIntoView({behavior: reducedMotion() ? "auto" : "smooth", block:"nearest"});
-  });
-
-  Array.prototype.forEach.call(document.querySelectorAll(".predict-btn"), function(b){
-    b.addEventListener("click", function(){
-      if(state.guess || !state.result) return;
-      state.guess = b.getAttribute("data-v");
-      Array.prototype.forEach.call(document.querySelectorAll(".predict-btn"), function(x){
-        x.classList.add("locked");
-        if(x===b) x.classList.add("chosen");
-      });
-      reveal(state.result, state.guess);
-    });
+    reveal(state.result);
   });
 
   function kvRow(k, v, note){
@@ -952,7 +874,7 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
         '<details class="margin-note"><summary>What is semiosis?</summary>'+
         '<div class="note-body">The chaining of signs: every interpretant becomes a new sign for a further interpretant. Reading never terminates; it only converges, and the final interpretant is the limit of inquiry.</div></details>'+
       '</div>'+
-      '<p class="provenance">Taxonomy: <a href="https://plato.stanford.edu/entries/peirce-semiotics/">SEP: Peirce\'s Theory of Signs</a> (the triad; the three trichotomies; the ten classes). Engine: surface-marker heuristics; every decision above carries its test. Build v20260915-signs1.</p>'+
+      '<p class="provenance">Taxonomy: <a href="https://plato.stanford.edu/entries/peirce-semiotics/">SEP: Peirce\'s Theory of Signs</a> (the triad; the three trichotomies; the ten classes). Engine: surface-marker heuristics; every decision above carries its test. Build v20260915-signs2.</p>'+
     '</article>';
   }
 
@@ -966,21 +888,12 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
     });
   }
 
-  function reveal(r, guess){
-    var gname = {icon:"resemblance", index:"pointing", symbol:"convention"}[guess];
-    var rname = {icon:"resemblance", index:"pointing", symbol:"convention"}[r.objectRelation];
-    if(guess === r.objectRelation){
-      predictVerdict.innerHTML = 'You said <b>'+gname+'</b>. The instrument says <b>'+rname+'</b>: <span class="match">confirmed</span>.';
-    }else{
-      predictVerdict.innerHTML = 'You said <b>'+gname+'</b>. The instrument says <b>'+rname+'</b>: <span class="miss">corrected</span>. The ledger in Plate IV shows why.';
-    }
-    predictVerdict.classList.add("on");
+  function reveal(r){
     plates.innerHTML = plateHTML(r);
     var ps = plates.querySelectorAll(".plate");
     requestAnimationFrame(function(){
       requestAnimationFrame(function(){
         for(var i=0;i<ps.length;i++){
-          ps[i].style.transitionDelay = (i*110)+"ms";
           ps[i].classList.add("on");
         }
         var svg = $("triad");
