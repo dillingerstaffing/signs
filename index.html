@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<meta name="build-version" content="v20260916-signs13">
+<meta name="build-version" content="v20260916-signs14">
 <title>Signs: An Instrument for Taking Texts Apart</title>
 <meta name="description" content="Inscribe a text. The instrument dissects it in Peirce's terms: the sign, the object, the interpretant, then names the class.">
 <meta property="og:title" content="Signs: An Instrument for Taking Texts Apart">
@@ -218,21 +218,6 @@ textarea.specimen::placeholder{color:var(--ink-faint)}
 .constraint s{text-decoration-color:var(--object);text-decoration-thickness:2px}
 .constraint .bad{color:var(--object);font-weight:700}
 .constraint-note{font-size:13.5px;color:var(--ink-soft);margin:0;max-width:680px;line-height:1.6}
-.matrix-row{margin:26px 0 0;padding-top:20px;border-top:1px solid var(--hairline)}
-.matrix{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:6px;margin-top:12px}
-.mcell{
-  font-family:var(--font-mono);font-size:11px;line-height:1.5;color:var(--ink-soft);
-  background:var(--paper);border:1px solid var(--hairline);border-radius:2px;
-  padding:10px 4px;min-height:54px;cursor:pointer;min-width:0;
-  transition:background-color var(--fast) var(--ease),color var(--fast) var(--ease),border-color var(--fast) var(--ease),transform var(--fast) var(--ease);
-}
-.mcell .mn{display:block;font-weight:700;font-size:13px}
-.mcell.sel{background:var(--ink);border-color:var(--ink);color:var(--paper)}
-.mcell:active{transform:translateY(1px)}
-.inspector{
-  margin:26px 0 0;padding:14px 16px;border:1px solid var(--hairline);border-radius:2px;
-  background:var(--paper);font-size:14px;line-height:1.65;min-height:54px;color:var(--ink);
-}
 .caveat{font-size:12.5px;color:var(--ink-faint);margin:10px 0 0;max-width:700px;line-height:1.6}
 .semiosis-row{margin:26px 0 0;padding-top:20px;border-top:1px solid var(--hairline)}
 .semiosis-cap{font-size:14px;color:var(--ink-soft);margin:0 0 6px}
@@ -270,7 +255,7 @@ textarea.specimen::placeholder{color:var(--ink-faint)}
 .mentry .mmeta{color:var(--ink-faint);margin-right:10px;white-space:nowrap}
   @media (prefers-reduced-motion:reduce){
     .disclose-ev .disclose-in,.disclose-proof .disclose-in,
-    .word,.dart,.dbtn,.sbtn,.mcell,.tchip,.eqnode{transition:none}
+    .word,.dart,.dbtn,.tchip,.eqnode{transition:none}
   }
 .mentry s{text-decoration-color:var(--object);text-decoration-thickness:1.5px;color:var(--ink-faint)}
 .eqnode{
@@ -281,47 +266,6 @@ textarea.specimen::placeholder{color:var(--ink-faint)}
 .eqnode:hover{border-bottom-style:solid;border-bottom-color:var(--ink);background:rgba(27,29,32,.06)}
 .eqnode:active{transform:translateY(1px)}
 .eq-cap{font-size:12.5px;color:var(--ink-faint);margin:10px 0 0;max-width:680px}
-.slice-row{display:flex;align-items:center;gap:12px;margin:14px 0 4px;flex-wrap:wrap}
-.mx-cap{font-family:var(--font-mono);font-size:11.5px;color:var(--ink-faint);margin:2px 0 0}
-.dossier{margin-top:18px;border:1px solid var(--hairline);background:rgba(255,255,255,.35);padding:16px 18px;max-width:720px}
-.dos-head{font-family:var(--font-mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;margin:0 0 10px}
-.dos-status{font-size:15px;margin:0 0 8px}
-.dos-diffs{margin:8px 0;padding-left:20px;font-size:14.5px}
-.dos-diffs li{margin:4px 0}
-.dos-diffs b{font-family:var(--font-mono);font-size:12px;letter-spacing:.08em}
-.dos-gloss{font-size:14px;color:var(--ink-soft);margin:10px 0 0}
-.slice{display:flex}
-.sbtn{
-  font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
-  background:transparent;border:1px solid var(--hairline);border-left:none;color:var(--ink-soft);
-  padding:9px 14px;min-height:40px;cursor:pointer;
-  transition:background-color var(--fast) var(--ease),color var(--fast) var(--ease);
-}
-.sbtn:first-child{border-left:1px solid var(--hairline);border-radius:2px 0 0 2px}
-.sbtn:last-child{border-radius:0 2px 2px 0}
-.sbtn[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
-.mgroup{margin:16px 0 0}
-.mgroup-label{font-family:var(--font-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft);margin:0 0 8px}
-.mgroup-label .cnt{color:var(--ink-faint);letter-spacing:.04em}
-.mcell{position:relative}
-.mgroup .matrix{display:flex;flex-wrap:wrap;gap:8px}
-.mgroup .mcell{flex:1 1 104px;max-width:172px;min-height:96px;padding:12px 8px;
-  font-size:10px;letter-spacing:.04em;line-height:1.45}
-.mgroup .mcell .mn{font-size:11px;margin-bottom:4px}
-.mcell .mx{position:absolute;top:3px;right:7px;font-size:10px;font-weight:700;color:var(--ink-faint);pointer-events:none}
-.mcell.cut::after{content:"";position:absolute;border:1px solid var(--ink-faint);pointer-events:none}
-.mcell.cut0::after{inset:6px 9px;border-radius:53% 47% 55% 45%/46% 54% 48% 52%;transform:rotate(-2deg)}
-.mcell.cut1::after{inset:8px 6px;border-radius:47% 53% 49% 51%/56% 44% 57% 43%;transform:rotate(2.5deg)}
-.mcell.cut2::after{inset:5px 10px;border-radius:56% 44% 51% 49%/43% 57% 45% 55%;transform:rotate(-1deg)}
-.mcell.cut3::after{inset:7px 7px;border-radius:49% 51% 45% 55%/53% 47% 54% 46%;transform:rotate(1.5deg)}
-.mcell.sel{
-  background-color:var(--paper);border-color:var(--ink);color:var(--ink);
-  background-image:
-    repeating-linear-gradient(45deg,rgba(27,29,32,.13) 0 1px,transparent 1px 7px),
-    repeating-linear-gradient(-45deg,rgba(27,29,32,.13) 0 1px,transparent 1px 7px);
-}
-.mcell.sel .mn{color:var(--ink)}
-.mcell.sel .mx{color:var(--ink)}
 .trick-chips{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 20px;align-items:center}
 .trick-chips .field-label{margin:0 4px 0 0}
 /* sfumato: depth opens as staggered tonal layers, never a hard cut */
@@ -393,7 +337,6 @@ footer.site .fnote{font-family:var(--font-mono);font-size:11px;letter-spacing:.1
   .answer-name{font-size:34px}
   .words{font-size:17px}
   .darts{grid-template-columns:1fr}
-  .matrix{grid-template-columns:repeat(5,minmax(0,1fr))}
   .scope .folio{display:block;margin:0 0 4px}
   .badge{margin:10px 0 0}
   nav.main{gap:16px}
@@ -1009,10 +952,6 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
        delome:["Reasons toward a conclusion","Premises working to a conclusion"]}
   };
   var NODE_LABEL={v:"D1",o:"D2",i:"D3"};
-  var SLICES={
-    d1:{groups:[["qualisign",[1]],["sinsign",[2,3,4]],["legisign",[5,6,7,8,9,10]]]},
-    d3:{groups:[["rheme",[1,2,3,5,6,8]],["dicent",[4,7,9]],["delome",[10]]]}
-  };
 
   var benchView=null, scribedInfo=null;
 
@@ -1124,60 +1063,6 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
       '</div></div>'+
       '<p class="eq-cap">Tap any of the three terms to recast it by hand. The sheet recomputes; nothing is repaired by demotion.</p>';
 
-    /* the ten classes: cuts enclose ruled-out classes; x marks the asserted one */
-    function cellHTML(c){
-      var cls="mcell", mark="";
-      if(ok){
-        if(c.n===classNo){ cls+=" sel"; mark='<span class="mx">x</span>'; }
-        else cls+=" cut cut"+(c.n%4); /* each cut is hand-scribed: no two enclosures share a shape */
-      }else{
-        mark='<span class="mx">o</span>';
-      }
-      return '<button type="button" class="'+cls+'" data-cn="'+c.n+
-        '" data-cname="'+esc(c.name)+'" data-cplain="'+esc(c.plain)+
-        '" aria-label="Class '+c.n+": "+esc(c.name)+'"><span class="mn">'+("0"+c.n).slice(-2)+"</span>"+esc(SHORT[c.n-1])+mark+"</button>";
-    }
-    /* class dossier: each cell opens the class read against the live verdicts */
-    var TRIPLE={};
-    Object.keys(CLASS_OF).forEach(function(k){ var p=k.split("|"); TRIPLE[CLASS_OF[k]]=[p[2],p[1],p[0]]; });
-    var TERM_PLAIN={qualisign:"a mere quality",sinsign:"a particular occurrence",legisign:"a repeatable type",
-      icon:"resemblance",index:"brute connection",symbol:"convention",
-      rheme:"a term, asserting nothing",dicent:"an assertion, true or false",delome:"an argument from premises to a conclusion"};
-    var DKEY={v:"D1",o:"D2",i:"D3"};
-    function dossierHTML(){
-      var n=vw.dossier; if(!n) return "";
-      var c=CLASSES[n-1], t=TRIPLE[n], keys=["v","o","i"], diffs=[];
-      keys.forEach(function(k,ix){ if(t[ix]!==vw[k]) diffs.push({k:k,need:t[ix],have:vw[k]}); });
-      var status;
-      if(!ok){
-        status='<p class="dos-status">No verdict on this sheet. The derived triple breaks the dependence rule: '+esc(viol)+'.</p>';
-      }else if(!diffs.length){
-        status='<p class="dos-status">Asserted. The three verdicts converge here: '+esc(vw.v)+' (D1), '+esc(vw.o)+' (D2), '+esc(vw.i)+' (D3), and '+esc(vw.i)+' &le; '+esc(vw.o)+' &le; '+esc(vw.v)+' holds.</p>';
-      }else{
-        status='<p class="dos-status">Ruled out, '+diffs.length+' verdict'+(diffs.length>1?'s':'')+' away:</p><ul class="dos-diffs">'+
-          diffs.map(function(d){
-            return '<li><b>'+DKEY[d.k]+'</b> would need '+esc(d.need)+' ('+esc(TERM_PLAIN[d.need])+'), not '+esc(d.have)+' ('+esc(TERM_PLAIN[d.have])+').</li>';
-          }).join("")+'</ul>';
-      }
-      return '<div class="dossier" id="dossier" role="region" aria-label="Class '+n+' dossier">'+
-        '<p class="dos-head">Class '+n+' of 10 &middot; '+esc(c.name)+'</p>'+status+
-        '<p class="dos-gloss">'+esc(c.plain)+' Example: '+esc(c.example)+'.</p></div>';
-    }
-    var slice=SLICES[vw.slice];
-    var groupsHTML=slice.groups.map(function(g){
-      var cells=g[1].map(function(n){ return cellHTML(CLASSES[n-1]); }).join("");
-      return '<div class="mgroup"><p class="mgroup-label">'+esc(g[0])+' <span class="cnt">'+g[1].join(" \u00b7 ")+'</span></p>'+
-        '<div class="matrix" role="group" aria-label="'+esc(g[0])+' classes">'+cells+'</div></div>';
-    }).join("");
-    var matrixHTML=
-      '<div class="slice-row"><span class="field-label">Slice</span>'+
-      '<div class="slice" role="group" aria-label="Matrix slice">'+
-      '<button type="button" class="sbtn" data-slice="d1" aria-pressed="'+(vw.slice==="d1")+'">D1 \u00b7 the sign</button>'+
-      '<button type="button" class="sbtn" data-slice="d3" aria-pressed="'+(vw.slice==="d3")+'">D3 \u00b7 the interpretant</button>'+
-      '</div></div>'+
-      '<p class="mx-cap">Tap a class to read it against the verdicts above.</p>'+
-      groupsHTML+dossierHTML();
-
     var chainItems=r.chain.map(function(c){
       return '<li><span class="cs">'+esc(c.slot)+"</span>"+esc(c.text)+"</li>";
     }).join("");
@@ -1219,10 +1104,6 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
         '<span class="field-label">Dependence check</span>'+
         constraintHTML+
       '</div>'+
-      '<div class="matrix-row">'+
-        '<span class="field-label">The ten classes</span>'+
-        matrixHTML+
-      '</div>'+
       '<div class="marginalia" id="marginalia" aria-live="polite"></div>'+
       '<p class="caveat">A Peircean class belongs to a sign as interpreted in context. It does not mechanically assign a separate class to every word.</p>'+
       '<div class="semiosis-row">'+
@@ -1232,7 +1113,7 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
       '</div>'+
     '</section>'+
     '<section class="further">'+
-      '<p class="provenance">Taxonomy: <a href="https://plato.stanford.edu/entries/peirce-semiotics/">SEP: Peirce\'s Theory of Signs</a> (the triad; the three trichotomies; the ten classes). Engine: surface-marker heuristics; every decision above carries its test. Build v20260916-signs13.</p>'+
+      '<p class="provenance">Taxonomy: <a href="https://plato.stanford.edu/entries/peirce-semiotics/">SEP: Peirce\'s Theory of Signs</a> (the triad; the three trichotomies; the ten classes). Engine: surface-marker heuristics; every decision above carries its test. Build v20260916-signs14.</p>'+
     '</section>';
   }
 
@@ -1313,15 +1194,6 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
       });
     });
 
-    Array.prototype.forEach.call(bench.querySelectorAll(".sbtn"),function(b){
-      b.addEventListener("click",function(){
-        vw.slice=b.getAttribute("data-slice");
-        logLedger("Matrix re-sliced: "+(vw.slice==="d1"?"by the sign (D1)":"by the interpretant (D3)")+". Same ten classes, new arrangement.");
-        postRenderFocus='.sbtn[data-slice="'+vw.slice+'"]';
-        renderBench();
-      });
-    });
-
     Array.prototype.forEach.call(bench.querySelectorAll(".eqnode"),function(b){
       b.addEventListener("click",function(){
         var key=b.getAttribute("data-node");
@@ -1365,35 +1237,13 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
         if(e.key==="Enter"||e.key===" "){ e.preventDefault(); traceCorner(key); }
       });
     });
-
-    Array.prototype.forEach.call(bench.querySelectorAll(".mcell"),function(c){
-      c.addEventListener("click",function(){
-        var n=+c.getAttribute("data-cn"), classNo=currentClass(vw);
-        if(vw.dossier===n){
-          vw.dossier=null;
-          logLedger("Class "+n+" dossier closed.");
-        }else{
-          vw.dossier=n;
-          if(classNo&&n===classNo)
-            logLedger("Class "+n+" dossier opened: asserted, the verdicts converge here.");
-          else if(classNo)
-            logLedger("Class "+n+" dossier opened: ruled out under the current verdicts.");
-          else
-            logLedger("Class "+n+" dossier opened: no verdict, the reading breaks the dependence rule.");
-        }
-        postRenderFocus='.mcell[data-cn="'+n+'"]';
-        renderBench();
-        var dz=$("dossier");
-        if(dz&&vw.dossier) dz.scrollIntoView({behavior:reducedMotion()?"auto":"smooth",block:"nearest"});
-      });
-    });
   }
 
   function reveal(r){
     folioN++;
     benchView={r:r,folio:"S."+("00"+folioN).slice(-3),
       v:r.vehicle,o:r.objectRelation,i:r.interp,
-      depth:"evidence",scribed:null,corner:null,slice:"d1",dossier:null,ledger:[]};
+      depth:"evidence",scribed:null,corner:null,ledger:[]};
     scribedInfo=null;
     logLedger("Sheet opened. The answer stands above; every tap scribes the why.");
     renderBench();
