@@ -301,7 +301,11 @@ textarea.specimen::placeholder{color:var(--ink-faint)}
   font-size:10px;letter-spacing:.04em;line-height:1.45}
 .mgroup .mcell .mn{font-size:11px;margin-bottom:4px}
 .mcell .mx{position:absolute;top:3px;right:7px;font-size:10px;font-weight:700;color:var(--ink-faint);pointer-events:none}
-.mcell.cut::after{content:"";position:absolute;inset:5px;border:1px solid var(--ink-faint);border-radius:50%;pointer-events:none}
+.mcell.cut::after{content:"";position:absolute;border:1px solid var(--ink-faint);pointer-events:none}
+.mcell.cut0::after{inset:6px 9px;border-radius:53% 47% 55% 45%/46% 54% 48% 52%;transform:rotate(-2deg)}
+.mcell.cut1::after{inset:8px 6px;border-radius:47% 53% 49% 51%/56% 44% 57% 43%;transform:rotate(2.5deg)}
+.mcell.cut2::after{inset:5px 10px;border-radius:56% 44% 51% 49%/43% 57% 45% 55%;transform:rotate(-1deg)}
+.mcell.cut3::after{inset:7px 7px;border-radius:49% 51% 45% 55%/53% 47% 54% 46%;transform:rotate(1.5deg)}
 .mcell.sel{
   background-color:var(--paper);border-color:var(--ink);color:var(--ink);
   background-image:
@@ -521,8 +525,8 @@ footer.site .fnote{font-family:var(--font-mono);font-size:11px;letter-spacing:.1
         <div class="primer-card">
           <div class="pnum">4</div>
           <h3>Ten species, and semiosis</h3>
-          <p>The admissibility rule: the later trichotomies cannot outrank the earlier. Order each trichotomy by quality (1), brute fact (2), convention (3); the interpretant's level may not exceed the object's, and the object's may not exceed the vehicle's. Seventeen of twenty seven combinations fail this test.</p>
-          <p>What survives is ten species, from the rhematic iconic qualisign (a mere feeling of red) to the delomic symbolic legisign (a full proof). When a reading would break the rule, the instrument flags the failure and asks for the earliest call to be re-examined, starting with the vehicle; it never demotes a reading to force a fit.</p>
+          <p>The admissibility rule: the later trichotomies cannot outrank the earlier. Order each trichotomy by quality (1), brute fact (2), convention (3); the interpretant's level may not exceed the object's, and the object's may not exceed the sign's. Seventeen of twenty seven combinations fail this test.</p>
+          <p>What survives is ten species, from the rhematic iconic qualisign (a mere feeling of red) to the delomic symbolic legisign (a full proof). When a reading would break the rule, the instrument flags the failure and asks for the earliest call to be re-examined, starting with the sign; it never demotes a reading to force a fit.</p>
           <p>Finally, semiosis. In the early account, every interpretant becomes a new sign, and the chain has no fixed end. In the later account semiosis is end-directed: inquiry converges on a final interpretant, and there need be no further sign. The instrument shows two links of the early chain and leaves the rest as open questions, which is where inquiry begins.</p>
         </div>
       </div>
@@ -748,21 +752,21 @@ function analyze(raw){
   ledger.push({k:"Interpretant", v:interp, test:interpTest});
 
   /* ---- D4: the admissibility gate ----
-     The rule is interpretant <= object <= vehicle. An inadmissible triple is a
+     The rule is interpretant <= object <= sign. An inadmissible triple is a
      mistaken reading, not a reading to repair by demotion: the honest move is
      to re-examine the earliest call first, starting with D1. */
   var V=vehicle, O=dominant, R=interp;
   var admissible = LVL[R]<=LVL[O] && LVL[O]<=LVL[V];
   if(admissible){
     ledger.push({k:"Admissibility", v:LVL[R]+" <= "+LVL[O]+" <= "+LVL[V]+" : admissible",
-      test:"Dependents never outrank what they depend on: interpretant <= object <= vehicle."});
+      test:"Dependents never outrank what they depend on: interpretant <= object <= sign."});
   }else{
     ledger.push({k:"Admissibility", v:"no admissible class",
       test:"Dependents never outrank what they depend on: "+R+" ("+LVL[R]+") / "+O+" ("+LVL[O]+") / "+V+" ("+LVL[V]+") breaks the rule. An inadmissible reading is a mistaken reading, so re-examine the earliest call first, starting with D1. The instrument does not demote readings to force a fit."});
   }
 
   var classNo = admissible ? CLASS_OF[R+"|"+O+"|"+V] : null;
-  var classInfo = admissible ? CLASSES[classNo-1] : {name:"No admissible class", plain:"The derived reading breaks the dependence rule, so no species fits. Re-examine the earliest call, starting with the vehicle."};
+  var classInfo = admissible ? CLASSES[classNo-1] : {name:"No admissible species", plain:"The derived reading breaks the dependence rule, so no species fits. Re-examine the earliest call, starting with the sign."};
 
   /* ambiguity worth recording */
   if(dominant==="symbol" && /\b(at|in|on)\s+the\s+\w+\s*[.!?]?\s*$/.test(t) && /(reading|says|reads|marked|labeled)/i.test(t)){
@@ -891,7 +895,7 @@ function analyze(raw){
   });
   trail.push({label:interp, test:interpTest});
   trail.push(classNo
-    ? {label:"class "+classNo, test:"Admissibility holds: interpretant <= object <= vehicle. "+classInfo.name+"."}
+    ? {label:"class "+classNo, test:"Admissibility holds: interpretant <= object <= sign. "+classInfo.name+"."}
     : {label:"no admissible class", test:"The derived reading breaks the dependence rule; re-examine the earliest call, starting with D1."});
   var tokenLine, replicaLine;
   if(V==="legisign"){
@@ -1104,7 +1108,7 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
         eqNode("o",vw.o,lvO,strike==="o")+" &le; "+
         eqNode("v",vw.v,lvV,false)+'</p>'+
       (ok
-        ? '<p class="constraint-note">The ranks satisfy the dependence rule, leaving one admissible class.</p>'
+        ? '<p class="constraint-note">The ranks satisfy the dependence rule, leaving one admissible species.</p>'
         : '<p class="constraint-note">Broken: '+esc(viol)+'. A broken reading is a misreading, not a verdict to repair by demotion. Re-examine the earliest call, D1, before the later ones.</p>')+
       '<div class="disclose-proof"><div class="disclose-in">'+
         '<p class="dart-proof">Scope: one ordinary reading of the whole sentence. A different reading can move the verdicts.</p>'+
@@ -1112,18 +1116,18 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
       '</div></div>'+
       '<p class="eq-cap">Tap any of the three terms to recast it by hand. The sheet recomputes; nothing is repaired by demotion.</p>';
 
-    /* the ten classes: cuts enclose ruled-out classes; x marks the asserted one */
+    /* the ten species: cuts enclose ruled-out species; x marks the asserted one */
     function cellHTML(c){
       var cls="mcell", mark="";
       if(ok){
         if(c.n===classNo){ cls+=" sel"; mark='<span class="mx">x</span>'; }
-        else cls+=" cut";
+        else cls+=" cut cut"+(c.n%4); /* each cut is hand-scribed: no two enclosures share a shape */
       }else{
         mark='<span class="mx">o</span>';
       }
       return '<button type="button" class="'+cls+'" data-cn="'+c.n+
         '" data-cname="'+esc(c.name)+'" data-cplain="'+esc(c.plain)+
-        '" aria-label="Class '+c.n+": "+esc(c.name)+'"><span class="mn">'+("0"+c.n).slice(-2)+"</span>"+esc(SHORT[c.n-1])+mark+"</button>";
+        '" aria-label="Species '+c.n+": "+esc(c.name)+'"><span class="mn">'+("0"+c.n).slice(-2)+"</span>"+esc(SHORT[c.n-1])+mark+"</button>";
     }
     var slice=SLICES[vw.slice];
     var groupsHTML=slice.groups.map(function(g){
@@ -1143,7 +1147,7 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
     }).join("");
 
     var clsInfo=ok?CLASSES[classNo-1]:null;
-    var answerName=ok?SHORT[classNo-1]:"No admissible class";
+    var answerName=ok?SHORT[classNo-1]:"No admissible species";
     var answerDef=ok?clsInfo.plain:((orig&&r.classPlain)||"The triple breaks the dependence rule, so no class admits it.");
 
     var depthBtns=["verdict","evidence","proof"].map(function(d){
@@ -1154,14 +1158,14 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
     '<section class="bench'+(vw.scribed!==null?" scribed":"")+'" id="bench" data-depth="'+vw.depth+'" aria-label="Dissection result">'+
       '<svg class="identity-svg" aria-hidden="true"></svg>'+
       '<p class="scope"><span class="folio">'+vw.folio+'</span>Scope: the whole sentence, under one ordinary declarative reading.'+
-        (ok?'<span class="badge ok">admissible reading</span>':'<span class="badge bad">no admissible class</span>')+'</p>'+
+        (ok?'<span class="badge ok">admissible reading</span>':'<span class="badge bad">no admissible species</span>')+'</p>'+
       '<div class="answer'+(vw.corner==="i"?" lit":"")+'" id="answerBlock">'+
         '<p class="answer-kicker">Species</p>'+
         '<h3 class="answer-name">'+esc(answerName)+'</h3>'+
         '<p class="answer-def">'+esc(answerDef)+'</p>'+
         (ok
-          ? '<p class="answer-class">CLASS '+classNo+' OF 10 &middot; '+esc(clsInfo.name)+'<span class="cap">visible before interaction</span></p>'
-          : '<p class="answer-class">NO ADMISSIBLE CLASS<span class="cap">the reading breaks the dependence rule</span></p>')+
+          ? '<p class="answer-class">SPECIES '+classNo+' OF 10 &middot; '+esc(clsInfo.name)+'<span class="cap">visible before interaction</span></p>'
+          : '<p class="answer-class">NO ADMISSIBLE SPECIES<span class="cap">the reading breaks the dependence rule</span></p>')+
       '</div>'+
       '<div class="words-row">'+
         '<span class="field-label">The sign</span>'+
@@ -1180,7 +1184,7 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
         constraintHTML+
       '</div>'+
       '<div class="matrix-row">'+
-        '<span class="field-label">The ten classes</span>'+
+        '<span class="field-label">The ten species</span>'+
         matrixHTML+
       '</div>'+
       '<div class="marginalia" id="marginalia" aria-live="polite"></div>'+
@@ -1276,7 +1280,7 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
     Array.prototype.forEach.call(bench.querySelectorAll(".sbtn"),function(b){
       b.addEventListener("click",function(){
         vw.slice=b.getAttribute("data-slice");
-        logLedger("Matrix re-sliced: "+(vw.slice==="d1"?"by the sign (D1)":"by the interpretant (D3)")+". Same ten classes, new arrangement.");
+        logLedger("Matrix re-sliced: "+(vw.slice==="d1"?"by the sign (D1)":"by the interpretant (D3)")+". Same ten species, new arrangement.");
         postRenderFocus='.sbtn[data-slice="'+vw.slice+'"]';
         renderBench();
       });
@@ -1330,11 +1334,11 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
       c.addEventListener("click",function(){
         var n=+c.getAttribute("data-cn"), classNo=currentClass(vw);
         if(classNo&&n===classNo)
-          logLedger("Class "+n+" asserted: "+vw.v+" + "+vw.o+" + "+vw.i+" is one admissible combination.");
+          logLedger("Species "+n+" asserted: "+vw.v+" + "+vw.o+" + "+vw.i+" is one admissible combination.");
         else if(classNo)
-          logLedger("Class "+n+" cut: not this combination under the current verdicts.");
+          logLedger("Species "+n+" cut: not this combination under the current verdicts.");
         else
-          logLedger("Class "+n+": no admissible triple here; the reading breaks the dependence rule.");
+          logLedger("Species "+n+": no admissible triple here; the reading breaks the dependence rule.");
         renderLedger();
       });
     });
