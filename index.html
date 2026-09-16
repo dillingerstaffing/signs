@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<meta name="build-version" content="v20260916-signs16">
+<meta name="build-version" content="v20260916-signs17">
 <title>Signs: An Instrument for Taking Texts Apart</title>
 <meta name="description" content="Inscribe a text. The instrument dissects it in Peirce's terms: the sign, the object, the interpretant, then names the class.">
 <meta property="og:title" content="Signs: An Instrument for Taking Texts Apart">
@@ -25,6 +25,18 @@
 <meta name="apple-mobile-web-app-title" content="Signs">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#eee9de">
+<script>
+/* Theme: notebook is the default; a stored visitor choice wins.
+   Runs before the stylesheet parses so the first paint is already
+   the right theme (no flash of the wrong one). Shared key emi-site-theme. */
+try{
+  var __t=localStorage.getItem('emi-site-theme');
+  var __theme=(__t==='classic')?'classic':'notebook';
+  document.documentElement.dataset.theme=__theme;
+  var __mc=document.querySelector('meta[name="theme-color"]');
+  if(__mc)__mc.setAttribute('content',__theme==='classic'?'#0b0e0d':'#eee9de');
+}catch(__e){document.documentElement.dataset.theme='notebook';}
+</script>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23eee9de'/%3E%3Cg stroke='%231b1d20' stroke-width='1.6'%3E%3Cline x1='16' y1='8' x2='8' y2='23'/%3E%3Cline x1='16' y1='8' x2='24' y2='23'/%3E%3Cline x1='8' y1='23' x2='24' y2='23'/%3E%3C/g%3E%3Ccircle cx='16' cy='8' r='3.4' fill='%23315f76'/%3E%3Ccircle cx='8' cy='23' r='3.4' fill='%239b4539'/%3E%3Ccircle cx='24' cy='23' r='3.4' fill='%237a583a'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -44,6 +56,74 @@
   --font-body:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,sans-serif;
   --font-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
 }
+/* ================= Dual theme: notebook (default) and classic =================
+   :root carries the notebook folio design, untouched. Everything below
+   re-voices the same markup as a stark dark drafting theme: near-black
+   surfaces, mono typography, hairlines, restrained. Every visible element
+   keys off these variables; hardcoded light colors get explicit classic
+   overrides further down. */
+html[data-theme="classic"]{
+  --paper:#0b0e0d; --paper-2:#111512; --paper-3:#1a201c;
+  --ink:#e8e6dc; --ink-soft:rgba(232,230,220,.62); --ink-faint:rgba(232,230,220,.40);
+  --hairline:rgba(232,230,220,.22); --hairline-soft:rgba(232,230,220,.11);
+  --vehicle:#6fa8bf; --object:#c47c5d; --interpretant:#cfa15c;
+  --font-display:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --font-body:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  background:#0b0e0d; color-scheme:dark;
+}
+html[data-theme="notebook"]{color-scheme:light}
+
+/* hardcoded light-theme colors: classic overrides */
+html[data-theme="classic"] header.site{background:rgba(11,14,13,.94)}
+html[data-theme="classic"] .btn:hover{background:#fff}
+html[data-theme="classic"] .answer.lit .answer-name{box-shadow:inset 0 -8px 0 rgba(207,161,92,.32)}
+html[data-theme="classic"] .word:hover{background:rgba(232,230,220,.09)}
+html[data-theme="classic"] .eqnode:hover{background:rgba(232,230,220,.09)}
+html[data-theme="classic"] .dart.traced{background:rgba(232,230,220,.06)}
+html[data-theme="classic"] table.classes tbody tr:hover{background:rgba(232,230,220,.05)}
+
+/* ---- The theme toggle: a quiet 26px mark, not a nav link ---- */
+nav.main{margin-left:auto}
+.brand{flex-shrink:0}
+.theme-toggle{
+  flex:0 0 auto;width:26px;height:26px;display:grid;place-items:center;padding:0;
+  background:transparent;border:1px solid var(--hairline);border-radius:2px;cursor:pointer;
+  margin-left:14px;
+}
+.theme-toggle:hover{border-color:var(--ink)}
+.theme-toggle:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.theme-toggle-mark{display:flex;width:12px;height:12px;transition:transform .5s cubic-bezier(.3,.7,.2,1)}
+.theme-toggle-mark i{display:block;width:6px;height:12px}
+.theme-toggle-mark i:first-child{background:#eee9de}
+.theme-toggle-mark i:last-child{background:#1b1d20;border-left:1px solid #eee9de}
+.theme-toggle.is-flipped .theme-toggle-mark{transform:rotate(180deg)}
+
+/* brand mark and drawn identity line follow the theme */
+.mark .mk-lines{stroke:var(--ink);fill:none}
+.mark .mk-v{fill:var(--vehicle)}
+.mark .mk-o{fill:var(--object)}
+.mark .mk-i{fill:var(--interpretant)}
+.identity-svg .il{fill:var(--ink)}
+.identity-svg .ilp{stroke:var(--ink)}
+/* notebook-only diagram treatment (research: genius-notebook devices):
+   direct keying on the scribe trace, and commitment-encoded nodes.
+   Classic keeps the original uniform visuals. */
+.identity-svg .ilabel{font-family:var(--font-mono);font-size:10px;letter-spacing:.14em;fill:var(--ink-faint)}
+html[data-theme="classic"] .identity-svg .ilabel{display:none}
+html[data-theme="notebook"] .identity-svg .il-dim{fill:var(--ink-faint)}
+
+/* ---- Theme wipe: a calm radial reveal from the toggle ---- */
+::view-transition-old(root), ::view-transition-new(root) {
+  animation: none; mix-blend-mode: normal;
+}
+::view-transition-new(root) {
+  z-index: 2147483647;
+  clip-path: circle(0px at var(--tx, 50vw) var(--ty, 12px));
+  animation: theme-wipe .7s cubic-bezier(.32, .72, .24, 1) forwards;
+}
+@keyframes theme-wipe {
+  to { clip-path: circle(150vmax at var(--tx, 50vw) var(--ty, 12px)); }
+}
 *{box-sizing:border-box}
 html{overflow-x:clip;scroll-behavior:smooth}
 body{
@@ -56,13 +136,13 @@ body{
 .visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 
 header.site{
-  position:sticky;top:0;z-index:50;height:64px;
+  position:sticky;top:env(safe-area-inset-top,0px);z-index:50;height:64px;
   background:rgba(238,233,222,.94);backdrop-filter:blur(8px);
   border-bottom:1px solid var(--hairline);
 }
 /* a marginal note, pinned above everything, in the folio's own voice */
 .disclaimer{background:var(--paper-2);border-bottom:1px solid var(--hairline)}
-.disclaimer .wrap{padding-top:9px;padding-bottom:9px;display:flex;gap:14px;align-items:baseline;flex-wrap:wrap}
+.disclaimer .wrap{padding-top:calc(9px + env(safe-area-inset-top,0px));padding-bottom:9px;display:flex;gap:14px;align-items:baseline;flex-wrap:wrap}
 .dlabel{font-family:var(--font-mono);font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);white-space:nowrap}
 .dtext{font-family:var(--font-display);font-style:italic;font-size:14.5px;line-height:1.5;color:var(--ink-soft)}
 header.site .wrap{height:64px;display:flex;align-items:center;justify-content:space-between}
@@ -341,11 +421,12 @@ footer.site .fnote{font-family:var(--font-mono);font-size:11px;letter-spacing:.1
   nav.main a{font-size:11px;white-space:nowrap}
   header.site .wrap{padding-left:18px;padding-right:0}
   nav.main{
-    overflow-x:auto;scrollbar-width:none;max-width:64vw;flex-shrink:1;
+    overflow-x:auto;scrollbar-width:none;max-width:50vw;flex-shrink:1;
     -webkit-mask-image:linear-gradient(to right,#000 86%,transparent);
     mask-image:linear-gradient(to right,#000 86%,transparent);
   }
   nav.main::-webkit-scrollbar{display:none}
+  .theme-toggle{margin-left:10px}
 }
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
@@ -364,13 +445,13 @@ footer.site .fnote{font-family:var(--font-mono);font-size:11px;letter-spacing:.1
 <header class="site">
   <div class="wrap">
     <a class="brand" href="#top" aria-label="Signs home">
-      <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true">
-        <g stroke="#1b1d20" stroke-width="1.6">
+      <svg class="mark" width="30" height="30" viewBox="0 0 32 32" aria-hidden="true">
+        <g class="mk-lines" stroke-width="1.6">
           <line x1="16" y1="8" x2="8" y2="23"/><line x1="16" y1="8" x2="24" y2="23"/><line x1="8" y1="23" x2="24" y2="23"/>
         </g>
-        <circle cx="16" cy="8" r="3.4" fill="#315f76"/>
-        <circle cx="8" cy="23" r="3.4" fill="#9b4539"/>
-        <circle cx="24" cy="23" r="3.4" fill="#7a583a"/>
+        <circle class="mk-v" cx="16" cy="8" r="3.4"/>
+        <circle class="mk-o" cx="8" cy="23" r="3.4"/>
+        <circle class="mk-i" cx="24" cy="23" r="3.4"/>
       </svg>
       <span class="word">SIGNS</span>
     </a>
@@ -380,6 +461,9 @@ footer.site .fnote{font-family:var(--font-mono);font-size:11px;letter-spacing:.1
       <a href="#primer">Primer</a>
       <a href="#colophon">Colophon</a>
     </nav>
+    <button class="theme-toggle" type="button" aria-label="Switch to classic drafting theme" title="Switch theme">
+      <span class="theme-toggle-mark" aria-hidden="true"><i></i><i></i></span>
+    </button>
   </div>
 </header>
 
@@ -513,13 +597,13 @@ footer.site .fnote{font-family:var(--font-mono);font-size:11px;letter-spacing:.1
 <footer class="site">
   <div class="wrap">
     <div class="fbrand">
-      <svg width="24" height="24" viewBox="0 0 32 32" aria-hidden="true">
-        <g stroke="#1b1d20" stroke-width="1.6">
+      <svg class="mark" width="24" height="24" viewBox="0 0 32 32" aria-hidden="true">
+        <g class="mk-lines" stroke-width="1.6">
           <line x1="16" y1="8" x2="8" y2="23"/><line x1="16" y1="8" x2="24" y2="23"/><line x1="8" y1="23" x2="24" y2="23"/>
         </g>
-        <circle cx="16" cy="8" r="3.4" fill="#315f76"/>
-        <circle cx="8" cy="23" r="3.4" fill="#9b4539"/>
-        <circle cx="24" cy="23" r="3.4" fill="#7a583a"/>
+        <circle class="mk-v" cx="16" cy="8" r="3.4"/>
+        <circle class="mk-o" cx="8" cy="23" r="3.4"/>
+        <circle class="mk-i" cx="24" cy="23" r="3.4"/>
       </svg>
       <span class="word">SIGNS</span>
     </div>
@@ -1117,11 +1201,11 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
       '</div>'+
     '</section>'+
     '<section class="further">'+
-      '<p class="provenance">Taxonomy: <a href="https://plato.stanford.edu/entries/peirce-semiotics/">SEP: Peirce\'s Theory of Signs</a> (the triad; the three trichotomies; the ten classes). Engine: surface-marker heuristics; every decision above carries its test. Build v20260916-signs16.</p>'+
+      '<p class="provenance">Taxonomy: <a href="https://plato.stanford.edu/entries/peirce-semiotics/">SEP: Peirce\'s Theory of Signs</a> (the triad; the three trichotomies; the ten classes). Engine: surface-marker heuristics; every decision above carries its test. Build v20260916-signs17.</p>'+
     '</section>';
   }
 
-  /* the line of identity: one static unbroken line, composed in place */
+  /* the scribe trace: one static unbroken line, composed in place */
   function drawIdentity(){
     var bench=$("bench"); if(!bench) return;
     var svg=bench.querySelector(".identity-svg"); if(!svg) return;
@@ -1141,13 +1225,24 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
     if(dRight<railX+40||dTop<wy) return;
     var f=function(n){ return n.toFixed(1); };
     var p="M "+f(wx)+" "+f(wy)+" H "+railX+" V "+f(dTop)+" H "+f(dRight)+" V "+f(cTop);
-    var nodes='<rect x="'+f(wx-3.5)+'" y="'+f(wy-3.5)+'" width="7" height="7" fill="#1b1d20"/>'+
+    var nodes='<rect x="'+f(wx-3.5)+'" y="'+f(wy-3.5)+'" width="7" height="7" class="il"/>'+
       darts.map(function(d){ var r=rel(d);
-        return '<rect x="'+f(r.x-3.5)+'" y="'+f(dTop-3.5)+'" width="7" height="7" fill="#1b1d20"/>';
+        /* commitment encoding (notebook): nodes at provisional (dimmed)
+           verdicts print in faint ink; the scribed sign, its live corner,
+           and the dependence check stay heavy */
+        var dc=d.classList.contains("dim")?" il-dim":"";
+        return '<rect x="'+f(r.x-3.5)+'" y="'+f(dTop-3.5)+'" width="7" height="7" class="il'+dc+'"/>';
       }).join("")+
-      '<rect x="'+f(dRight-3.5)+'" y="'+f(cTop-3.5)+'" width="7" height="7" fill="#1b1d20"/>';
+      '<rect x="'+f(dRight-3.5)+'" y="'+f(cTop-3.5)+'" width="7" height="7" class="il"/>';
+    /* direct keying (notebook): the rail carries its own label, never a
+       separate legend; only when the rail is long enough to carry it */
+    var railLen=dTop-wy, label="";
+    if(railLen>240){
+      var lx=f(railX), ly=f(wy+railLen/2);
+      label='<text class="ilabel" x="'+lx+'" y="'+ly+'" transform="rotate(-90 '+lx+' '+ly+')" text-anchor="middle">one sign under three descriptions</text>';
+    }
     svg.setAttribute("viewBox","0 0 "+f(b.width)+" "+f(b.height));
-    svg.innerHTML='<path d="'+p+'" fill="none" stroke="#1b1d20" stroke-width="2.5"/>'+nodes;
+    svg.innerHTML='<path d="'+p+'" fill="none" class="ilp" stroke-width="2.5"/>'+nodes+label;
   }
 
   var postRenderFocus=null;
@@ -1260,6 +1355,46 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
     if(rzT) clearTimeout(rzT);
     rzT=setTimeout(function(){ drawIdentity(); },150);
   });
+})();
+</script>
+<script>
+/* Theme toggle: notebook (default) and classic drafting. The head script
+   sets data-theme before first paint; this wires the toggle button.
+   Switches wipe radially from the toggle via the View Transitions API,
+   fall back to an instant swap, and respect prefers-reduced-motion. */
+(function () {
+  var KEY = 'emi-site-theme', root = document.documentElement;
+  var meta = document.querySelector('meta[name="theme-color"]');
+  var COLORS = { notebook: '#eee9de', classic: '#0b0e0d' };
+  var btn = document.querySelector('.theme-toggle');
+  function current() { return root.dataset.theme === 'classic' ? 'classic' : 'notebook'; }
+  function apply(t) {
+    root.dataset.theme = t;
+    if (meta) meta.setAttribute('content', COLORS[t]);
+    if (btn) btn.setAttribute('aria-label',
+      t === 'classic' ? 'Switch to notebook folio theme' : 'Switch to classic drafting theme');
+  }
+  function toggle() {
+    var next = current() === 'classic' ? 'notebook' : 'classic';
+    try { localStorage.setItem(KEY, next); } catch (_) {}
+    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (btn) {
+      var r = btn.getBoundingClientRect();
+      root.style.setProperty('--tx', Math.round(r.left + r.width / 2) + 'px');
+      root.style.setProperty('--ty', Math.round(r.top + r.height / 2) + 'px');
+      btn.classList.toggle('is-flipped', next === 'classic');
+    }
+    if (!reduced && document.startViewTransition) {
+      document.startViewTransition(function () { apply(next); });
+    } else {
+      apply(next);
+    }
+  }
+  if (btn) {
+    btn.classList.toggle('is-flipped', current() === 'classic');
+    btn.addEventListener('click', toggle);
+  }
+  apply(current());
 })();
 </script>
 <script>
