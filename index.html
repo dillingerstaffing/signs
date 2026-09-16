@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<meta name="build-version" content="v20260916-signs7">
+<meta name="build-version" content="v20260916-signs8">
 <title>Signs: An Instrument for Taking Texts Apart</title>
 <meta name="description" content="Inscribe a text. The instrument dissects it in Peirce's terms: the vehicle, the object, the interpretant, then names the species.">
 <meta property="og:title" content="Signs: An Instrument for Taking Texts Apart">
@@ -181,13 +181,11 @@ textarea.specimen::placeholder{color:var(--ink-faint)}
 .triad-cap{font-size:12px;color:var(--ink-soft);margin:10px 0 0;max-width:340px;line-height:1.6}
 .triad-controls .field-label{margin:18px 0 8px}
 .triad-controls .field-label:first-child{margin-top:0}
-.toggle-row{display:flex;align-items:center;gap:10px;min-height:44px;cursor:pointer;font-size:14px}
-.toggle-row input{width:20px;height:20px;accent-color:var(--ink)}
-input[type="range"].peel{width:100%;min-height:44px;-webkit-appearance:none;appearance:none;background:transparent;cursor:pointer}
-input[type="range"].peel::-webkit-slider-runnable-track{height:2px;background:var(--ink)}
-input[type="range"].peel::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:18px;height:18px;margin-top:-8px;background:var(--paper);border:2px solid var(--ink);border-radius:0}
-input[type="range"].peel::-moz-range-track{height:2px;background:var(--ink)}
-input[type="range"].peel::-moz-range-thumb{width:14px;height:14px;background:var(--paper);border:2px solid var(--ink);border-radius:0}
+input[type="range"].scrub{width:100%;min-height:44px;-webkit-appearance:none;appearance:none;background:transparent;cursor:pointer}
+input[type="range"].scrub::-webkit-slider-runnable-track{height:2px;background:var(--ink)}
+input[type="range"].scrub::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:18px;height:18px;margin-top:-8px;background:var(--paper);border:2px solid var(--ink);border-radius:0}
+input[type="range"].scrub::-moz-range-track{height:2px;background:var(--ink)}
+input[type="range"].scrub::-moz-range-thumb{width:14px;height:14px;background:var(--paper);border:2px solid var(--ink);border-radius:0}
 .triad-svg text{paint-order:stroke;stroke:var(--paper);stroke-width:5px}
 .peel-marks{display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint)}
 .triad-svg .node{opacity:0;transform-box:fill-box;transform-origin:center;transition:opacity var(--t-standard) var(--e-out),transform var(--t-expressive) var(--e-out)}
@@ -197,10 +195,41 @@ input[type="range"].peel::-moz-range-thumb{width:14px;height:14px;background:var
 .triad-svg.revealed[data-peel="0"] .edge-oi,.triad-svg.revealed[data-peel="0"] .edge-vi{opacity:.1}
 .triad-svg.revealed[data-peel="1"] .node-i,.triad-svg.revealed[data-peel="1"] .edge-oi,.triad-svg.revealed[data-peel="1"] .edge-vi{opacity:.1}
 .triad-svg.revealed[data-peel="2"] .edge-oi{opacity:.1}
-.triad-svg.exploded .node-v{transform:translate(0,-38px)}
-.triad-svg.exploded .node-o{transform:translate(-48px,32px)}
-.triad-svg.exploded .node-i{transform:translate(48px,32px)}
-.triad-svg.exploded .edge{opacity:.18}
+/* the bench: continuous exploded view driven by --ex on .smain */
+.smain{--ex:0}
+.smain .node-v{transform:translate(0,calc(var(--ex) * -38px))}
+.smain .node-o{transform:translate(calc(var(--ex) * -52px),calc(var(--ex) * 34px))}
+.smain .node-i{transform:translate(calc(var(--ex) * 52px),calc(var(--ex) * 34px))}
+.smain .edge{opacity:calc(1 - var(--ex)*0.82)}
+.smain.scrubbing .triad-svg .node{transition:opacity var(--t-standard) var(--e-out),transform .08s linear}
+/* specimen trays: pulled out as the corners separate */
+.trays{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:20px;
+  opacity:var(--ex);transform:translateY(calc((1 - var(--ex)) * 18px))}
+.trays .tray{pointer-events:none}
+.smain.trays-live .trays .tray{pointer-events:auto}
+.tray{border:1px solid var(--hairline);border-radius:2px;background:var(--paper);padding:14px 16px 16px;font-size:13.5px;line-height:1.6}
+.tray .tk{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;display:block;margin-bottom:8px}
+.tray-d1{border-top:3px solid var(--vehicle)} .tray-d1 .tk{color:var(--vehicle)}
+.tray-d2{border-top:3px solid var(--object)} .tray-d2 .tk{color:var(--object)}
+.tray-d3{border-top:3px solid var(--interpretant)} .tray-d3 .tk{color:var(--interpretant)}
+.tray .tverdict{font-family:var(--font-display);font-weight:560;font-size:27px;margin:0 0 2px;letter-spacing:.01em;text-transform:uppercase}
+.tray .trej{color:var(--ink-faint);font-size:12.5px;font-family:var(--font-mono)}
+.tray .trej s{text-decoration-color:var(--object);text-decoration-thickness:1.5px}
+.tray .ttest{color:var(--ink-soft);font-size:13px;margin-top:10px}
+.tray .tsub{color:var(--ink-soft);font-size:12.5px;margin-top:8px;font-style:italic}
+@media (max-width:900px){.trays{grid-template-columns:1fr}}
+/* causal threads: hairlines from a corner to its evidence */
+.canvas{position:relative}
+.threads{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:5}
+.ent{transition:opacity .25s}
+.ent.dim{opacity:.25}
+.specimen-quote{border-bottom:3px solid transparent;transition:border-color .25s}
+.specimen-quote.lit{border-bottom-color:var(--interpretant)}
+.btn{font-family:var(--font-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;
+  background:var(--ink);color:var(--paper);border:1px solid var(--ink);border-radius:2px;
+  padding:12px 18px;min-height:44px;cursor:pointer;margin-top:18px}
+.btn:active{transform:translateY(1px)}
+.cell.hit{box-shadow:0 0 0 3px var(--paper),0 0 0 5px var(--ink)}
 .triad-svg .draw{stroke-dasharray:1;stroke-dashoffset:1}
 .triad-svg.revealed .draw{animation:drawline .7s var(--e-out) forwards}
 @keyframes drawline{to{stroke-dashoffset:0}}
@@ -914,6 +943,7 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
     }
     var subs = (r.subordinates||[]).map(function(x){ return String(x).split(" (")[0]; });
     var subsLine = subs.length ? "also at work: "+subs.join(" \u00b7 ") : null;
+
     return ''+
     '<svg class="triad-svg" id="triad" data-peel="3" viewBox="-50 0 560 410" role="img" aria-label="Triadic diagram: three corners, three verdicts">'+
       '<defs><marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">'+
@@ -964,8 +994,31 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
       return '<div class="mnote"><span class="mk">Open</span>'+esc(q)+'</div>';
     }).join("");
 
+    var testOf={};
+    r.ledger.forEach(function(l){ testOf[l.k]=l.test; });
+    function tray(cls, tag, verdict, others, test, sub){
+      return '<div class="tray '+cls+'"><span class="tk">'+tag+'</span>'+
+        '<p class="tverdict">'+esc(verdict)+'</p>'+
+        '<p class="trej">not <s>'+others.join('</s> &middot; not <s>')+'</s></p>'+
+        '<p class="ttest">'+esc(test)+'</p>'+
+        (sub?'<p class="tsub">'+esc(sub)+'</p>':'')+'</div>';
+    }
+    var traysHTML='<div class="trays" id="trays" aria-label="Specimen trays">'+
+      tray("tray-d1","D1 &middot; the sign in itself",r.vehicle,
+        ["qualisign","sinsign","legisign"].filter(function(w){return w!==r.vehicle;}),
+        testOf["Vehicle"]||"")+
+      tray("tray-d2","D2 &middot; the sign to its object",r.objectRelation,
+        ["icon","index","symbol"].filter(function(w){return w!==r.objectRelation;}),
+        testOf["Object relation"]||"",
+        r.subordinates.length?("Also at work: "+r.subordinates.join("; ")+"."):"")+
+      tray("tray-d3","D3 &middot; the sign to its interpretant",r.interp,
+        ["rheme","dicent","delome"].filter(function(w){return w!==r.interp;}),
+        testOf["Interpretant"]||"")+
+    '</div>';
+
     return ''+
     '<section class="canvas" id="canvas" aria-label="Dissection">'+
+      '<svg class="threads" id="threads" aria-hidden="true"></svg>'+
       '<div class="canvas-head">'+
         '<span class="kicker">Dissection</span>'+
         '<p class="specimen-quote">&ldquo;'+esc(r.text)+'&rdquo;</p>'+
@@ -983,11 +1036,16 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
         admiss+
         '<div class="triad-controls">'+
           '<span class="field-label">Dissection</span>'+
-          '<label class="toggle-row"><input type="checkbox" id="explode"> Exploded view</label>'+
+          '<label class="field-label" for="explode">Exploded view</label>'+
+          '<input type="range" class="scrub" id="explode" min="0" max="100" value="0" aria-label="Exploded view: pull the three corners apart">'+
+          '<div class="peel-marks"><span>Assembled</span><span>Exploded</span></div>'+
           '<span class="field-label">Layer peel</span>'+
-          '<input type="range" class="peel" id="peel" min="0" max="3" value="3" aria-label="Layer peel: vehicle, object, interpretant, whole">'+
+          '<input type="range" class="scrub" id="peel" min="0" max="3" value="3" aria-label="Layer peel: vehicle, object, interpretant, whole">'+
           '<div class="peel-marks"><span>Vehicle</span><span>Object</span><span>Interpr.</span><span>Whole</span></div>'+
-        '</div></div>'+
+          '<button type="button" class="btn" id="trace">Trace the derivation</button>'+
+        '</div>'+
+        traysHTML+
+        '</div>'+
         '<aside class="smargin">'+revNote+whyThree+'</aside></div>'+
       '</div>'+
       '<div class="canvas-row">'+
@@ -1003,10 +1061,10 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
         '</div>'+
         '<aside class="smargin">'+openNotes+'</aside></div>'+
       '</div>'+
-      '<p class="inspector" id="inspector">Tap an entity, a triad corner, or a class: its verdict and test appear here.</p>'+
+      '<p class="inspector" id="inspector">Tap a triad corner to trace its evidence in the sentence; tap Trace the derivation to watch the three verdicts converge on the class.</p>'+
     '</section>'+
     '<section class="further">'+
-      '<p class="provenance">Taxonomy: <a href="https://plato.stanford.edu/entries/peirce-semiotics/">SEP: Peirce\'s Theory of Signs</a> (the triad; the three trichotomies; the ten classes). Engine: surface-marker heuristics; every decision above carries its test. Build v20260916-signs7.</p>'+
+      '<p class="provenance">Taxonomy: <a href="https://plato.stanford.edu/entries/peirce-semiotics/">SEP: Peirce\'s Theory of Signs</a> (the triad; the three trichotomies; the ten classes). Engine: surface-marker heuristics; every decision above carries its test. Build v20260916-signs8.</p>'+
     '</section>';
   }
 
@@ -1032,7 +1090,10 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
     };
     Array.prototype.forEach.call(document.querySelectorAll("#triad [data-node]"), function(g){
       g.style.cursor="pointer";
-      g.addEventListener("click",function(){ say(nodeInfo[g.getAttribute("data-node")]); });
+      g.addEventListener("click",function(){
+        var n=g.getAttribute("data-node");
+        say(nodeInfo[n]); traceCorner(n,g);
+      });
     });
     Array.prototype.forEach.call(document.querySelectorAll(".cell"), function(c){
       c.addEventListener("click",function(){
@@ -1040,17 +1101,138 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
       });
     });
     var svg=$("triad");
-    if(svg) wireTriad(svg);
-  }
 
-  function wireTriad(svg){
-    var explode = $("explode"), peel = $("peel");
-    if(explode) explode.addEventListener("change", function(){
-      svg.classList.toggle("exploded", explode.checked);
-    });
-    if(peel) peel.addEventListener("input", function(){
-      svg.setAttribute("data-peel", peel.value);
-    });
+    /* ---- the bench: threads, trays, derivation tracing ---- */
+    var NS="http://www.w3.org/2000/svg";
+    var CORNER_COLOR={v:"#2f5d7d",o:"#a63d22",i:"#6b5a1e"};
+    function clearThreads(){
+      var t=$("threads"); if(t) t.innerHTML="";
+      Array.prototype.forEach.call(document.querySelectorAll(".ent.dim"), function(el){ el.classList.remove("dim"); });
+      var q=document.querySelector(".specimen-quote"); if(q) q.classList.remove("lit");
+    }
+    if(window.__signsClear) window.removeEventListener("resize", window.__signsClear);
+    window.__signsClear=clearThreads; window.addEventListener("resize", clearThreads);
+    function sectionGeom(){
+      var sec=$("canvas"), t=$("threads");
+      if(!sec||!t) return null;
+      var sr=sec.getBoundingClientRect();
+      t.setAttribute("viewBox","0 0 "+sec.offsetWidth+" "+sec.offsetHeight);
+      return {sr:sr};
+    }
+    function threadLine(x1,y1,x2,y2,color){
+      var ln=document.createElementNS(NS,"line");
+      ln.setAttribute("x1",x1.toFixed(1)); ln.setAttribute("y1",y1.toFixed(1));
+      ln.setAttribute("x2",x2.toFixed(1)); ln.setAttribute("y2",y2.toFixed(1));
+      ln.setAttribute("stroke",color); ln.setAttribute("stroke-width","1.5");
+      $("threads").appendChild(ln);
+    }
+    /* tap a corner: hairlines to the exact evidence behind its verdict */
+    function traceCorner(n, g){
+      clearThreads();
+      var geo=sectionGeom(); if(!geo) return;
+      var sr=geo.sr, color=CORNER_COLOR[n];
+      var fr=g.getBoundingClientRect();
+      var x1=fr.left+fr.width/2-sr.left, y1=fr.bottom-sr.top;
+      function lineTo(el){
+        var r2=el.getBoundingClientRect();
+        threadLine(x1,y1,r2.left+r2.width/2-sr.left,r2.top-sr.top,color);
+      }
+      var ents=Array.prototype.slice.call(document.querySelectorAll(".ent"));
+      if(n==="v"){ ents.forEach(lineTo); }
+      else if(n==="o"){
+        var strong=ents.filter(function(e){ return e.getAttribute("data-k")!=="symbol"; });
+        ents.forEach(function(e){ if(e.getAttribute("data-k")==="symbol") e.classList.add("dim"); });
+        (strong.length?strong:ents).forEach(lineTo);
+      }else{
+        var q=document.querySelector(".specimen-quote");
+        if(q){ q.classList.add("lit"); lineTo(q); }
+      }
+    }
+    /* trace the derivation: three verdicts travel to the class, or jam */
+    function traceDerivation(svg){
+      clearThreads();
+      var geo=sectionGeom(); if(!geo) return;
+      var sr=geo.sr, t=$("threads");
+      var names=["v","o","i"];
+      var segs=names.map(function(n){
+        var g=svg.querySelector('[data-node="'+n+'"]');
+        var fr=g.getBoundingClientRect();
+        return {x1:fr.left+fr.width/2-sr.left, y1:fr.top+fr.height/2-sr.top, color:CORNER_COLOR[n]};
+      });
+      var target=r.classNo?document.querySelector('.cell[data-cn="'+r.classNo+'"]'):null;
+      if(target){
+        var tr=target.getBoundingClientRect();
+        var x2=tr.left+tr.width/2-sr.left, y2=tr.top-sr.top;
+        segs.forEach(function(s){ s.x2=x2; s.y2=y2; threadLine(s.x1,s.y1,x2,y2,s.color); });
+      }else{
+        var sc=document.querySelector(".scale"), scr=sc.getBoundingClientRect();
+        var jam={x:sr.width/2, y:scr.top-sr.top-44};
+        segs.forEach(function(s){ s.x2=jam.x; s.y2=jam.y; threadLine(s.x1,s.y1,jam.x,jam.y,s.color); });
+        var mk=document.createElementNS(NS,"g");
+        var mc=document.createElementNS(NS,"circle");
+        mc.setAttribute("cx",jam.x); mc.setAttribute("cy",jam.y); mc.setAttribute("r",7);
+        mc.setAttribute("fill","none"); mc.setAttribute("stroke","#a63d22"); mc.setAttribute("stroke-width","2");
+        mk.appendChild(mc);
+        var tx=document.createElementNS(NS,"text");
+        tx.setAttribute("x",jam.x); tx.setAttribute("y",jam.y-16);
+        tx.setAttribute("text-anchor","middle"); tx.setAttribute("font-size","12");
+        tx.setAttribute("font-family","JetBrains Mono, monospace"); tx.setAttribute("fill","#a63d22");
+        tx.textContent="no admissible class";
+        mk.appendChild(tx); t.appendChild(mk);
+      }
+      var dots=segs.map(function(s){
+        var c=document.createElementNS(NS,"circle");
+        c.setAttribute("r",4.5); c.setAttribute("fill",s.color);
+        c.setAttribute("cx",s.x1); c.setAttribute("cy",s.y1);
+        t.appendChild(c); return c;
+      });
+      function finish(){
+        if(target){
+          target.classList.add("hit");
+          setTimeout(function(){ target.classList.remove("hit"); },1400);
+          say("Derivation traced: "+r.vehicle+", "+r.objectRelation+" and "+r.interp+" converge on class "+r.classNo+", "+r.className+".");
+        }else{
+          say("Derivation traced: the three verdicts cannot converge. The reading breaks the dependence rule, so there is no admissible class. Re-examine the earliest call, D1.");
+        }
+      }
+      if(reducedMotion()){
+        dots.forEach(function(c,i){ c.setAttribute("cx",segs[i].x2); c.setAttribute("cy",segs[i].y2); });
+        finish(); return;
+      }
+      var t0=null;
+      (function frame(ts){
+        if(t0===null) t0=ts;
+        var alive=false;
+        dots.forEach(function(c,i){
+          var p=(ts-t0-i*160)/850; p=p<0?0:(p>1?1:p);
+          if(p<1) alive=true;
+          var e=p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2;
+          c.setAttribute("cx",segs[i].x1+(segs[i].x2-segs[i].x1)*e);
+          c.setAttribute("cy",segs[i].y1+(segs[i].y2-segs[i].y1)*e);
+        });
+        if(alive) requestAnimationFrame(frame); else finish();
+      })(performance.now());
+    }
+    function wireTriad(svg){
+      var smain=svg.closest(".smain");
+      var explode=$("explode"), peel=$("peel"), trace=$("trace");
+      function setEx(){
+        var ex=explode.value/100;
+        smain.style.setProperty("--ex",ex.toFixed(3));
+        smain.classList.toggle("trays-live",ex>0.3);
+        clearThreads();
+      }
+      if(explode){
+        explode.addEventListener("input",setEx);
+        explode.addEventListener("pointerdown",function(){ smain.classList.add("scrubbing"); });
+        ["pointerup","pointercancel","blur"].forEach(function(ev){
+          explode.addEventListener(ev,function(){ smain.classList.remove("scrubbing"); });
+        });
+      }
+      if(peel) peel.addEventListener("input",function(){ svg.setAttribute("data-peel",peel.value); });
+      if(trace) trace.addEventListener("click",function(){ traceDerivation(svg); });
+    }
+    if(svg) wireTriad(svg);
   }
 
   function reveal(r){
