@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<meta name="build-version" content="v20260916-signs11">
+<meta name="build-version" content="v20260916-signs12">
 <title>Signs: An Instrument for Taking Texts Apart</title>
-<meta name="description" content="Inscribe a text. The instrument dissects it in Peirce's terms: the vehicle, the object, the interpretant, then names the species.">
+<meta name="description" content="Inscribe a text. The instrument dissects it in Peirce's terms: the sign, the object, the interpretant, then names the species.">
 <meta property="og:title" content="Signs: An Instrument for Taking Texts Apart">
 <meta property="og:description" content="Every text is a machine of signs. This instrument takes yours apart and names the species.">
 <meta property="og:type" content="website">
@@ -138,7 +138,7 @@ textarea.specimen::placeholder{color:var(--ink-faint)}
 /* ---- the bench: answer first, evidence in place ---- */
 .bench{
   background:var(--paper-2);border:1px solid var(--hairline);border-radius:3px;
-  padding:30px 30px 26px;margin-top:22px;scroll-margin-top:84px;
+  padding:30px 30px 26px;margin-top:22px;scroll-margin-top:84px;position:relative;
 }
 .scope{font-family:var(--font-mono);font-size:12px;letter-spacing:.06em;color:var(--ink-soft);margin:0 0 26px;line-height:2.1}
 .scope .folio{font-weight:700;color:var(--ink);letter-spacing:.14em;margin-right:14px}
@@ -159,7 +159,7 @@ textarea.specimen::placeholder{color:var(--ink-faint)}
   padding:1px 2px;margin:0 .35em 0 0;cursor:pointer;
   transition:background-color var(--fast) var(--ease),color var(--fast) var(--ease),box-shadow var(--fast) var(--ease),opacity var(--fast) var(--ease),border-color var(--fast) var(--ease);
 }
-.word:hover{border-bottom-color:var(--hairline)}
+.word:hover{border-bottom-color:var(--hairline);background:rgba(27,29,32,.06)}
 .word.active{background:var(--ink);color:var(--paper)}
 .word.hl-v{box-shadow:inset 0 -3px 0 var(--vehicle);color:var(--vehicle)}
 .word.hl-o{box-shadow:inset 0 -3px 0 var(--object);color:var(--object)}
@@ -255,6 +255,73 @@ textarea.specimen::placeholder{color:var(--ink-faint)}
 .provenance{font-family:var(--font-mono);font-size:12px;color:var(--ink-faint);margin-top:26px;line-height:1.8}
 .provenance a{color:var(--ink-soft)}
 
+
+/* ---- signs12: the sheet of assertion ---- */
+.identity-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:0;transition:opacity var(--fast) var(--ease);z-index:2}
+.bench.scribed .identity-svg{opacity:1}
+.marginalia{
+  margin:26px 0 0;padding:14px 16px;border:1px solid var(--hairline);border-radius:2px;
+  background:var(--paper);font-family:var(--font-mono);font-size:12.5px;line-height:1.7;
+  min-height:54px;color:var(--ink);
+}
+.marginalia .mcap{font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-faint);margin:0 0 10px}
+.mentry{margin:0 0 8px}
+.mentry:last-child{margin-bottom:0}
+.mentry .mmeta{color:var(--ink-faint);margin-right:10px;white-space:nowrap}
+  @media (prefers-reduced-motion:reduce){
+    .disclose-ev .disclose-in,.disclose-proof .disclose-in,
+    .word,.dart,.dbtn,.sbtn,.mcell,.tchip,.eqnode{transition:none}
+  }
+.mentry s{text-decoration-color:var(--object);text-decoration-thickness:1.5px;color:var(--ink-faint)}
+.eqnode{
+  font:inherit;color:inherit;background:transparent;border:none;border-bottom:2px dotted var(--ink-faint);
+  padding:1px 2px;cursor:pointer;
+  transition:border-color var(--fast) var(--ease),background-color var(--fast) var(--ease);
+}
+.eqnode:hover{border-bottom-style:solid;border-bottom-color:var(--ink);background:rgba(27,29,32,.06)}
+.eqnode:active{transform:translateY(1px)}
+.eq-cap{font-size:12.5px;color:var(--ink-faint);margin:10px 0 0;max-width:680px}
+.slice-row{display:flex;align-items:center;gap:12px;margin:14px 0 4px;flex-wrap:wrap}
+.slice{display:flex}
+.sbtn{
+  font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+  background:transparent;border:1px solid var(--hairline);border-left:none;color:var(--ink-soft);
+  padding:9px 14px;min-height:40px;cursor:pointer;
+  transition:background-color var(--fast) var(--ease),color var(--fast) var(--ease);
+}
+.sbtn:first-child{border-left:1px solid var(--hairline);border-radius:2px 0 0 2px}
+.sbtn:last-child{border-radius:0 2px 2px 0}
+.sbtn[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.mgroup{margin:16px 0 0}
+.mgroup-label{font-family:var(--font-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft);margin:0 0 8px}
+.mgroup-label .cnt{color:var(--ink-faint);letter-spacing:.04em}
+.mcell{position:relative}
+.mgroup .matrix{display:flex;flex-wrap:wrap;gap:8px}
+.mgroup .mcell{flex:1 1 104px;max-width:172px;min-height:96px;padding:12px 8px;
+  font-size:10px;letter-spacing:.04em;line-height:1.45}
+.mgroup .mcell .mn{font-size:11px;margin-bottom:4px}
+.mcell .mx{position:absolute;top:3px;right:7px;font-size:10px;font-weight:700;color:var(--ink-faint);pointer-events:none}
+.mcell.cut::after{content:"";position:absolute;inset:5px;border:1px solid var(--ink-faint);border-radius:50%;pointer-events:none}
+.mcell.sel{
+  background-color:var(--paper);border-color:var(--ink);color:var(--ink);
+  background-image:
+    repeating-linear-gradient(45deg,rgba(27,29,32,.13) 0 1px,transparent 1px 7px),
+    repeating-linear-gradient(-45deg,rgba(27,29,32,.13) 0 1px,transparent 1px 7px);
+}
+.mcell.sel .mn{color:var(--ink)}
+.mcell.sel .mx{color:var(--ink)}
+.trick-chips{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 20px;align-items:center}
+.trick-chips .field-label{margin:0 4px 0 0}
+/* sfumato: depth opens as staggered tonal layers, never a hard cut */
+.disclose-in>p{transition:opacity var(--medium) var(--ease)}
+.bench[data-depth="evidence"] .disclose-ev .disclose-in>p:nth-child(2),
+.bench[data-depth="proof"] .disclose-ev .disclose-in>p:nth-child(2),
+.bench[data-depth="proof"] .disclose-proof .disclose-in>p:nth-child(2){transition-delay:70ms}
+.bench[data-depth="evidence"] .disclose-ev .disclose-in>p:nth-child(3),
+.bench[data-depth="proof"] .disclose-ev .disclose-in>p:nth-child(3),
+.bench[data-depth="proof"] .disclose-proof .disclose-in>p:nth-child(3){transition-delay:140ms}
+.bench[data-depth="evidence"] .disclose-ev .disclose-in>p:nth-child(4),
+.bench[data-depth="proof"] .disclose-ev .disclose-in>p:nth-child(4){transition-delay:210ms}
 
 .table-scroll{overflow-x:auto;border:1px solid var(--hairline);border-radius:3px;background:var(--paper-2)}
 table.classes{width:100%;border-collapse:collapse;min-width:680px;font-size:13px}
@@ -374,12 +441,19 @@ footer.site .fnote{font-family:var(--font-mono);font-size:11px;letter-spacing:.1
     <div class="wrap">
       <div class="col-narrow">
         <p class="eyebrow">The instrument</p>
-        <h2 id="instrument-h">Inscribe a specimen</h2>
-        <p class="sub">One text at a time. The instrument lays the sentence out in the open: its words, its three verdicts, its species, and every decision it made.</p>
+        <h2 id="instrument-h">Inscribe a sign</h2>
+        <p class="sub">One text at a time. Try a trick: each hides more machinery than it admits. The instrument lays the sentence out in the open: its words, its three verdicts, its species, and every decision it made.</p>
 
-        <label class="specimen-label" for="specimen">Specimen text</label>
+        <div class="trick-chips" role="group" aria-label="Try a trick">
+          <span class="field-label">Try a trick:</span>
+          <button class="chip tchip" type="button" data-trick="Time flies like an arrow.">Time flies like an arrow.</button>
+          <button class="chip tchip" type="button" data-trick="I think, therefore I am.">I think, therefore I am.</button>
+          <button class="chip tchip" type="button" data-trick="Chris Dillinger">Chris Dillinger</button>
+        </div>
+
+        <label class="specimen-label" for="specimen">The sign</label>
         <textarea class="specimen" id="specimen" rows="3" maxlength="600"
-          placeholder="Inscribe a sentence, a name, a line. The instrument takes it apart: vehicle, object, interpretant."></textarea>
+          placeholder="Inscribe a sentence, a name, a line. The instrument takes it apart: sign, object, interpretant."></textarea>
 
         <div class="studies" role="group" aria-label="Worked studies">
           <span class="field-label">Or take a study:</span>
@@ -423,14 +497,14 @@ footer.site .fnote{font-family:var(--font-mono);font-size:11px;letter-spacing:.1
           <div class="pnum">1</div>
           <h3>Start with a molehill</h3>
           <p>A gardener sees a fresh mound of earth and reads it: moles. The mound does not look like a mole, and no one agreed that mounds mean moles. It signifies by brute connection, the way smoke means fire.</p>
-          <p>Three parts, always. The <code>mound</code> is the vehicle, the thing doing the signifying. The <code>moles</code> are the object, what it stands for. The <code>gardener's understanding</code> is the interpretant, what it grows in the mind.</p>
+          <p>Three parts, always. The <code>mound</code> is the sign (the representamen), the thing doing the signifying. The <code>moles</code> are the object, what it stands for. The <code>gardener's understanding</code> is the interpretant, what it grows in the mind.</p>
         </div>
         <div class="primer-card">
           <div class="pnum">2</div>
           <h3>The triad</h3>
           <p>Signification is irreducibly triadic: a sign is whatever functions in the three-place relation. Remove any corner and the rest goes silent: marks without an object are noise, an object with no interpretant is never read.</p>
           <div class="tri-mini">
-            <b class="tv">Vehicle</b> (representamen): the marks themselves<br>
+            <b class="tv">Sign</b> (representamen): the marks themselves<br>
             <b class="to">Object</b>: what the marks stand for<br>
             <b class="ti">Interpretant</b>: the understanding produced
           </div>
@@ -745,7 +819,7 @@ function analyze(raw){
   var crosscut="Second division, contested: the received view reads emotional / energetic / logical as another name for immediate / dynamic / final; Short reads it as a cross-cutting division. No rule assigns a text to exactly one of the three."
 
   var chain=[
-    {slot:"Sign 1", text:"The specimen: \""+trunc(t,90)+"\" Its immediate object: "+trunc(immediateObj,110)},
+    {slot:"Sign 1", text:"The sign: \""+trunc(t,90)+"\" Its immediate object: "+trunc(immediateObj,110)},
     {slot:"The early account: interpretant becomes sign 2", text:"This reading ("+dynI+") is itself a new sign, starting the chain the early account describes. Its refined immediate object: "+trunc(dynamicObj,110)},
     {slot:"Final interpretant", text:"The final interpretant is the interpretation inquiry would settle on in the limit. Here it stays open; the sharpest open form is: "+questions[0]}
   ];
@@ -862,6 +936,7 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
   function resetAnalysis(){
     state.result = null;
     plates.innerHTML = "";
+    benchView = null; scribedInfo = null;
   }
 
   chips.forEach(function(ch){
@@ -871,6 +946,16 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
       specimen.value = SIGNS.STUDIES[+ch.getAttribute("data-study")].text;
       resetAnalysis();
       specimen.focus();
+    });
+  });
+  var tricks = Array.prototype.slice.call(document.querySelectorAll(".tchip"));
+  tricks.forEach(function(ch){
+    ch.addEventListener("click", function(){
+      specimen.value = ch.getAttribute("data-trick");
+      var t = specimen.value.trim();
+      if(!t){ resetAnalysis(); specimen.focus(); return; }
+      state.result = SIGNS.analyze(t);
+      reveal(state.result);
     });
   });
   specimen.addEventListener("input", resetAnalysis);
@@ -887,41 +972,102 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
   var CAPW={qualisign:"Qualisign",sinsign:"Sinsign",legisign:"Legisign",icon:"Icon",index:"Index",symbol:"Symbol",rheme:"Rheme",dicent:"Dicent",delome:"Delome"};
   function cap1(s){ return String(s).charAt(0).toUpperCase()+String(s).slice(1); }
 
-  function benchHTML(r){
-    folioN++;
-    var folio="S."+("00"+folioN).slice(-3);
-    var LVL2={qualisign:1,sinsign:2,legisign:3,icon:1,index:2,symbol:3,rheme:1,dicent:2,delome:3};
-    var lvV=LVL2[r.vehicle], lvO=LVL2[r.objectRelation], lvR=LVL2[r.interp];
-    var ok=!!r.classNo;
+  /* ---- signs12: the bench as a sheet of assertion ----
+     Peirce's sheet of assertion is the ground of every existential graph:
+     to scribe is to assert; erasure removes. Tapping a word scribes it
+     (asserts "analyze this"); tapping again erases. The line of identity is
+     drawn once, statically, in place: one unbroken ink line from the
+     scribed word through the three decision articles to the dependence
+     check, asserting one sign under three descriptions. No staged drawing,
+     no moving marks, no off-screen targets. Cuts (hairline ovals) enclose
+     only ruled-out classes: enclosing is negation. */
+
+  var BRV=["qualisign","sinsign","legisign"],
+      BRO=["icon","index","symbol"],
+      BRI=["rheme","dicent","delome"];
+  var BRANCH_INFO={
+    v:{qualisign:["A mere quality","A quality, not yet embodied"],
+       sinsign:["This particular occurrence","An event, unrepeatable as an occurrence"],
+       legisign:["The repeatable form","A type instantiated by this token"]},
+    o:{icon:["Likeness carries the reference","The token signifies by resemblance"],
+       index:["Pointing carries the reference","Anchored to the occasion"],
+       symbol:["Convention carries the reference","Words signify by learned convention"]},
+    i:{rheme:["Presents a term for contemplation","Neither true nor false; a qualitative possibility"],
+       dicent:["Presents a fact for assessment","Capable of being taken as true or false"],
+       delome:["Reasons toward a conclusion","Premises working to a conclusion"]}
+  };
+  var NODE_LABEL={v:"D1",o:"D2",i:"D3"};
+  var SLICES={
+    d1:{groups:[["qualisign",[1]],["sinsign",[2,3,4]],["legisign",[5,6,7,8,9,10]]]},
+    d3:{groups:[["rheme",[1,2,3,5,6,8]],["dicent",[4,7,9]],["delome",[10]]]}
+  };
+
+  var benchView=null, scribedInfo=null;
+
+  function tripleKey(t){ return t.i+"|"+t.o+"|"+t.v; }
+  function isOriginal(vw){ var r=vw.r; return vw.v===r.vehicle&&vw.o===r.objectRelation&&vw.i===r.interp; }
+  function currentClass(vw){ return CLASS_OF[tripleKey(vw)]||null; }
+
+  function logLedger(text,node){
+    var vw=benchView; if(!vw) return;
+    var now=new Date(), t=("0"+now.getHours()).slice(-2)+":"+("0"+now.getMinutes()).slice(-2);
+    vw.ledger.push({folio:vw.folio,t:t,text:text,node:node||null,struck:false});
+    if(vw.ledger.length>7) vw.ledger.shift();
+  }
+  function renderLedger(){
+    var m=$("marginalia"); if(!m||!benchView) return;
+    m.innerHTML='<p class="mcap">Marginalia</p>'+benchView.ledger.map(function(e){
+      return '<p class="mentry"><span class="mmeta">'+esc(e.folio)+' \u00b7 '+esc(e.t)+'</span>'+
+        (e.struck?'<s>'+esc(e.text)+'</s>':esc(e.text))+'</p>';
+    }).join("");
+  }
+
+  function benchHTML(vw){
+    var r=vw.r;
+    var lvV=LVL[vw.v], lvO=LVL[vw.o], lvR=LVL[vw.i];
+    var classNo=currentClass(vw), ok=!!classNo;
+    var orig=isOriginal(vw);
     var testOf={};
     r.ledger.forEach(function(l){ testOf[l.k]=l.test; });
     var strike=!ok?(lvR>lvO?"i":(lvO>lvV?"o":null)):null;
-    var viol=!ok?(lvR>lvO?(r.interp+" ("+lvR+") outranks "+r.objectRelation+" ("+lvO+")")
-                            :(r.objectRelation+" ("+lvO+") outranks "+r.vehicle+" ("+lvV+")")):null;
+    var viol=!ok?(lvR>lvO?(vw.i+" ("+lvR+") outranks "+vw.o+" ("+lvO+")")
+                            :(vw.o+" ("+lvO+") outranks "+vw.v+" ("+lvV+")")):null;
 
-    /* words, each mapped to the entity span that produced it */
+    /* the sign, laid out as live word buttons; each mapped to its entity span */
     var roleOf={index:"Points",icon:"Pictures",symbol:"Means by convention"};
     var cornerOf={index:"o",icon:"o",symbol:"v"};
     var ws=wordsOf(r.text), pos=0;
-    var wordsHTML=ws.map(function(w){
+    var wordsHTML=ws.map(function(w,idx){
       var at=r.text.indexOf(w,pos); if(at<0) at=pos; pos=at+w.length;
       var kind="symbol", gloss="Works by convention: this span means what it does by habit and law, neither pointing nor picturing.";
       for(var k=0;k<r.entities.length;k++){ var e=r.entities[k];
         if(at>=e.start&&at<e.start+e.len){ kind=e.kind; gloss=e.gloss; break; } }
-      return '<button type="button" class="word" data-kind="'+kind+'" data-corner="'+cornerOf[kind]+
-        '" data-role="'+esc(roleOf[kind])+'" data-gloss="'+esc(gloss)+'">'+esc(w)+'</button>';
+      var cls="word";
+      if(vw.scribed===idx) cls+=" active";
+      else if(vw.corner==="v") cls+=" hl-v";
+      else if(vw.corner==="o") cls+=(kind==="symbol"?" dim":" hl-o");
+      else if(vw.corner==="i") cls+=" dim";
+      return '<button type="button" class="'+cls+'" data-wid="'+idx+'" data-kind="'+kind+'" data-corner="'+cornerOf[kind]+
+        '" data-role="'+esc(roleOf[kind])+'" data-gloss="'+esc(gloss)+'" aria-pressed="'+(vw.scribed===idx)+'">'+esc(w)+'</button>';
     }).join(" ");
+    var wordNoteHTML=scribedInfo
+      ? '<span class="wr">'+esc(scribedInfo.role)+"</span>"+esc(scribedInfo.text+" \u00b7 "+scribedInfo.gloss)
+      : "";
 
-    /* decision articles */
+    /* decision articles: short, declarative, one mechanism each */
     function altLine(list,chosen){
       return "not "+list.filter(function(x){return x!==chosen;}).map(function(x){return "<s>"+x+"</s>";}).join(" &middot; not ");
     }
-    function dart(key,tag,verdict,role,sub,alts,test,subord,proof){
-      return '<article class="dart dart-'+key+'" data-corner="'+key+'" tabindex="0" role="button" aria-label="'+esc(tag+": "+verdict)+'">'+
+    function dart(key,tag,verdict,alts,test,subord,proof){
+      var info=BRANCH_INFO[key][verdict];
+      var cls="dart dart-"+key;
+      if(vw.corner===key) cls+=" traced";
+      else if(scribedInfo&&scribedInfo.corner!==key) cls+=" dim";
+      return '<article class="'+cls+'" data-corner="'+key+'" tabindex="0" role="button" aria-label="'+esc(tag+": "+verdict)+'">'+
         '<p class="dart-kicker">'+esc(tag)+'</p>'+
-        '<p class="dart-role">'+esc(role)+'</p>'+
+        '<p class="dart-role">'+esc(info[0])+'</p>'+
         '<p class="dart-verdict'+(strike===key?' struck':'')+'">'+esc(CAPW[verdict]||verdict)+'</p>'+
-        '<p class="dart-sub">'+esc(sub)+'</p>'+
+        '<p class="dart-sub">'+esc(info[1])+'</p>'+
         '<div class="disclose-ev"><div class="disclose-in">'+
           '<p class="dart-alt">'+altLine(alts,verdict)+'</p>'+
           '<p class="dart-test">'+esc(test)+'</p>'+
@@ -932,93 +1078,112 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
         '</div></div>'+
       '</article>';
     }
+    var handNote="Hand-set branch. No engine test; the dependence check below is the live verdict.";
     var dartsHTML=
-      dart("v","D1 \u00b7 the sign in itself",r.vehicle,
-        r.vehicle==="legisign"?"The repeatable form":"This particular occurrence",
-        r.vehicle==="legisign"?"A type instantiated by this token":"An event, unrepeatable as an occurrence",
-        ["qualisign","sinsign","legisign"],testOf["Vehicle"]||"",
+      dart("v","D1 \u00b7 the sign in itself",vw.v,
+        ["qualisign","sinsign","legisign"],orig?(testOf["Vehicle"]||""):handNote,
         null,
-        "D1 rank "+lvV+". The classification belongs to the sign under this reading.")+
-      dart("o","D2 \u00b7 the sign to its object",r.objectRelation,
-        r.objectRelation==="symbol"?"Convention carries the reference":r.objectRelation==="index"?"Pointing carries the reference":"Likeness carries the reference",
-        r.objectRelation==="symbol"?"Words signify by learned convention":r.objectRelation==="index"?"Names and deictics anchor to the occasion":"The token signifies by resemblance",
-        ["icon","index","symbol"],testOf["Object relation"]||"",
-        r.subordinates.length?("Also at work: "+r.subordinates.join("; ")+"."):null,
+        "D1 rank "+lvV+". The class belongs to the sign under this reading.")+
+      dart("o","D2 \u00b7 the sign to its object",vw.o,
+        ["icon","index","symbol"],orig?(testOf["Object relation"]||""):handNote,
+        (orig&&r.subordinates.length)?("Also at work: "+r.subordinates.join("; ")+"."):null,
         "D2 rank "+lvO+". Context can supply a particular object without making the linguistic sign itself an index.")+
-      dart("i","D3 \u00b7 the sign to its interpretant",r.interp,
-        r.interp==="delome"?"Reasons toward a conclusion":r.interp==="dicent"?"Presents a fact for assessment":"Presents a term for contemplation",
-        r.interp==="delome"?"Premises working to a conclusion":r.interp==="dicent"?"Capable of being taken as true or false":"Neither true nor false; a qualitative possibility",
-        ["rheme","dicent","delome"],testOf["Interpretant"]||"",
+      dart("i","D3 \u00b7 the sign to its interpretant",vw.i,
+        ["rheme","dicent","delome"],orig?(testOf["Interpretant"]||""):handNote,
         null,
-        "D3 rank "+lvR+". This is a candidate reading of an utterance in context, not an intrinsic property of a string alone.");
+        "D3 rank "+lvR+". A candidate reading of an utterance in context, not an intrinsic property of a string alone.");
 
-    /* dependence check, from the live ranks */
-    function eqPart(term,rank,isStruck){
+    /* dependence check; each term is a live control: tap to recast by hand */
+    function eqNode(key,term,rank,isStruck){
       var s=esc(term)+" ("+rank+")";
-      return isStruck?'<s class="bad">'+s+'</s>':s;
+      var inner=isStruck?'<s class="bad">'+s+'</s>':s;
+      return '<button type="button" class="eqnode" data-node="'+key+'" aria-label="Recast '+NODE_LABEL[key]+', now '+esc(term)+'">'+inner+'</button>';
     }
-    var constraintHTML='<p class="constraint">'+
-        eqPart(r.interp,lvR,strike==="i")+" &le; "+
-        eqPart(r.objectRelation,lvO,strike==="o")+" &le; "+
-        eqPart(r.vehicle,lvV,false)+'</p>'+
+    var constraintHTML='<p class="constraint" id="constraintP">'+
+        eqNode("i",vw.i,lvR,strike==="i")+" &le; "+
+        eqNode("o",vw.o,lvO,strike==="o")+" &le; "+
+        eqNode("v",vw.v,lvV,false)+'</p>'+
       (ok
         ? '<p class="constraint-note">The ranks satisfy the dependence rule, leaving one admissible class.</p>'
         : '<p class="constraint-note">Broken: '+esc(viol)+'. A broken reading is a misreading, not a verdict to repair by demotion. Re-examine the earliest call, D1, before the later ones.</p>')+
       '<div class="disclose-proof"><div class="disclose-in">'+
         '<p class="dart-proof">Scope: one ordinary reading of the whole sentence. A different reading can move the verdicts.</p>'+
         r.questions.slice(0,3).map(function(q){ return '<p class="dart-proof">Open: '+esc(q)+'</p>'; }).join("")+
-      '</div></div>';
+      '</div></div>'+
+      '<p class="eq-cap">Tap any of the three terms to recast it by hand. The sheet recomputes; nothing is repaired by demotion.</p>';
 
-    /* the ten classes */
-    var cells=SIGNS.CLASSES.map(function(c){
-      return '<button type="button" class="mcell'+(c.n===r.classNo?" sel":"")+'" data-cn="'+c.n+
+    /* the ten classes: cuts enclose ruled-out classes; x marks the asserted one */
+    function cellHTML(c){
+      var cls="mcell", mark="";
+      if(ok){
+        if(c.n===classNo){ cls+=" sel"; mark='<span class="mx">x</span>'; }
+        else cls+=" cut";
+      }else{
+        mark='<span class="mx">o</span>';
+      }
+      return '<button type="button" class="'+cls+'" data-cn="'+c.n+
         '" data-cname="'+esc(c.name)+'" data-cplain="'+esc(c.plain)+
-        '" aria-label="Class '+c.n+": "+esc(c.name)+'"><span class="mn">'+("0"+c.n).slice(-2)+"</span>"+esc(SHORT[c.n-1])+"</button>";
+        '" aria-label="Class '+c.n+": "+esc(c.name)+'"><span class="mn">'+("0"+c.n).slice(-2)+"</span>"+esc(SHORT[c.n-1])+mark+"</button>";
+    }
+    var slice=SLICES[vw.slice];
+    var groupsHTML=slice.groups.map(function(g){
+      var cells=g[1].map(function(n){ return cellHTML(CLASSES[n-1]); }).join("");
+      return '<div class="mgroup"><p class="mgroup-label">'+esc(g[0])+' <span class="cnt">'+g[1].join(" \u00b7 ")+'</span></p>'+
+        '<div class="matrix" role="group" aria-label="'+esc(g[0])+' classes">'+cells+'</div></div>';
     }).join("");
+    var matrixHTML=
+      '<div class="slice-row"><span class="field-label">Slice</span>'+
+      '<div class="slice" role="group" aria-label="Matrix slice">'+
+      '<button type="button" class="sbtn" data-slice="d1" aria-pressed="'+(vw.slice==="d1")+'">D1 \u00b7 the sign</button>'+
+      '<button type="button" class="sbtn" data-slice="d3" aria-pressed="'+(vw.slice==="d3")+'">D3 \u00b7 the interpretant</button>'+
+      '</div></div>'+groupsHTML;
 
     var chainItems=r.chain.map(function(c){
       return '<li><span class="cs">'+esc(c.slot)+"</span>"+esc(c.text)+"</li>";
     }).join("");
 
-    var answerName=ok?SHORT[r.classNo-1]:"No admissible class";
+    var clsInfo=ok?CLASSES[classNo-1]:null;
+    var answerName=ok?SHORT[classNo-1]:"No admissible class";
+    var answerDef=ok?clsInfo.plain:((orig&&r.classPlain)||"The triple breaks the dependence rule, so no class admits it.");
+
+    var depthBtns=["verdict","evidence","proof"].map(function(d){
+      return '<button type="button" class="dbtn" data-depth="'+d+'" aria-pressed="'+(vw.depth===d)+'">'+d.charAt(0).toUpperCase()+d.slice(1)+'</button>';
+    }).join("");
 
     return ''+
-    '<section class="bench" id="bench" data-depth="evidence" aria-label="Dissection result">'+
-      '<p class="scope"><span class="folio">'+folio+'</span>Scope: the whole sentence, under one ordinary declarative reading.'+
+    '<section class="bench'+(vw.scribed!==null?" scribed":"")+'" id="bench" data-depth="'+vw.depth+'" aria-label="Dissection result">'+
+      '<svg class="identity-svg" aria-hidden="true"></svg>'+
+      '<p class="scope"><span class="folio">'+vw.folio+'</span>Scope: the whole sentence, under one ordinary declarative reading.'+
         (ok?'<span class="badge ok">admissible reading</span>':'<span class="badge bad">no admissible class</span>')+'</p>'+
-      '<div class="answer" id="answerBlock">'+
+      '<div class="answer'+(vw.corner==="i"?" lit":"")+'" id="answerBlock">'+
         '<p class="answer-kicker">Species</p>'+
         '<h3 class="answer-name">'+esc(answerName)+'</h3>'+
-        '<p class="answer-def">'+esc(r.classPlain)+'</p>'+
+        '<p class="answer-def">'+esc(answerDef)+'</p>'+
         (ok
-          ? '<p class="answer-class">CLASS '+r.classNo+' OF 10 &middot; '+esc(r.className)+'<span class="cap">visible before interaction</span></p>'
+          ? '<p class="answer-class">CLASS '+classNo+' OF 10 &middot; '+esc(clsInfo.name)+'<span class="cap">visible before interaction</span></p>'
           : '<p class="answer-class">NO ADMISSIBLE CLASS<span class="cap">the reading breaks the dependence rule</span></p>')+
       '</div>'+
       '<div class="words-row">'+
-        '<span class="field-label">Specimen</span>'+
+        '<span class="field-label">The sign</span>'+
         '<p class="words">'+wordsHTML+'</p>'+
-        '<p class="words-cap">Select a word. Related evidence changes ink in place.</p>'+
-        '<p class="word-note" id="wordNote" aria-live="polite"></p>'+
+        '<p class="words-cap">Tap a word to scribe it. Tap again to erase.</p>'+
+        '<p class="word-note" id="wordNote" aria-live="polite">'+wordNoteHTML+'</p>'+
       '</div>'+
       '<div class="depth-row">'+
         '<span class="field-label" id="depthLabel">Depth</span>'+
-        '<div class="depth" role="group" aria-labelledby="depthLabel">'+
-          '<button type="button" class="dbtn" data-depth="verdict" aria-pressed="false">Verdict</button>'+
-          '<button type="button" class="dbtn" data-depth="evidence" aria-pressed="true">Evidence</button>'+
-          '<button type="button" class="dbtn" data-depth="proof" aria-pressed="false">Proof</button>'+
-        '</div>'+
+        '<div class="depth" role="group" aria-labelledby="depthLabel">'+depthBtns+'</div>'+
         '<p class="depth-cap">The answer and the three verdicts never hide. Evidence and proof open in place, under the verdict they support.</p>'+
       '</div>'+
-      '<div class="darts">'+dartsHTML+'</div>'+
+      '<div class="darts" id="dartsRow">'+dartsHTML+'</div>'+
       '<div class="constraint-row">'+
         '<span class="field-label">Dependence check</span>'+
         constraintHTML+
       '</div>'+
       '<div class="matrix-row">'+
-        '<span class="field-label">Species: the ten classes</span>'+
-        '<div class="matrix" role="group" aria-label="The ten classes">'+cells+'</div>'+
+        '<span class="field-label">The ten classes</span>'+
+        matrixHTML+
       '</div>'+
-      '<p class="inspector" id="inspector">The answer is already present. Interaction only reveals why it holds.</p>'+
+      '<div class="marginalia" id="marginalia" aria-live="polite"></div>'+
       '<p class="caveat">A Peircean class belongs to a sign as interpreted in context. It does not mechanically assign a separate class to every word.</p>'+
       '<div class="semiosis-row">'+
         '<span class="field-label">Semiosis: the chain</span>'+
@@ -1027,73 +1192,131 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
       '</div>'+
     '</section>'+
     '<section class="further">'+
-      '<p class="provenance">Taxonomy: <a href="https://plato.stanford.edu/entries/peirce-semiotics/">SEP: Peirce\'s Theory of Signs</a> (the triad; the three trichotomies; the ten classes). Engine: surface-marker heuristics; every decision above carries its test. Build v20260916-signs11.</p>'+
+      '<p class="provenance">Taxonomy: <a href="https://plato.stanford.edu/entries/peirce-semiotics/">SEP: Peirce\'s Theory of Signs</a> (the triad; the three trichotomies; the ten classes). Engine: surface-marker heuristics; every decision above carries its test. Build v20260916-signs12.</p>'+
     '</section>';
   }
 
-  function wireBench(r){
-    var bench=$("bench"), insp=$("inspector"), note=$("wordNote"), answer=$("answerBlock");
-    var DEF="The answer is already present. Interaction only reveals why it holds.";
-    function say(t){ if(insp) insp.textContent=t; }
-    var wordOn=null, cornerOn=null;
+  /* the line of identity: one static unbroken line, composed in place */
+  function drawIdentity(){
+    var bench=$("bench"); if(!bench) return;
+    var svg=bench.querySelector(".identity-svg"); if(!svg) return;
+    svg.innerHTML=""; svg.removeAttribute("viewBox");
+    if(!benchView||benchView.scribed===null||!scribedInfo) return;
+    var b=bench.getBoundingClientRect();
+    if(b.width<2||b.height<2) return;
+    function rel(el){ if(!el) return null; var q=el.getBoundingClientRect();
+      return {x:q.left-b.left,y:q.top-b.top,w:q.width,h:q.height}; }
+    var wBtn=bench.querySelector('.word[data-wid="'+benchView.scribed+'"]');
+    var W=rel(wBtn), D=rel($("dartsRow")), C=rel($("constraintP"));
+    if(!W||!D||!C) return;
+    var darts=Array.prototype.slice.call(bench.querySelectorAll(".dart"));
+    if(darts.length<3) return;
+    var railX=12, wx=W.x, wy=W.y+W.h/2;
+    var dTop=D.y-8, dRight=D.x+D.w-8, cTop=C.y+8;
+    if(dRight<railX+40||dTop<wy) return;
+    var f=function(n){ return n.toFixed(1); };
+    var p="M "+f(wx)+" "+f(wy)+" H "+railX+" V "+f(dTop)+" H "+f(dRight)+" V "+f(cTop);
+    var nodes='<rect x="'+f(wx-3.5)+'" y="'+f(wy-3.5)+'" width="7" height="7" fill="#1b1d20"/>'+
+      darts.map(function(d){ var r=rel(d);
+        return '<rect x="'+f(r.x-3.5)+'" y="'+f(dTop-3.5)+'" width="7" height="7" fill="#1b1d20"/>';
+      }).join("")+
+      '<rect x="'+f(dRight-3.5)+'" y="'+f(cTop-3.5)+'" width="7" height="7" fill="#1b1d20"/>';
+    svg.setAttribute("viewBox","0 0 "+f(b.width)+" "+f(b.height));
+    svg.innerHTML='<path d="'+p+'" fill="none" stroke="#1b1d20" stroke-width="2.5"/>'+nodes;
+  }
+
+  var postRenderFocus=null;
+  function renderBench(){
+    var vw=benchView; if(!vw) return;
+    plates.innerHTML=benchHTML(vw);
+    wireBench(vw);
+    renderLedger();
+    drawIdentity();
+    if(postRenderFocus){
+      var b=$("bench"), el=b?b.querySelector(postRenderFocus):null;
+      if(el&&el.focus){ try{ el.focus({preventScroll:true}); }catch(e){ el.focus(); } }
+      postRenderFocus=null;
+    }
+  }
+
+  function wireBench(vw){
+    var bench=$("bench"), answer=$("answerBlock");
     var words=Array.prototype.slice.call(bench.querySelectorAll(".word"));
     var darts=Array.prototype.slice.call(bench.querySelectorAll(".dart"));
-    function clearWord(){
-      wordOn=null;
-      words.forEach(function(w){ w.classList.remove("active"); });
-      darts.forEach(function(d){ d.classList.remove("dim"); });
-      if(note) note.innerHTML="";
-    }
-    function clearCorner(){
-      cornerOn=null;
-      darts.forEach(function(d){ d.classList.remove("traced","dim"); });
-      words.forEach(function(w){ w.classList.remove("hl-v","hl-o","hl-i","dim"); });
-      if(answer) answer.classList.remove("lit");
-    }
+
     words.forEach(function(w){
       w.addEventListener("click",function(){
-        if(wordOn===w){ clearWord(); say(DEF); return; }
-        clearWord(); clearCorner(); wordOn=w;
-        w.classList.add("active");
-        var corner=w.getAttribute("data-corner");
-        darts.forEach(function(d){ if(d.getAttribute("data-corner")!==corner) d.classList.add("dim"); });
-        var role=w.getAttribute("data-role"), gloss=w.getAttribute("data-gloss");
-        if(note) note.innerHTML='<span class="wr">'+esc(role)+"</span>"+esc(w.textContent+" \u00b7 "+gloss);
-        say(w.textContent+" \u00b7 "+role+": "+gloss);
+        var wid=+w.getAttribute("data-wid");
+        vw.corner=null;
+        if(vw.scribed===wid){
+          vw.scribed=null; scribedInfo=null;
+          logLedger("Erased. Sheet clear.");
+        }else{
+          vw.scribed=wid;
+          scribedInfo={text:w.textContent,role:w.getAttribute("data-role"),
+            gloss:w.getAttribute("data-gloss"),corner:w.getAttribute("data-corner")};
+          logLedger("\u201c"+w.textContent+"\u201d scribed: one sign under three descriptions.");
+        }
+        postRenderFocus='.word[data-wid="'+wid+'"]';
+        renderBench();
       });
     });
+
     Array.prototype.forEach.call(bench.querySelectorAll(".dbtn"),function(b){
       b.addEventListener("click",function(){
-        Array.prototype.forEach.call(bench.querySelectorAll(".dbtn"),function(x){ x.setAttribute("aria-pressed","false"); });
-        b.setAttribute("aria-pressed","true");
-        bench.setAttribute("data-depth",b.getAttribute("data-depth"));
-        say(DEF);
+        vw.depth=b.getAttribute("data-depth");
+        Array.prototype.forEach.call(bench.querySelectorAll(".dbtn"),function(x){
+          x.setAttribute("aria-pressed",x===b?"true":"false"); });
+        bench.setAttribute("data-depth",vw.depth);
+        logLedger("Depth: "+vw.depth+".");
+        renderLedger();
       });
     });
+
+    Array.prototype.forEach.call(bench.querySelectorAll(".sbtn"),function(b){
+      b.addEventListener("click",function(){
+        vw.slice=b.getAttribute("data-slice");
+        logLedger("Matrix re-sliced: "+(vw.slice==="d1"?"by the sign (D1)":"by the interpretant (D3)")+". Same ten classes, new arrangement.");
+        postRenderFocus='.sbtn[data-slice="'+vw.slice+'"]';
+        renderBench();
+      });
+    });
+
+    Array.prototype.forEach.call(bench.querySelectorAll(".eqnode"),function(b){
+      b.addEventListener("click",function(){
+        var key=b.getAttribute("data-node");
+        var seq=key==="v"?BRV:(key==="o"?BRO:BRI);
+        var cur=key==="v"?vw.v:(key==="o"?vw.o:vw.i);
+        var nxt=seq[(seq.indexOf(cur)+1)%seq.length];
+        if(key==="v") vw.v=nxt; else if(key==="o") vw.o=nxt; else vw.i=nxt;
+        vw.ledger.forEach(function(e){ if(e.node===key) e.struck=true; });
+        logLedger(NODE_LABEL[key]+" recast: "+cur+" \u2192 "+nxt+". Hand-set; the dependence check is the live verdict.",key);
+        postRenderFocus='.eqnode[data-node="'+key+'"]';
+        renderBench();
+      });
+    });
+
     var testOf={};
-    r.ledger.forEach(function(l){ testOf[l.k]=l.test; });
-    var nodeInfo={
-      v:"D1, the sign in itself: "+r.vehicle+". "+r.vehicleWhy+" Test: "+(testOf["Vehicle"]||""),
-      o:"D2, the sign to its object: "+r.objectRelation+" (dominant). "+r.objectWhy+" Test: "+(testOf["Object relation"]||"")+
-        (r.subordinates.length?(" Also at work: "+r.subordinates.join("; ")+"."):""),
-      i:"D3, the sign to its interpretant: "+r.interp+". "+r.interpWhy+" Test: "+(testOf["Interpretant"]||"")
-    };
+    vw.r.ledger.forEach(function(l){ testOf[l.k]=l.test; });
     function traceCorner(key){
-      if(cornerOn===key){ clearCorner(); say(DEF); return; }
-      clearCorner(); clearWord(); cornerOn=key;
-      var dart=bench.querySelector('.dart[data-corner="'+key+'"]');
-      if(dart) dart.classList.add("traced");
-      if(key==="v"){ words.forEach(function(w){ w.classList.add("hl-v"); }); }
-      else if(key==="o"){
-        words.forEach(function(w){
-          if(w.getAttribute("data-kind")==="symbol") w.classList.add("dim");
-          else w.classList.add("hl-o");
-        });
+      if(vw.corner===key){
+        vw.corner=null;
+        logLedger(NODE_LABEL[key]+" reading erased.",key);
       }else{
-        if(answer) answer.classList.add("lit");
-        words.forEach(function(w){ w.classList.add("dim"); });
+        vw.corner=key; vw.scribed=null; scribedInfo=null;
+        var info=BRANCH_INFO[key][key==="v"?vw.v:(key==="o"?vw.o:vw.i)];
+        var t=NODE_LABEL[key]+", "+(key==="v"?"the sign in itself":key==="o"?"the sign to its object":"the sign to its interpretant")+
+          ": "+info[0].toLowerCase()+"; "+info[1].toLowerCase()+".";
+        if(isOriginal(vw)){
+          if(key==="v"&&testOf["Vehicle"]) t+=" Test: "+testOf["Vehicle"];
+          if(key==="o"&&testOf["Object relation"]) t+=" Test: "+testOf["Object relation"];
+          if(key==="i"&&testOf["Interpretant"]) t+=" Test: "+testOf["Interpretant"];
+          if(key==="o"&&vw.r.subordinates.length) t+=" Also at work: "+vw.r.subordinates.join("; ")+".";
+        }
+        logLedger(t,key);
       }
-      say(nodeInfo[key]);
+      postRenderFocus='.dart[data-corner="'+key+'"]';
+      renderBench();
     }
     darts.forEach(function(d){
       var key=d.getAttribute("data-corner");
@@ -1102,26 +1325,38 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
         if(e.key==="Enter"||e.key===" "){ e.preventDefault(); traceCorner(key); }
       });
     });
+
     Array.prototype.forEach.call(bench.querySelectorAll(".mcell"),function(c){
       c.addEventListener("click",function(){
-        var n=+c.getAttribute("data-cn");
-        if(r.classNo&&n===r.classNo){
-          say("Class "+n+" is selected. "+cap1(r.vehicle)+" + "+r.objectRelation+" + "+r.interp+" is one admissible Peircean combination.");
-        }else if(r.classNo){
-          say("Class "+n+": "+c.getAttribute("data-cname")+". That combination does not match these three verdicts.");
-        }else{
-          say("Class "+n+": "+c.getAttribute("data-cname")+". No verdict triple here is admissible; the reading breaks the dependence rule.");
-        }
+        var n=+c.getAttribute("data-cn"), classNo=currentClass(vw);
+        if(classNo&&n===classNo)
+          logLedger("Class "+n+" asserted: "+vw.v+" + "+vw.o+" + "+vw.i+" is one admissible combination.");
+        else if(classNo)
+          logLedger("Class "+n+" cut: not this combination under the current verdicts.");
+        else
+          logLedger("Class "+n+": no admissible triple here; the reading breaks the dependence rule.");
+        renderLedger();
       });
     });
   }
 
   function reveal(r){
-    plates.innerHTML=benchHTML(r);
-    wireBench(r);
+    folioN++;
+    benchView={r:r,folio:"S."+("00"+folioN).slice(-3),
+      v:r.vehicle,o:r.objectRelation,i:r.interp,
+      depth:"evidence",scribed:null,corner:null,slice:"d1",ledger:[]};
+    scribedInfo=null;
+    logLedger("Sheet opened. The answer stands above; every tap scribes the why.");
+    renderBench();
     var b=$("bench");
     if(b) b.scrollIntoView({behavior:reducedMotion()?"auto":"smooth",block:"start"});
   }
+
+  var rzT=null;
+  window.addEventListener("resize",function(){
+    if(rzT) clearTimeout(rzT);
+    rzT=setTimeout(function(){ drawIdentity(); },150);
+  });
 })();
 </script>
 </body>
