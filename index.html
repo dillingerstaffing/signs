@@ -116,6 +116,43 @@ textarea.specimen::placeholder{color:var(--ink-faint)}
 .chip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 
 .plates{margin-top:8px}
+.canvas{
+  background:var(--paper-2);border:1px solid var(--hairline);border-radius:3px;
+  padding:30px 30px 24px;margin-top:22px;
+  opacity:0;transform:translateY(12px);
+  transition:opacity var(--t-standard) var(--e-out),transform var(--t-standard) var(--e-out);
+}
+.canvas.on{opacity:1;transform:none}
+.canvas-head .specimen-quote{font-family:var(--font-display);font-size:26px;line-height:1.4;margin:10px 0 10px;font-weight:600}
+.species-line{font-size:15px;margin:0}
+.species-line strong{font-family:var(--font-mono);font-size:13px;letter-spacing:.08em}
+.species-plain{display:block;color:var(--ink-soft);font-size:13.5px;margin-top:5px;line-height:1.55}
+.canvas-row{margin-top:26px;padding-top:22px;border-top:1px solid var(--hairline)}
+.canvas-row>.field-label{display:block;margin-bottom:12px}
+.entity-strip{font-size:19px;line-height:2.15;margin:0;max-width:720px}
+.ent{border-bottom:2px solid;padding-bottom:1px;cursor:pointer}
+.ent-index{border-color:var(--object)}
+.ent-icon{border-color:var(--vehicle)}
+.ent:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.scale{display:grid;grid-template-columns:repeat(10,1fr);gap:6px}
+.cell{
+  font-family:var(--font-mono);font-size:13px;padding:10px 0;min-height:44px;
+  text-align:center;background:var(--paper);border:1px solid var(--hairline);border-radius:2px;
+  cursor:pointer;color:var(--ink-soft);
+}
+.cell.lit{background:var(--ink);color:var(--paper);border-color:var(--ink);font-weight:700}
+.trail{display:flex;align-items:center;gap:8px;overflow-x:auto;padding-bottom:8px;-webkit-overflow-scrolling:touch}
+.tchip{
+  flex:0 0 auto;font-family:var(--font-mono);font-size:12.5px;padding:10px 14px;min-height:44px;
+  background:var(--paper);border:1px solid var(--hairline);border-radius:2px;cursor:pointer;white-space:nowrap;
+}
+.tchip.tend{background:var(--ink);color:var(--paper);border-color:var(--ink);font-weight:700}
+.tarrow{color:var(--ink-faint);flex:0 0 auto}
+.inspector{
+  margin:24px 0 0;padding:14px 16px;border:1px solid var(--hairline);border-radius:2px;
+  background:var(--paper);font-size:14px;line-height:1.65;min-height:54px;color:var(--ink);
+}
+.further{margin-top:36px}
 .plate{
   background:var(--paper-2);border:1px solid var(--hairline);border-radius:3px;
   padding:30px;margin:0 0 22px;
@@ -219,7 +256,7 @@ details.margin-note .note-body{padding:0 16px 16px 38px;color:var(--ink);font-si
 .provenance a{color:var(--ink-soft)}
 
 .species{margin:6px 0 4px}
-.species .kicker{font-family:var(--font-mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft)}
+.kicker{font-family:var(--font-mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft)}
 .species h4{font-family:var(--font-display);font-size:34px;font-weight:600;margin:8px 0 6px;color:var(--object)}
 .species .classno{font-family:var(--font-mono);font-size:13px;color:var(--ink-soft)}
 
@@ -276,6 +313,9 @@ footer.site .fnote{font-family:var(--font-mono);font-size:11px;letter-spacing:.1
   section.block{padding:52px 0}
   section.block h2{font-size:30px}
   .plate{padding:22px 18px}
+  .canvas{padding:22px 18px 18px}
+  .canvas-head .specimen-quote{font-size:22px}
+  .entity-strip{font-size:17px}
   .kv{grid-template-columns:1fr;gap:2px}
   .kv dt{padding-top:10px}
   .kv dd{margin-bottom:6px}
@@ -295,6 +335,7 @@ footer.site .fnote{font-family:var(--font-mono);font-size:11px;letter-spacing:.1
   *,*::before,*::after{animation:none!important;transition:none!important}
   html{scroll-behavior:auto}
   .plate{opacity:1;transform:none}
+  .canvas{opacity:1;transform:none}
   .triad-svg .draw{stroke-dashoffset:0}
   .triad-svg .node{opacity:1}
 }
@@ -341,7 +382,7 @@ footer.site .fnote{font-family:var(--font-mono);font-size:11px;letter-spacing:.1
       <div class="col-narrow">
         <p class="eyebrow">The instrument</p>
         <h2 id="instrument-h">Inscribe a specimen</h2>
-        <p class="sub">One text at a time. The instrument reads it four ways, then shows every decision it made.</p>
+        <p class="sub">One text at a time. The instrument lays the sentence on one bench: its entities, its triad, its species, and every decision it made.</p>
 
         <label class="specimen-label" for="specimen">Specimen text</label>
         <textarea class="specimen" id="specimen" rows="3" maxlength="600"
@@ -428,7 +469,7 @@ footer.site .fnote{font-family:var(--font-mono);font-size:11px;letter-spacing:.1
       <div class="colophon-grid" style="margin-top:34px">
         <div>
           <h3>Method</h3>
-          <p>This instrument is heuristic, not an oracle. It reads surface markers: pronouns, names, tenses, similes, moods, inference words. It cannot know your context, and it says so in the plates.</p>
+          <p>This instrument is heuristic, not an oracle. It reads surface markers: pronouns, names, tenses, similes, moods, inference words. It cannot know your context, and it says so on the bench.</p>
           <p>Mixture is the norm. Almost every text does iconic, indexical, and symbolic work at once; the instrument names the dominant relation and lists the subordinates rather than forcing purity.</p>
           <p>Peirce later sketched a 66-class extension. It was never finished, and scholars dispute it. This instrument implements the completed 1903 system of ten, plus the immediate and dynamic refinements.</p>
         </div>
@@ -439,7 +480,7 @@ footer.site .fnote{font-family:var(--font-mono);font-size:11px;letter-spacing:.1
           <p>The working method, staged dissection, exploded views, margin questions, and visible revision, follows the study habits of Leonardo's journals, without a drop of pastiche.</p>
         </div>
       </div>
-      <p class="wit">First compositions always err; every sound reading begins by correcting the page. Where this instrument misreads your words, amend the record: the ledger shows exactly which test failed.</p>
+      <p class="wit">First compositions always err; every sound reading begins by correcting the page. Where this instrument misreads your words, amend the record: the derivation trail shows exactly which test failed.</p>
     </div>
   </section>
 </main>
@@ -711,6 +752,57 @@ function analyze(raw){
     {slot:"Final interpretant", text:"Inquiry converges when: "+questions[0]}
   ];
 
+  /* ---- entities: the spans that do the signifying work ---- */
+  function escRe(s){ return s.replace(/[.*+?^${}()|[\]\\]/g,"\\$&"); }
+  var entities=[];
+  function addEntity(pattern, kind, gloss){
+    var rx=new RegExp(pattern,"gi"), m, seen={};
+    while((m=rx.exec(t))){
+      var key=m.index+":"+m[0].length;
+      if(seen[key]) continue; seen[key]=1;
+      entities.push({start:m.index, len:m[0].length, text:m[0], kind:kind, gloss:gloss});
+    }
+  }
+  proper.forEach(function(p){ addEntity("\\b"+escRe(p)+"\\b","index","Names a particular; points by brute contact with its bearer."); });
+  var seenPron={};
+  pronHits.forEach(function(p){ if(seenPron[p])return; seenPron[p]=1;
+    addEntity("\\b"+escRe(p)+"\\b","index","Points to the occasion of utterance: the speaker, the addressee, the here and now."); });
+  var seenDei={};
+  deicticHits.forEach(function(d){ if(seenDei[d])return; seenDei[d]=1;
+    addEntity("\\b"+escRe(d)+"\\b","index","Points: this place, this time, this one here."); });
+  var seenOn={};
+  onomHits.forEach(function(w){ if(seenOn[w])return; seenOn[w]=1;
+    addEntity("\\b"+escRe(w)+"\\b","icon","Means by its sound-shape: the quality resembles what it names."); });
+  if(vehicle==="qualisign") addEntity("^[\\s\\S]+$","icon","A bare quality does the signifying: the sound-shape itself, apart from any bearer.");
+  if(simileWord) addEntity(escRe(simileWord),"icon","Means by likeness: the text asks to be read as like something else.");
+  entities.sort(function(a,b){ return a.start-b.start || b.len-a.len; });
+  var dedup=[];
+  entities.forEach(function(e){
+    var last=dedup[dedup.length-1];
+    if(!last || e.start>=last.start+last.len) dedup.push(e);
+  });
+  entities=dedup;
+
+  /* ---- short lines for the populated triad ---- */
+  var vShort = vehicle==="legisign" ? ["word types","this replica"]
+             : vehicle==="sinsign" ? ["this occurrence"] : ["the sound-shape"];
+  var oShort = refs.length ? [refs[0].length>26 ? refs[0].slice(0,26)+"..." : refs[0]]
+                           : (dominant==="icon" ? ["a likeness"] : ["no fixed referent"]);
+  if(refs.length>1) oShort.push("+"+(refs.length-1)+" more");
+  var iShort = interp==="delome" ? ["reasons to a conclusion"]
+             : interp==="rheme" ? ["presents a term"]
+             : endsQ ? ["puts a fact at issue"] : (imperative||endsBang) ? ["directs action"] : ["asserts a claim"];
+
+  /* ---- derivation trail ---- */
+  var trail=[
+    {label:vehicle, test:vehicleTest},
+    {label:dominant+" (dominant)", test:domTest}
+  ];
+  subordinates.forEach(function(s){
+    trail.push({label:"sub: "+s.split(" (")[0], test:"Mixture is the norm; subordinate work is named, not forced into the dominant slot."});
+  });
+  trail.push({label:interp, test:interpTest});
+  trail.push({label:"class "+classNo, test:"Admissibility holds: interpretant <= object <= vehicle. "+classInfo.name+"."});
   var tokenLine, replicaLine;
   if(V==="legisign"){
     tokenLine="Types used: "+ws.length+" word tokens drawn from conventional word types.";
@@ -729,7 +821,8 @@ function analyze(raw){
     immediateObj:immediateObj, dynamicObj:dynamicObj, epistemic:epistemic, mismatch:mismatch,
     interp:R, interpWhy:interpWhy, immI:immI, dynI:dynI, questions:questions, crosscut:crosscut,
     classNo:classNo, className:classInfo.name, classPlain:classInfo.plain,
-    ledger:ledger, chain:chain
+    ledger:ledger, chain:chain, entities:entities,
+    vShort:vShort, oShort:oShort, iShort:iShort, trail:trail
   };
 }
 
@@ -780,88 +873,118 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
     return '<dt>'+esc(k)+'</dt><dd>'+esc(v)+(note ? '<span class="q">'+esc(note)+'</span>' : '')+'</dd>';
   }
 
-  function triadSVG(){
+  function svgLines(s, max){
+    var words=String(s).split(" "), lines=[""], i, w;
+    for(i=0;i<words.length;i++){
+      w=words[i];
+      if((lines[lines.length-1]+" "+w).trim().length>max){ lines.push(w); }
+      else{ lines[lines.length-1]=(lines[lines.length-1]+" "+w).trim(); }
+    }
+    return lines.slice(0,2);
+  }
+  function svgContent(lines, x, y){
+    var out="";
+    for(var i=0;i<lines.length;i++){
+      out+='<text x="'+x+'" y="'+(y+i*15)+'" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" fill="rgba(27,29,32,.62)">'+esc(lines[i])+'</text>';
+    }
+    return out;
+  }
+  function edgeLabel(x, y, s){
+    return '<text x="'+x+'" y="'+y+'" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" letter-spacing="2" fill="#1b1d20" opacity="0.75" paint-order="stroke" stroke="#f4f1e8" stroke-width="4">'+esc(s)+'</text>';
+  }
+
+  function triadSVG(r){
+    r = r || {vShort:[""], oShort:[""], iShort:[""], objectRelation:"", interp:""};
     return ''+
-    '<svg class="triad-svg" id="triad" data-peel="3" viewBox="0 0 400 340" role="img" aria-label="Triadic diagram: vehicle, object, interpretant">'+
+    '<svg class="triad-svg" id="triad" data-peel="3" viewBox="0 0 400 380" role="img" aria-label="Triadic diagram: vehicle, object, interpretant">'+
       '<defs><marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">'+
       '<path d="M0,0 L10,5 L0,10 z" fill="#1b1d20" opacity="0.55"/></marker></defs>'+
       '<line class="edge edge-vi draw" x1="217.4" y1="99.2" x2="294.6" y2="228.8" stroke="#1b1d20" stroke-width="1.4" opacity="0.6" marker-end="url(#arr)" pathLength="1" style="animation-delay:.55s"/>'+
       '<line class="edge edge-vo draw" x1="105.4" y1="228.8" x2="182.6" y2="99.2" stroke="#1b1d20" stroke-width="1.4" opacity="0.6" marker-end="url(#arr)" pathLength="1" style="animation-delay:.7s"/>'+
       '<line class="edge edge-oi draw" x1="122" y1="258" x2="278" y2="258" stroke="#1b1d20" stroke-width="1.2" opacity="0.45" stroke-dasharray="5 5" pathLength="1" style="animation-delay:.85s"/>'+
-      '<g class="node node-v" style="transition-delay:.1s">'+
+      edgeLabel(144,176,r.objectRelation)+
+      edgeLabel(258,176,r.interp)+
+      '<g class="node node-v" data-node="v" style="transition-delay:.1s">'+
         '<circle cx="200" cy="70" r="30" fill="#f4f1e8" stroke="#2f5d7d" stroke-width="2.5"/>'+
         '<circle cx="200" cy="70" r="6" fill="#2f5d7d"/>'+
         '<text x="200" y="120" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" letter-spacing="2" fill="rgba(27,29,32,.64)">VEHICLE</text>'+
+        svgContent(svgLines(r.vShort.join(" \u00b7 "),26),200,138)+
       '</g>'+
-      '<g class="node node-o" style="transition-delay:.25s">'+
+      '<g class="node node-o" data-node="o" style="transition-delay:.25s">'+
         '<circle cx="88" cy="258" r="30" fill="#f4f1e8" stroke="#a63d22" stroke-width="2.5"/>'+
         '<circle cx="88" cy="258" r="6" fill="#a63d22"/>'+
         '<text x="88" y="308" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" letter-spacing="2" fill="rgba(27,29,32,.64)">OBJECT</text>'+
+        svgContent(svgLines(r.oShort.join(" \u00b7 "),20),88,326)+
       '</g>'+
-      '<g class="node node-i" style="transition-delay:.4s">'+
+      '<g class="node node-i" data-node="i" style="transition-delay:.4s">'+
         '<circle cx="312" cy="258" r="30" fill="#f4f1e8" stroke="#6b5a1e" stroke-width="2.5"/>'+
         '<circle cx="312" cy="258" r="6" fill="#6b5a1e"/>'+
         '<text x="312" y="308" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" letter-spacing="2" fill="rgba(27,29,32,.64)">INTERPRETANT</text>'+
+        svgContent(svgLines(r.iShort.join(" \u00b7 "),20),312,326)+
       '</g>'+
     '</svg>';
   }
 
-  function plateHTML(r){
-    var sub = r.subordinates.length
-      ? '<dl class="kv">'+kvRow("Subordinate work", r.subordinates.join("; "),
-          "Mixture is the norm; the instrument names subordinates rather than forcing purity.")+'</dl>' : "";
-    var mis = r.mismatch ? '<dl class="kv">'+kvRow("Mismatch flag", r.mismatch)+'</dl>' : "";
-    var ledgerRows = r.ledger.map(function(e){
-      return '<div class="ledger-row"><div class="lk">'+esc(e.k)+'</div><div class="lv">'+esc(e.v)+
-        '<span class="test">'+esc(e.test)+'</span></div></div>';
+  function canvasHTML(r){
+    var strip="", pos=0;
+    r.entities.forEach(function(e){
+      strip+=esc(r.text.slice(pos,e.start));
+      strip+='<span class="ent ent-'+e.kind+'" tabindex="0" role="button" data-g="'+esc(e.gloss)+'">'+esc(e.text)+'</span>';
+      pos=e.start+e.len;
+    });
+    strip+=esc(r.text.slice(pos));
+
+    var cells = SIGNS.CLASSES.map(function(c){
+      return '<button type="button" class="cell'+(c.n===r.classNo?" lit":"")+'" data-cn="'+c.n+
+        '" data-cname="'+esc(c.name)+'" data-cplain="'+esc(c.plain)+
+        '" aria-label="Class '+c.n+": "+esc(c.name)+'">'+c.n+'</button>';
     }).join("");
+
+    var chips = r.trail.map(function(s,i){
+      return (i?'<span class="tarrow" aria-hidden="true">&rarr;</span>':'')+
+        '<button type="button" class="tchip'+(i===r.trail.length-1?" tend":"")+'" data-t="'+esc(s.test)+'">'+esc(s.label)+'</button>';
+    }).join("");
+
     var chainItems = r.chain.map(function(c){
       return '<li><span class="cs">'+esc(c.slot)+'</span>'+esc(c.text)+'</li>';
     }).join("");
     var questions = r.questions.map(function(q){ return '<li>'+esc(q)+'</li>'; }).join("");
 
     return ''+
-    '<article class="plate" id="plate-1">'+
-      '<div class="plate-head"><span class="plate-num">I</span><h3>The Vehicle</h3><span class="slot">the sign in itself</span></div>'+
-      '<p class="plate-intro">First the material: what kind of thing is doing the signifying, before asking what it points at.</p>'+
-      '<dl class="kv">'+kvRow("Token and type", r.tokenLine)+kvRow("Replicas", r.replicaLine)+'</dl>'+
-      '<div class="verdict-row"><span class="verdict-chip v-vehicle">'+esc(r.vehicle)+'</span>'+
-      '<span class="verdict-why">'+esc(r.vehicleWhy)+'</span></div>'+
-    '</article>'+
-
-    '<article class="plate" id="plate-2">'+
-      '<div class="plate-head"><span class="plate-num">II</span><h3>The Object</h3><span class="slot">the sign to its object</span></div>'+
-      '<p class="plate-intro">What the text presents is not always what is really there. The instrument keeps the two apart.</p>'+
-      '<dl class="kv">'+kvRow("Immediate object", r.immediateObj)+kvRow("Dynamic object", r.dynamicObj)+kvRow("Epistemic status", r.epistemic)+'</dl>'+mis+
-      '<div class="verdict-row"><span class="verdict-chip v-object">'+esc(r.objectRelation)+' (dominant)</span>'+
-      '<span class="verdict-why">'+esc(r.objectWhy)+'</span></div>'+sub+
-    '</article>'+
-
-    '<article class="plate" id="plate-3">'+
-      '<div class="plate-head"><span class="plate-num">III</span><h3>The Interpretant</h3><span class="slot">the sign to its interpretant</span></div>'+
-      '<p class="plate-intro">What the text grows in the mind: what the form allows, what this reading produces, and what inquiry would converge on.</p>'+
-      '<dl class="kv">'+kvRow("Immediate interpretant", r.immI)+kvRow("Dynamic interpretant", "This instrument's situated reading: "+r.dynI)+
-      kvRow("Cross-cut", r.crosscut, "Emotional, energetic, and logical readings cut across the three interpretants; they are not a fourth slot.")+'</dl>'+
-      '<div class="verdict-row"><span class="verdict-chip v-interpretant">'+esc(r.interp)+'</span>'+
-      '<span class="verdict-why">'+esc(r.interpWhy)+'</span></div>'+
-    '</article>'+
-
-    '<article class="plate" id="plate-4">'+
-      '<div class="plate-head"><span class="plate-num">IV</span><h3>The Species</h3><span class="slot">the whole, assembled</span></div>'+
-      '<div class="species"><div class="kicker">The species</div><h4>'+esc(r.className)+'</h4>'+
-      '<div class="classno">Class '+r.classNo+' of 10 &middot; '+esc(r.classPlain)+'</div></div>'+
-      '<div class="triad-wrap" style="margin-top:22px">'+
-        '<div>'+triadSVG()+'</div>'+
+    '<section class="canvas" id="canvas" aria-label="Dissection">'+
+      '<div class="canvas-head">'+
+        '<span class="kicker">Dissection</span>'+
+        '<p class="specimen-quote">&ldquo;'+esc(r.text)+'&rdquo;</p>'+
+        '<p class="species-line"><strong>CLASS '+r.classNo+' OF 10</strong> &middot; '+esc(r.className)+
+        '<span class="species-plain">'+esc(r.classPlain)+'</span></p>'+
+      '</div>'+
+      '<div class="canvas-row">'+
+        '<span class="field-label">Entities: what the sentence is made of</span>'+
+        '<p class="entity-strip">'+strip+'</p>'+
+      '</div>'+
+      '<div class="canvas-row">'+
+        '<span class="field-label">The triad, populated</span>'+
+        '<div class="triad-wrap"><div>'+triadSVG(r)+'</div>'+
         '<div class="triad-controls">'+
           '<span class="field-label">Dissection</span>'+
           '<label class="toggle-row"><input type="checkbox" id="explode"> Exploded view</label>'+
           '<span class="field-label">Layer peel</span>'+
           '<input type="range" class="peel" id="peel" min="0" max="3" value="3" aria-label="Layer peel: vehicle, object, interpretant, whole">'+
           '<div class="peel-marks"><span>Vehicle</span><span>Object</span><span>Interpr.</span><span>Whole</span></div>'+
-        '</div>'+
+        '</div></div>'+
       '</div>'+
-      '<div class="ledger" aria-label="Derivation ledger">'+ledgerRows+'</div>'+
-      '<h3 style="font-family:var(--font-display);font-size:22px;margin:30px 0 4px">Semiosis: the chain</h3>'+
+      '<div class="canvas-row">'+
+        '<span class="field-label">Species: the ten classes</span>'+
+        '<div class="scale" role="group" aria-label="The ten classes">'+cells+'</div>'+
+      '</div>'+
+      '<div class="canvas-row">'+
+        '<span class="field-label">Derivation: each decision and its test</span>'+
+        '<div class="trail">'+chips+'</div>'+
+      '</div>'+
+      '<p class="inspector" id="inspector">Tap an entity, a triad node, a class, or a step: its test appears here.</p>'+
+    '</section>'+
+    '<section class="further">'+
+      '<h3 style="font-family:var(--font-display);font-size:22px;margin:0 0 4px">Semiosis: the chain</h3>'+
       '<p style="font-size:14px;color:var(--ink-soft);margin:0 0 6px">Every interpretant becomes a new sign. Two links shown; the rest is inquiry.</p>'+
       '<ol class="chain">'+chainItems+'</ol>'+
       '<h3 style="font-family:var(--font-display);font-size:22px;margin:30px 0 10px">Open questions</h3>'+
@@ -874,8 +997,37 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
         '<details class="margin-note"><summary>What is semiosis?</summary>'+
         '<div class="note-body">The chaining of signs: every interpretant becomes a new sign for a further interpretant. Reading never terminates; it only converges, and the final interpretant is the limit of inquiry.</div></details>'+
       '</div>'+
-      '<p class="provenance">Taxonomy: <a href="https://plato.stanford.edu/entries/peirce-semiotics/">SEP: Peirce\'s Theory of Signs</a> (the triad; the three trichotomies; the ten classes). Engine: surface-marker heuristics; every decision above carries its test. Build v20260915-signs2.</p>'+
-    '</article>';
+      '<p class="provenance">Taxonomy: <a href="https://plato.stanford.edu/entries/peirce-semiotics/">SEP: Peirce\'s Theory of Signs</a> (the triad; the three trichotomies; the ten classes). Engine: surface-marker heuristics; every decision above carries its test. Build v20260916-signs3.</p>'+
+    '</section>';
+  }
+
+  function wireCanvas(r){
+    var insp=$("inspector");
+    function say(t){ if(insp) insp.textContent=t; }
+    Array.prototype.forEach.call(document.querySelectorAll(".ent"), function(el){
+      function go(){ say(el.textContent+": "+el.getAttribute("data-g")); }
+      el.addEventListener("click",go);
+      el.addEventListener("keydown",function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); go(); } });
+    });
+    var nodeInfo={
+      v:"Vehicle: "+r.tokenLine+" "+r.replicaLine+" Verdict: "+r.vehicle+". "+r.vehicleWhy,
+      o:"Object: "+r.immediateObj+" "+r.dynamicObj+" Epistemic status: "+r.epistemic+(r.mismatch?" "+r.mismatch:""),
+      i:"Interpretant: "+r.immI+" Situated reading: "+r.dynI+" Cross-cut: "+r.crosscut
+    };
+    Array.prototype.forEach.call(document.querySelectorAll("#triad [data-node]"), function(g){
+      g.style.cursor="pointer";
+      g.addEventListener("click",function(){ say(nodeInfo[g.getAttribute("data-node")]); });
+    });
+    Array.prototype.forEach.call(document.querySelectorAll(".cell"), function(c){
+      c.addEventListener("click",function(){
+        say("Class "+c.getAttribute("data-cn")+": "+c.getAttribute("data-cname")+". "+c.getAttribute("data-cplain")+".");
+      });
+    });
+    Array.prototype.forEach.call(document.querySelectorAll(".tchip"), function(c){
+      c.addEventListener("click",function(){ say(c.textContent+": "+c.getAttribute("data-t")); });
+    });
+    var svg=$("triad");
+    if(svg) wireTriad(svg);
   }
 
   function wireTriad(svg){
@@ -889,21 +1041,18 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
   }
 
   function reveal(r){
-    plates.innerHTML = plateHTML(r);
-    var ps = plates.querySelectorAll(".plate");
+    plates.innerHTML = canvasHTML(r);
+    wireCanvas(r);
     requestAnimationFrame(function(){
       requestAnimationFrame(function(){
-        for(var i=0;i<ps.length;i++){
-          ps[i].classList.add("on");
-        }
+        var cv=$("canvas");
+        if(cv) cv.classList.add("on");
         var svg = $("triad");
         if(svg){
           svg.classList.add("revealed");
-          wireTriad(svg);
           setTimeout(function(){
             var nodes = svg.querySelectorAll(".node");
             for(var j=0;j<nodes.length;j++) nodes[j].style.transitionDelay = "0ms";
-            for(var k=0;k<ps.length;k++) ps[k].style.transitionDelay = "0ms";
           }, 1400);
         }
       });
