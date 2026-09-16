@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<meta name="build-version" content="v20260916-signs8">
+<meta name="build-version" content="v20260916-signs9">
 <title>Signs: An Instrument for Taking Texts Apart</title>
 <meta name="description" content="Inscribe a text. The instrument dissects it in Peirce's terms: the vehicle, the object, the interpretant, then names the species.">
 <meta property="og:title" content="Signs: An Instrument for Taking Texts Apart">
@@ -218,11 +218,15 @@ input[type="range"].scrub::-moz-range-thumb{width:14px;height:14px;background:va
 .tray .ttest{color:var(--ink-soft);font-size:13px;margin-top:10px}
 .tray .tsub{color:var(--ink-soft);font-size:12.5px;margin-top:8px;font-style:italic}
 @media (max-width:900px){.trays{grid-template-columns:1fr}}
-/* causal threads: hairlines from a corner to its evidence */
+/* evidence tracing: corners cross-highlight in place; derivation pulses travel */
 .canvas{position:relative}
 .threads{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:5}
-.ent{transition:opacity .25s}
+.ent{transition:opacity .25s,background-color .2s,box-shadow .2s}
 .ent.dim{opacity:.25}
+.ent.hl-v{background:rgba(47,93,125,.13);box-shadow:inset 0 0 0 1px rgba(47,93,125,.65);color:var(--vehicle)}
+.ent.hl-o{background:rgba(166,61,34,.13);box-shadow:inset 0 0 0 1px rgba(166,61,34,.65);color:var(--object)}
+.ent.hl-i{background:rgba(107,90,30,.15);box-shadow:inset 0 0 0 1px rgba(107,90,30,.65);color:var(--interpretant)}
+#triad .node.traced>circle:first-of-type{stroke-width:5}
 .specimen-quote{border-bottom:3px solid transparent;transition:border-color .25s}
 .specimen-quote.lit{border-bottom-color:var(--interpretant)}
 .btn{font-family:var(--font-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;
@@ -1061,7 +1065,7 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
         '</div>'+
         '<aside class="smargin">'+openNotes+'</aside></div>'+
       '</div>'+
-      '<p class="inspector" id="inspector">Tap a triad corner to trace its evidence in the sentence; tap Trace the derivation to watch the three verdicts converge on the class.</p>'+
+      '<p class="inspector" id="inspector">Tap a triad corner to light up its evidence in the sentence; tap Trace the derivation to watch the three verdicts converge on the class.</p>'+
     '</section>'+
     '<section class="further">'+
       '<p class="provenance">Taxonomy: <a href="https://plato.stanford.edu/entries/peirce-semiotics/">SEP: Peirce\'s Theory of Signs</a> (the triad; the three trichotomies; the ten classes). Engine: surface-marker heuristics; every decision above carries its test. Build v20260916-signs8.</p>'+
@@ -1105,10 +1109,13 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
     /* ---- the bench: threads, trays, derivation tracing ---- */
     var NS="http://www.w3.org/2000/svg";
     var CORNER_COLOR={v:"#2f5d7d",o:"#a63d22",i:"#6b5a1e"};
+    var cornerActive=null;
     function clearThreads(){
       var t=$("threads"); if(t) t.innerHTML="";
-      Array.prototype.forEach.call(document.querySelectorAll(".ent.dim"), function(el){ el.classList.remove("dim"); });
+      Array.prototype.forEach.call(document.querySelectorAll(".ent"), function(el){ el.classList.remove("dim","hl-v","hl-o","hl-i"); });
+      Array.prototype.forEach.call(document.querySelectorAll("#triad .node.traced"), function(el){ el.classList.remove("traced"); });
       var q=document.querySelector(".specimen-quote"); if(q) q.classList.remove("lit");
+      cornerActive=null;
     }
     if(window.__signsClear) window.removeEventListener("resize", window.__signsClear);
     window.__signsClear=clearThreads; window.addEventListener("resize", clearThreads);
@@ -1126,26 +1133,22 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
       ln.setAttribute("stroke",color); ln.setAttribute("stroke-width","1.5");
       $("threads").appendChild(ln);
     }
-    /* tap a corner: hairlines to the exact evidence behind its verdict */
+    /* tap a corner: the exact evidence behind its verdict lights up in place, no lines */
     function traceCorner(n, g){
-      clearThreads();
-      var geo=sectionGeom(); if(!geo) return;
-      var sr=geo.sr, color=CORNER_COLOR[n];
-      var fr=g.getBoundingClientRect();
-      var x1=fr.left+fr.width/2-sr.left, y1=fr.bottom-sr.top;
-      function lineTo(el){
-        var r2=el.getBoundingClientRect();
-        threadLine(x1,y1,r2.left+r2.width/2-sr.left,r2.top-sr.top,color);
-      }
+      if(cornerActive===n){ clearThreads(); return; }
+      clearThreads(); cornerActive=n;
+      if(g) g.classList.add("traced");
+      var hl="hl-"+n;
       var ents=Array.prototype.slice.call(document.querySelectorAll(".ent"));
-      if(n==="v"){ ents.forEach(lineTo); }
+      if(n==="v"){ ents.forEach(function(e){ e.classList.add(hl); }); }
       else if(n==="o"){
         var strong=ents.filter(function(e){ return e.getAttribute("data-k")!=="symbol"; });
+        (strong.length?strong:ents).forEach(function(e){ e.classList.add(hl); });
         ents.forEach(function(e){ if(e.getAttribute("data-k")==="symbol") e.classList.add("dim"); });
-        (strong.length?strong:ents).forEach(lineTo);
       }else{
         var q=document.querySelector(".specimen-quote");
-        if(q){ q.classList.add("lit"); lineTo(q); }
+        if(q) q.classList.add("lit");
+        ents.forEach(function(e){ e.classList.add("dim"); });
       }
     }
     /* trace the derivation: three verdicts travel to the class, or jam */
@@ -1180,6 +1183,13 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
         tx.textContent="no admissible class";
         mk.appendChild(tx); t.appendChild(mk);
       }
+      /* the whole path must be on screen first: a pulse traveling to an unseen target reads as a glitch */
+      var secTopAbs=window.pageYOffset+sr.top;
+      var pathTopAbs=secTopAbs+Math.min(segs[0].y1,segs[1].y1,segs[2].y1);
+      var pathBotAbs=secTopAbs+segs[0].y2;
+      var vh=window.innerHeight||640;
+      var pathFits=(pathTopAbs>=window.pageYOffset+24)&&(pathBotAbs<=window.pageYOffset+vh-24);
+      var camStart=Math.max(0,pathTopAbs-vh*0.25), camEnd=Math.max(0,pathBotAbs-vh*0.65), CAM_DUR=1250;
       var dots=segs.map(function(s){
         var c=document.createElementNS(NS,"circle");
         c.setAttribute("r",4.5); c.setAttribute("fill",s.color);
@@ -1197,12 +1207,17 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
       }
       if(reducedMotion()){
         dots.forEach(function(c,i){ c.setAttribute("cx",segs[i].x2); c.setAttribute("cy",segs[i].y2); });
+        if(!pathFits) window.scrollTo({top:camEnd,behavior:"auto"});
         finish(); return;
       }
+      if(!pathFits) window.scrollTo({top:camStart,behavior:"auto"});
       var t0=null;
       (function frame(ts){
         if(t0===null) t0=ts;
         var alive=false;
+        var cp=(ts-t0)/CAM_DUR; cp=cp<0?0:(cp>1?1:cp);
+        var ce=cp<.5?2*cp*cp:1-Math.pow(-2*cp+2,2)/2;
+        if(!pathFits) window.scrollTo(0,camStart+(camEnd-camStart)*ce);
         dots.forEach(function(c,i){
           var p=(ts-t0-i*160)/850; p=p<0?0:(p>1?1:p);
           if(p<1) alive=true;
