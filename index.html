@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<meta name="build-version" content="v20260916-signs14">
+<meta name="build-version" content="v20260916-signs15">
 <title>Signs: An Instrument for Taking Texts Apart</title>
 <meta name="description" content="Inscribe a text. The instrument dissects it in Peirce's terms: the sign, the object, the interpretant, then names the class.">
 <meta property="og:title" content="Signs: An Instrument for Taking Texts Apart">
@@ -60,6 +60,11 @@ header.site{
   background:rgba(238,233,222,.94);backdrop-filter:blur(8px);
   border-bottom:1px solid var(--hairline);
 }
+/* a marginal note, pinned above everything, in the folio's own voice */
+.disclaimer{background:var(--paper-2);border-bottom:1px solid var(--hairline)}
+.disclaimer .wrap{padding-top:9px;padding-bottom:9px;display:flex;gap:14px;align-items:baseline;flex-wrap:wrap}
+.dlabel{font-family:var(--font-mono);font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);white-space:nowrap}
+.dtext{font-family:var(--font-display);font-style:italic;font-size:14.5px;line-height:1.5;color:var(--ink-soft)}
 header.site .wrap{height:64px;display:flex;align-items:center;justify-content:space-between}
 .brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink)}
 .brand svg{display:block}
@@ -357,6 +362,12 @@ footer.site .fnote{font-family:var(--font-mono);font-size:11px;letter-spacing:.1
 </style>
 </head>
 <body>
+<div class="disclaimer" role="note" aria-label="Disclaimer">
+  <div class="wrap">
+    <span class="dlabel">A marginal note</span>
+    <span class="dtext">This site is an experiment to discover a UI design that I enjoy; the content is nonsense.</span>
+  </div>
+</div>
 <header class="site">
   <div class="wrap">
     <a class="brand" href="#top" aria-label="Signs home">
@@ -1113,7 +1124,7 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
       '</div>'+
     '</section>'+
     '<section class="further">'+
-      '<p class="provenance">Taxonomy: <a href="https://plato.stanford.edu/entries/peirce-semiotics/">SEP: Peirce\'s Theory of Signs</a> (the triad; the three trichotomies; the ten classes). Engine: surface-marker heuristics; every decision above carries its test. Build v20260916-signs14.</p>'+
+      '<p class="provenance">Taxonomy: <a href="https://plato.stanford.edu/entries/peirce-semiotics/">SEP: Peirce\'s Theory of Signs</a> (the triad; the three trichotomies; the ten classes). Engine: surface-marker heuristics; every decision above carries its test. Build v20260916-signs15.</p>'+
     '</section>';
   }
 
