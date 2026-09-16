@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<meta name="build-version" content="v20260916-signs9">
+<meta name="build-version" content="v20260916-signs10">
 <title>Signs: An Instrument for Taking Texts Apart</title>
 <meta name="description" content="Inscribe a text. The instrument dissects it in Peirce's terms: the vehicle, the object, the interpretant, then names the species.">
 <meta property="og:title" content="Signs: An Instrument for Taking Texts Apart">
@@ -218,15 +218,8 @@ input[type="range"].scrub::-moz-range-thumb{width:14px;height:14px;background:va
 .tray .ttest{color:var(--ink-soft);font-size:13px;margin-top:10px}
 .tray .tsub{color:var(--ink-soft);font-size:12.5px;margin-top:8px;font-style:italic}
 @media (max-width:900px){.trays{grid-template-columns:1fr}}
-/* evidence tracing: corners cross-highlight in place; derivation eliminates classes */
+/* evidence tracing: corners cross-highlight in place */
 .canvas{position:relative}
-.scale .cell{transition:opacity .3s}
-.scale .cell.out{opacity:.16}
-.tray{transition:box-shadow .25s}
-.tray-d1.step{box-shadow:inset 0 0 0 2px var(--vehicle)}
-.tray-d2.step{box-shadow:inset 0 0 0 2px var(--object)}
-.tray-d3.step{box-shadow:inset 0 0 0 2px var(--interpretant)}
-.deriv-cap{font-family:var(--font-mono);font-size:13px;line-height:1.6;color:var(--ink);margin:0 0 12px;min-height:20px}
 .ent{transition:opacity .25s,background-color .2s,box-shadow .2s}
 .ent.dim{opacity:.25}
 .ent.hl-v{background:rgba(47,93,125,.13);box-shadow:inset 0 0 0 1px rgba(47,93,125,.65);color:var(--vehicle)}
@@ -239,7 +232,6 @@ input[type="range"].scrub::-moz-range-thumb{width:14px;height:14px;background:va
   background:var(--ink);color:var(--paper);border:1px solid var(--ink);border-radius:2px;
   padding:12px 18px;min-height:44px;cursor:pointer;margin-top:18px}
 .btn:active{transform:translateY(1px)}
-.cell.hit{box-shadow:0 0 0 3px var(--paper),0 0 0 5px var(--ink)}
 .triad-svg .draw{stroke-dasharray:1;stroke-dashoffset:1}
 .triad-svg.revealed .draw{animation:drawline .7s var(--e-out) forwards}
 @keyframes drawline{to{stroke-dashoffset:0}}
@@ -1051,7 +1043,6 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
           '<span class="field-label">Layer peel</span>'+
           '<input type="range" class="scrub" id="peel" min="0" max="3" value="3" aria-label="Layer peel: vehicle, object, interpretant, whole">'+
           '<div class="peel-marks"><span>Vehicle</span><span>Object</span><span>Interpr.</span><span>Whole</span></div>'+
-          '<button type="button" class="btn" id="trace">Trace the derivation</button>'+
         '</div>'+
         traysHTML+
         '</div>'+
@@ -1059,7 +1050,6 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
       '</div>'+
       '<div class="canvas-row">'+
         '<span class="field-label">Species: the ten classes</span>'+
-        '<p class="deriv-cap" id="derivCap" aria-live="polite"></p>'+
         '<div class="srow"><div class="smain"><div class="scale" role="group" aria-label="The ten classes">'+cells+'</div></div>'+
         '<aside class="smargin">'+whyTen+'</aside></div>'+
       '</div>'+
@@ -1071,10 +1061,10 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
         '</div>'+
         '<aside class="smargin">'+openNotes+'</aside></div>'+
       '</div>'+
-      '<p class="inspector" id="inspector">Tap a triad corner to light up its evidence in the sentence; tap Trace the derivation to eliminate the ten classes step by step until one remains.</p>'+
+      '<p class="inspector" id="inspector">Tap a triad corner to light up its evidence in the sentence.</p>'+
     '</section>'+
     '<section class="further">'+
-      '<p class="provenance">Taxonomy: <a href="https://plato.stanford.edu/entries/peirce-semiotics/">SEP: Peirce\'s Theory of Signs</a> (the triad; the three trichotomies; the ten classes). Engine: surface-marker heuristics; every decision above carries its test. Build v20260916-signs9.</p>'+
+      '<p class="provenance">Taxonomy: <a href="https://plato.stanford.edu/entries/peirce-semiotics/">SEP: Peirce\'s Theory of Signs</a> (the triad; the three trichotomies; the ten classes). Engine: surface-marker heuristics; every decision above carries its test. Build v20260916-signs10.</p>'+
     '</section>';
   }
 
@@ -1112,30 +1102,11 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
     });
     var svg=$("triad");
 
-    /* ---- the bench: cross-highlighting, and derivation by elimination ---- */
-    var cornerActive=null, derivRun=0;
-    /* each class parsed from its own name into a [vehicle, object, interpretant] triple */
-    var CLASS_TRIPLE={};
-    (function(){
-      var OW={icon:"icon",iconic:"icon",index:"index",indexical:"index",symbol:"symbol",symbolic:"symbol"};
-      var IW={rheme:"rheme",rhematic:"rheme",dicent:"dicent",dicentic:"dicent",delome:"delome",delomic:"delome"};
-      SIGNS.CLASSES.forEach(function(c){
-        var t=[null,null,null];
-        c.name.toLowerCase().split(/\s+/).forEach(function(w){
-          if(w==="qualisign"||w==="sinsign"||w==="legisign") t[0]=w;
-          else if(OW[w]) t[1]=OW[w];
-          else if(IW[w]) t[2]=IW[w];
-        });
-        CLASS_TRIPLE[c.n]=t;
-      });
-    })();
+    /* ---- the bench: corner cross-highlighting ---- */
+    var cornerActive=null;
     function clearThreads(){
-      derivRun++;
       Array.prototype.forEach.call(document.querySelectorAll(".ent"), function(el){ el.classList.remove("dim","hl-v","hl-o","hl-i"); });
       Array.prototype.forEach.call(document.querySelectorAll("#triad .node.traced"), function(el){ el.classList.remove("traced"); });
-      Array.prototype.forEach.call(document.querySelectorAll(".scale .cell.out"), function(el){ el.classList.remove("out"); });
-      Array.prototype.forEach.call(document.querySelectorAll(".tray.step"), function(el){ el.classList.remove("step"); });
-      var h=document.querySelector(".scale .cell.hit"); if(h) h.classList.remove("hit");
       var q=document.querySelector(".specimen-quote"); if(q) q.classList.remove("lit");
       cornerActive=null;
     }
@@ -1159,49 +1130,9 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
         ents.forEach(function(e){ e.classList.add("dim"); });
       }
     }
-    /* trace the derivation: each verdict eliminates the classes it rules out, until one remains */
-    function traceDerivation(){
-      clearThreads();
-      var my=++derivRun;
-      var cap=$("derivCap");
-      var cells=Array.prototype.slice.call(document.querySelectorAll(".scale .cell"));
-      var trays={v:document.querySelector(".tray-d1"),o:document.querySelector(".tray-d2"),i:document.querySelector(".tray-d3")};
-      function alive(){ return my===derivRun; }
-      function setCap(t){ if(cap) cap.textContent=t; say(t); }
-      var sc=document.querySelector(".scale");
-      if(sc) sc.scrollIntoView({block:"center",behavior:reducedMotion()?"auto":"smooth"});
-      var steps=[["v","D1",r.vehicle,"vehicle"],["o","D2",r.objectRelation,"object relation"],["i","D3",r.interp,"interpretant"]];
-      var remaining=cells.slice();
-      function run(n){
-        if(!alive()) return;
-        var key=steps[n][0], tag=steps[n][1], val=steps[n][2], slot=steps[n][3];
-        if(trays[key]) trays[key].classList.add("step");
-        remaining=remaining.filter(function(c){
-          var keep=CLASS_TRIPLE[+c.getAttribute("data-cn")][n]===val;
-          if(!keep) c.classList.add("out");
-          return keep;
-        });
-        if(remaining.length===0){
-          setCap(tag+": "+val+". Nothing left standing: no class admits "+val+" as "+slot+" alongside the earlier verdicts. The reading breaks the dependence rule at this step, so there is no admissible class. Re-examine the earliest call, D1.");
-          return;
-        }
-        if(n<2){
-          setCap(tag+": "+val+". "+remaining.length+" of the 10 classes admit "+val+" as "+slot+".");
-          if(reducedMotion()) run(n+1);
-          else setTimeout(function(){ run(n+1); },1100);
-        }else{
-          var win=remaining[0]||(r.classNo?document.querySelector('.cell[data-cn="'+r.classNo+'"]'):null);
-          if(win) win.classList.add("hit");
-          setCap("Class "+(win?win.getAttribute("data-cn"):"?")+" of 10: "+r.className+". Derived, not asserted: the three verdicts leave exactly one admissible class.");
-          setTimeout(function(){ if(win&&alive()) win.classList.remove("hit"); },2400);
-        }
-      }
-      if(reducedMotion()) run(0);
-      else setTimeout(function(){ run(0); },450);
-    }
     function wireTriad(svg){
       var smain=svg.closest(".smain");
-      var explode=$("explode"), peel=$("peel"), trace=$("trace");
+      var explode=$("explode"), peel=$("peel");
       function setEx(){
         var ex=explode.value/100;
         smain.style.setProperty("--ex",ex.toFixed(3));
@@ -1216,7 +1147,6 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
         });
       }
       if(peel) peel.addEventListener("input",function(){ svg.setAttribute("data-peel",peel.value); });
-      if(trace) trace.addEventListener("click",function(){ traceDerivation(); });
     }
     if(svg) wireTriad(svg);
   }
