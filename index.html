@@ -282,6 +282,14 @@ textarea.specimen::placeholder{color:var(--ink-faint)}
 .eqnode:active{transform:translateY(1px)}
 .eq-cap{font-size:12.5px;color:var(--ink-faint);margin:10px 0 0;max-width:680px}
 .slice-row{display:flex;align-items:center;gap:12px;margin:14px 0 4px;flex-wrap:wrap}
+.mx-cap{font-family:var(--font-mono);font-size:11.5px;color:var(--ink-faint);margin:2px 0 0}
+.dossier{margin-top:18px;border:1px solid var(--hairline);background:rgba(255,255,255,.35);padding:16px 18px;max-width:720px}
+.dos-head{font-family:var(--font-mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;margin:0 0 10px}
+.dos-status{font-size:15px;margin:0 0 8px}
+.dos-diffs{margin:8px 0;padding-left:20px;font-size:14.5px}
+.dos-diffs li{margin:4px 0}
+.dos-diffs b{font-family:var(--font-mono);font-size:12px;letter-spacing:.08em}
+.dos-gloss{font-size:14px;color:var(--ink-soft);margin:10px 0 0}
 .slice{display:flex}
 .sbtn{
   font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
@@ -1129,6 +1137,32 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
         '" data-cname="'+esc(c.name)+'" data-cplain="'+esc(c.plain)+
         '" aria-label="Class '+c.n+": "+esc(c.name)+'"><span class="mn">'+("0"+c.n).slice(-2)+"</span>"+esc(SHORT[c.n-1])+mark+"</button>";
     }
+    /* class dossier: each cell opens the class read against the live verdicts */
+    var TRIPLE={};
+    Object.keys(CLASS_OF).forEach(function(k){ var p=k.split("|"); TRIPLE[CLASS_OF[k]]=[p[2],p[1],p[0]]; });
+    var TERM_PLAIN={qualisign:"a mere quality",sinsign:"a particular occurrence",legisign:"a repeatable type",
+      icon:"resemblance",index:"brute connection",symbol:"convention",
+      rheme:"a term, asserting nothing",dicent:"an assertion, true or false",delome:"an argument from premises to a conclusion"};
+    var DKEY={v:"D1",o:"D2",i:"D3"};
+    function dossierHTML(){
+      var n=vw.dossier; if(!n) return "";
+      var c=CLASSES[n-1], t=TRIPLE[n], keys=["v","o","i"], diffs=[];
+      keys.forEach(function(k,ix){ if(t[ix]!==vw[k]) diffs.push({k:k,need:t[ix],have:vw[k]}); });
+      var status;
+      if(!ok){
+        status='<p class="dos-status">No verdict on this sheet. The derived triple breaks the dependence rule: '+esc(viol)+'.</p>';
+      }else if(!diffs.length){
+        status='<p class="dos-status">Asserted. The three verdicts converge here: '+esc(vw.v)+' (D1), '+esc(vw.o)+' (D2), '+esc(vw.i)+' (D3), and '+esc(vw.i)+' &le; '+esc(vw.o)+' &le; '+esc(vw.v)+' holds.</p>';
+      }else{
+        status='<p class="dos-status">Ruled out, '+diffs.length+' verdict'+(diffs.length>1?'s':'')+' away:</p><ul class="dos-diffs">'+
+          diffs.map(function(d){
+            return '<li><b>'+DKEY[d.k]+'</b> would need '+esc(d.need)+' ('+esc(TERM_PLAIN[d.need])+'), not '+esc(d.have)+' ('+esc(TERM_PLAIN[d.have])+').</li>';
+          }).join("")+'</ul>';
+      }
+      return '<div class="dossier" id="dossier" role="region" aria-label="Class '+n+' dossier">'+
+        '<p class="dos-head">Class '+n+' of 10 &middot; '+esc(c.name)+'</p>'+status+
+        '<p class="dos-gloss">'+esc(c.plain)+' Example: '+esc(c.example)+'.</p></div>';
+    }
     var slice=SLICES[vw.slice];
     var groupsHTML=slice.groups.map(function(g){
       var cells=g[1].map(function(n){ return cellHTML(CLASSES[n-1]); }).join("");
@@ -1140,7 +1174,9 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
       '<div class="slice" role="group" aria-label="Matrix slice">'+
       '<button type="button" class="sbtn" data-slice="d1" aria-pressed="'+(vw.slice==="d1")+'">D1 \u00b7 the sign</button>'+
       '<button type="button" class="sbtn" data-slice="d3" aria-pressed="'+(vw.slice==="d3")+'">D3 \u00b7 the interpretant</button>'+
-      '</div></div>'+groupsHTML;
+      '</div></div>'+
+      '<p class="mx-cap">Tap a class to read it against the verdicts above.</p>'+
+      groupsHTML+dossierHTML();
 
     var chainItems=r.chain.map(function(c){
       return '<li><span class="cs">'+esc(c.slot)+"</span>"+esc(c.text)+"</li>";
@@ -1333,13 +1369,22 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
     Array.prototype.forEach.call(bench.querySelectorAll(".mcell"),function(c){
       c.addEventListener("click",function(){
         var n=+c.getAttribute("data-cn"), classNo=currentClass(vw);
-        if(classNo&&n===classNo)
-          logLedger("Class "+n+" asserted: "+vw.v+" + "+vw.o+" + "+vw.i+" is one admissible combination.");
-        else if(classNo)
-          logLedger("Class "+n+" cut: not this combination under the current verdicts.");
-        else
-          logLedger("Class "+n+": no admissible triple here; the reading breaks the dependence rule.");
-        renderLedger();
+        if(vw.dossier===n){
+          vw.dossier=null;
+          logLedger("Class "+n+" dossier closed.");
+        }else{
+          vw.dossier=n;
+          if(classNo&&n===classNo)
+            logLedger("Class "+n+" dossier opened: asserted, the verdicts converge here.");
+          else if(classNo)
+            logLedger("Class "+n+" dossier opened: ruled out under the current verdicts.");
+          else
+            logLedger("Class "+n+" dossier opened: no verdict, the reading breaks the dependence rule.");
+        }
+        postRenderFocus='.mcell[data-cn="'+n+'"]';
+        renderBench();
+        var dz=$("dossier");
+        if(dz&&vw.dossier) dz.scrollIntoView({behavior:reducedMotion()?"auto":"smooth",block:"nearest"});
       });
     });
   }
@@ -1348,7 +1393,7 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
     folioN++;
     benchView={r:r,folio:"S."+("00"+folioN).slice(-3),
       v:r.vehicle,o:r.objectRelation,i:r.interp,
-      depth:"evidence",scribed:null,corner:null,slice:"d1",ledger:[]};
+      depth:"evidence",scribed:null,corner:null,slice:"d1",dossier:null,ledger:[]};
     scribedInfo=null;
     logLedger("Sheet opened. The answer stands above; every tap scribes the why.");
     renderBench();
