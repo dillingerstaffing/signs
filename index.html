@@ -218,9 +218,15 @@ input[type="range"].scrub::-moz-range-thumb{width:14px;height:14px;background:va
 .tray .ttest{color:var(--ink-soft);font-size:13px;margin-top:10px}
 .tray .tsub{color:var(--ink-soft);font-size:12.5px;margin-top:8px;font-style:italic}
 @media (max-width:900px){.trays{grid-template-columns:1fr}}
-/* evidence tracing: corners cross-highlight in place; derivation pulses travel */
+/* evidence tracing: corners cross-highlight in place; derivation eliminates classes */
 .canvas{position:relative}
-.threads{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:5}
+.scale .cell{transition:opacity .3s}
+.scale .cell.out{opacity:.16}
+.tray{transition:box-shadow .25s}
+.tray-d1.step{box-shadow:inset 0 0 0 2px var(--vehicle)}
+.tray-d2.step{box-shadow:inset 0 0 0 2px var(--object)}
+.tray-d3.step{box-shadow:inset 0 0 0 2px var(--interpretant)}
+.deriv-cap{font-family:var(--font-mono);font-size:13px;line-height:1.6;color:var(--ink);margin:0 0 12px;min-height:20px}
 .ent{transition:opacity .25s,background-color .2s,box-shadow .2s}
 .ent.dim{opacity:.25}
 .ent.hl-v{background:rgba(47,93,125,.13);box-shadow:inset 0 0 0 1px rgba(47,93,125,.65);color:var(--vehicle)}
@@ -1022,7 +1028,6 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
 
     return ''+
     '<section class="canvas" id="canvas" aria-label="Dissection">'+
-      '<svg class="threads" id="threads" aria-hidden="true"></svg>'+
       '<div class="canvas-head">'+
         '<span class="kicker">Dissection</span>'+
         '<p class="specimen-quote">&ldquo;'+esc(r.text)+'&rdquo;</p>'+
@@ -1054,6 +1059,7 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
       '</div>'+
       '<div class="canvas-row">'+
         '<span class="field-label">Species: the ten classes</span>'+
+        '<p class="deriv-cap" id="derivCap" aria-live="polite"></p>'+
         '<div class="srow"><div class="smain"><div class="scale" role="group" aria-label="The ten classes">'+cells+'</div></div>'+
         '<aside class="smargin">'+whyTen+'</aside></div>'+
       '</div>'+
@@ -1065,10 +1071,10 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
         '</div>'+
         '<aside class="smargin">'+openNotes+'</aside></div>'+
       '</div>'+
-      '<p class="inspector" id="inspector">Tap a triad corner to light up its evidence in the sentence; tap Trace the derivation to watch the three verdicts converge on the class.</p>'+
+      '<p class="inspector" id="inspector">Tap a triad corner to light up its evidence in the sentence; tap Trace the derivation to eliminate the ten classes step by step until one remains.</p>'+
     '</section>'+
     '<section class="further">'+
-      '<p class="provenance">Taxonomy: <a href="https://plato.stanford.edu/entries/peirce-semiotics/">SEP: Peirce\'s Theory of Signs</a> (the triad; the three trichotomies; the ten classes). Engine: surface-marker heuristics; every decision above carries its test. Build v20260916-signs8.</p>'+
+      '<p class="provenance">Taxonomy: <a href="https://plato.stanford.edu/entries/peirce-semiotics/">SEP: Peirce\'s Theory of Signs</a> (the triad; the three trichotomies; the ten classes). Engine: surface-marker heuristics; every decision above carries its test. Build v20260916-signs9.</p>'+
     '</section>';
   }
 
@@ -1106,33 +1112,35 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
     });
     var svg=$("triad");
 
-    /* ---- the bench: threads, trays, derivation tracing ---- */
-    var NS="http://www.w3.org/2000/svg";
-    var CORNER_COLOR={v:"#2f5d7d",o:"#a63d22",i:"#6b5a1e"};
-    var cornerActive=null;
+    /* ---- the bench: cross-highlighting, and derivation by elimination ---- */
+    var cornerActive=null, derivRun=0;
+    /* each class parsed from its own name into a [vehicle, object, interpretant] triple */
+    var CLASS_TRIPLE={};
+    (function(){
+      var OW={icon:"icon",iconic:"icon",index:"index",indexical:"index",symbol:"symbol",symbolic:"symbol"};
+      var IW={rheme:"rheme",rhematic:"rheme",dicent:"dicent",dicentic:"dicent",delome:"delome",delomic:"delome"};
+      SIGNS.CLASSES.forEach(function(c){
+        var t=[null,null,null];
+        c.name.toLowerCase().split(/\s+/).forEach(function(w){
+          if(w==="qualisign"||w==="sinsign"||w==="legisign") t[0]=w;
+          else if(OW[w]) t[1]=OW[w];
+          else if(IW[w]) t[2]=IW[w];
+        });
+        CLASS_TRIPLE[c.n]=t;
+      });
+    })();
     function clearThreads(){
-      var t=$("threads"); if(t) t.innerHTML="";
+      derivRun++;
       Array.prototype.forEach.call(document.querySelectorAll(".ent"), function(el){ el.classList.remove("dim","hl-v","hl-o","hl-i"); });
       Array.prototype.forEach.call(document.querySelectorAll("#triad .node.traced"), function(el){ el.classList.remove("traced"); });
+      Array.prototype.forEach.call(document.querySelectorAll(".scale .cell.out"), function(el){ el.classList.remove("out"); });
+      Array.prototype.forEach.call(document.querySelectorAll(".tray.step"), function(el){ el.classList.remove("step"); });
+      var h=document.querySelector(".scale .cell.hit"); if(h) h.classList.remove("hit");
       var q=document.querySelector(".specimen-quote"); if(q) q.classList.remove("lit");
       cornerActive=null;
     }
     if(window.__signsClear) window.removeEventListener("resize", window.__signsClear);
     window.__signsClear=clearThreads; window.addEventListener("resize", clearThreads);
-    function sectionGeom(){
-      var sec=$("canvas"), t=$("threads");
-      if(!sec||!t) return null;
-      var sr=sec.getBoundingClientRect();
-      t.setAttribute("viewBox","0 0 "+sec.offsetWidth+" "+sec.offsetHeight);
-      return {sr:sr};
-    }
-    function threadLine(x1,y1,x2,y2,color){
-      var ln=document.createElementNS(NS,"line");
-      ln.setAttribute("x1",x1.toFixed(1)); ln.setAttribute("y1",y1.toFixed(1));
-      ln.setAttribute("x2",x2.toFixed(1)); ln.setAttribute("y2",y2.toFixed(1));
-      ln.setAttribute("stroke",color); ln.setAttribute("stroke-width","1.5");
-      $("threads").appendChild(ln);
-    }
     /* tap a corner: the exact evidence behind its verdict lights up in place, no lines */
     function traceCorner(n, g){
       if(cornerActive===n){ clearThreads(); return; }
@@ -1151,82 +1159,45 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
         ents.forEach(function(e){ e.classList.add("dim"); });
       }
     }
-    /* trace the derivation: three verdicts travel to the class, or jam */
-    function traceDerivation(svg){
+    /* trace the derivation: each verdict eliminates the classes it rules out, until one remains */
+    function traceDerivation(){
       clearThreads();
-      var geo=sectionGeom(); if(!geo) return;
-      var sr=geo.sr, t=$("threads");
-      var names=["v","o","i"];
-      var segs=names.map(function(n){
-        var g=svg.querySelector('[data-node="'+n+'"]');
-        var fr=g.getBoundingClientRect();
-        return {x1:fr.left+fr.width/2-sr.left, y1:fr.top+fr.height/2-sr.top, color:CORNER_COLOR[n]};
-      });
-      var target=r.classNo?document.querySelector('.cell[data-cn="'+r.classNo+'"]'):null;
-      if(target){
-        var tr=target.getBoundingClientRect();
-        var x2=tr.left+tr.width/2-sr.left, y2=tr.top-sr.top;
-        segs.forEach(function(s){ s.x2=x2; s.y2=y2; threadLine(s.x1,s.y1,x2,y2,s.color); });
-      }else{
-        var sc=document.querySelector(".scale"), scr=sc.getBoundingClientRect();
-        var jam={x:sr.width/2, y:scr.top-sr.top-44};
-        segs.forEach(function(s){ s.x2=jam.x; s.y2=jam.y; threadLine(s.x1,s.y1,jam.x,jam.y,s.color); });
-        var mk=document.createElementNS(NS,"g");
-        var mc=document.createElementNS(NS,"circle");
-        mc.setAttribute("cx",jam.x); mc.setAttribute("cy",jam.y); mc.setAttribute("r",7);
-        mc.setAttribute("fill","none"); mc.setAttribute("stroke","#a63d22"); mc.setAttribute("stroke-width","2");
-        mk.appendChild(mc);
-        var tx=document.createElementNS(NS,"text");
-        tx.setAttribute("x",jam.x); tx.setAttribute("y",jam.y-16);
-        tx.setAttribute("text-anchor","middle"); tx.setAttribute("font-size","12");
-        tx.setAttribute("font-family","JetBrains Mono, monospace"); tx.setAttribute("fill","#a63d22");
-        tx.textContent="no admissible class";
-        mk.appendChild(tx); t.appendChild(mk);
-      }
-      /* the whole path must be on screen first: a pulse traveling to an unseen target reads as a glitch */
-      var secTopAbs=window.pageYOffset+sr.top;
-      var pathTopAbs=secTopAbs+Math.min(segs[0].y1,segs[1].y1,segs[2].y1);
-      var pathBotAbs=secTopAbs+segs[0].y2;
-      var vh=window.innerHeight||640;
-      var pathFits=(pathTopAbs>=window.pageYOffset+24)&&(pathBotAbs<=window.pageYOffset+vh-24);
-      var camStart=Math.max(0,pathTopAbs-vh*0.25), camEnd=Math.max(0,pathBotAbs-vh*0.65), CAM_DUR=1250;
-      var dots=segs.map(function(s){
-        var c=document.createElementNS(NS,"circle");
-        c.setAttribute("r",4.5); c.setAttribute("fill",s.color);
-        c.setAttribute("cx",s.x1); c.setAttribute("cy",s.y1);
-        t.appendChild(c); return c;
-      });
-      function finish(){
-        if(target){
-          target.classList.add("hit");
-          setTimeout(function(){ target.classList.remove("hit"); },1400);
-          say("Derivation traced: "+r.vehicle+", "+r.objectRelation+" and "+r.interp+" converge on class "+r.classNo+", "+r.className+".");
+      var my=++derivRun;
+      var cap=$("derivCap");
+      var cells=Array.prototype.slice.call(document.querySelectorAll(".scale .cell"));
+      var trays={v:document.querySelector(".tray-d1"),o:document.querySelector(".tray-d2"),i:document.querySelector(".tray-d3")};
+      function alive(){ return my===derivRun; }
+      function setCap(t){ if(cap) cap.textContent=t; say(t); }
+      var sc=document.querySelector(".scale");
+      if(sc) sc.scrollIntoView({block:"center",behavior:reducedMotion()?"auto":"smooth"});
+      var steps=[["v","D1",r.vehicle,"vehicle"],["o","D2",r.objectRelation,"object relation"],["i","D3",r.interp,"interpretant"]];
+      var remaining=cells.slice();
+      function run(n){
+        if(!alive()) return;
+        var key=steps[n][0], tag=steps[n][1], val=steps[n][2], slot=steps[n][3];
+        if(trays[key]) trays[key].classList.add("step");
+        remaining=remaining.filter(function(c){
+          var keep=CLASS_TRIPLE[+c.getAttribute("data-cn")][n]===val;
+          if(!keep) c.classList.add("out");
+          return keep;
+        });
+        if(remaining.length===0){
+          setCap(tag+": "+val+". Nothing left standing: no class admits "+val+" as "+slot+" alongside the earlier verdicts. The reading breaks the dependence rule at this step, so there is no admissible class. Re-examine the earliest call, D1.");
+          return;
+        }
+        if(n<2){
+          setCap(tag+": "+val+". "+remaining.length+" of the 10 classes admit "+val+" as "+slot+".");
+          if(reducedMotion()) run(n+1);
+          else setTimeout(function(){ run(n+1); },1100);
         }else{
-          say("Derivation traced: the three verdicts cannot converge. The reading breaks the dependence rule, so there is no admissible class. Re-examine the earliest call, D1.");
+          var win=remaining[0]||(r.classNo?document.querySelector('.cell[data-cn="'+r.classNo+'"]'):null);
+          if(win) win.classList.add("hit");
+          setCap("Class "+(win?win.getAttribute("data-cn"):"?")+" of 10: "+r.className+". Derived, not asserted: the three verdicts leave exactly one admissible class.");
+          setTimeout(function(){ if(win&&alive()) win.classList.remove("hit"); },2400);
         }
       }
-      if(reducedMotion()){
-        dots.forEach(function(c,i){ c.setAttribute("cx",segs[i].x2); c.setAttribute("cy",segs[i].y2); });
-        if(!pathFits) window.scrollTo({top:camEnd,behavior:"auto"});
-        finish(); return;
-      }
-      if(!pathFits) window.scrollTo({top:camStart,behavior:"auto"});
-      var t0=null;
-      (function frame(ts){
-        if(t0===null) t0=ts;
-        var alive=false;
-        var cp=(ts-t0)/CAM_DUR; cp=cp<0?0:(cp>1?1:cp);
-        var ce=cp<.5?2*cp*cp:1-Math.pow(-2*cp+2,2)/2;
-        if(!pathFits) window.scrollTo(0,camStart+(camEnd-camStart)*ce);
-        dots.forEach(function(c,i){
-          var p=(ts-t0-i*160)/850; p=p<0?0:(p>1?1:p);
-          if(p<1) alive=true;
-          var e=p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2;
-          c.setAttribute("cx",segs[i].x1+(segs[i].x2-segs[i].x1)*e);
-          c.setAttribute("cy",segs[i].y1+(segs[i].y2-segs[i].y1)*e);
-        });
-        if(alive) requestAnimationFrame(frame); else finish();
-      })(performance.now());
+      if(reducedMotion()) run(0);
+      else setTimeout(function(){ run(0); },450);
     }
     function wireTriad(svg){
       var smain=svg.closest(".smain");
@@ -1245,7 +1216,7 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
         });
       }
       if(peel) peel.addEventListener("input",function(){ svg.setAttribute("data-peel",peel.value); });
-      if(trace) trace.addEventListener("click",function(){ traceDerivation(svg); });
+      if(trace) trace.addEventListener("click",function(){ traceDerivation(); });
     }
     if(svg) wireTriad(svg);
   }
