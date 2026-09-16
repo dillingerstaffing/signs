@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<meta name="build-version" content="v20260916-signs4">
+<meta name="build-version" content="v20260916-signs5">
 <title>Signs: An Instrument for Taking Texts Apart</title>
 <meta name="description" content="Inscribe a text. The instrument dissects it in Peirce's terms: the vehicle, the object, the interpretant, then names the species.">
 <meta property="og:title" content="Signs: An Instrument for Taking Texts Apart">
@@ -142,13 +142,6 @@ textarea.specimen::placeholder{color:var(--ink-faint)}
   cursor:pointer;color:var(--ink-soft);
 }
 .cell.lit{background:var(--ink);color:var(--paper);border-color:var(--ink);font-weight:700}
-.trail{display:flex;align-items:center;gap:8px;overflow-x:auto;padding-bottom:8px;-webkit-overflow-scrolling:touch}
-.tchip{
-  flex:0 0 auto;font-family:var(--font-mono);font-size:12.5px;padding:10px 14px;min-height:44px;
-  background:var(--paper);border:1px solid var(--hairline);border-radius:2px;cursor:pointer;white-space:nowrap;
-}
-.tchip.tend{background:var(--ink);color:var(--paper);border-color:var(--ink);font-weight:700}
-.tarrow{color:var(--ink-faint);flex:0 0 auto}
 .inspector{
   margin:24px 0 0;padding:14px 16px;border:1px solid var(--hairline);border-radius:2px;
   background:var(--paper);font-size:14px;line-height:1.65;min-height:54px;color:var(--ink);
@@ -187,14 +180,25 @@ input[type="range"].peel::-moz-range-thumb{width:14px;height:14px;background:var
 .triad-svg.revealed[data-peel="0"] .edge-oi,.triad-svg.revealed[data-peel="0"] .edge-vi{opacity:.1}
 .triad-svg.revealed[data-peel="1"] .node-i,.triad-svg.revealed[data-peel="1"] .edge-oi,.triad-svg.revealed[data-peel="1"] .edge-vi{opacity:.1}
 .triad-svg.revealed[data-peel="2"] .edge-oi{opacity:.1}
-.triad-svg.exploded .node-v{transform:translate(0,-34px)}
-.triad-svg.exploded .node-o{transform:translate(-46px,30px)}
-.triad-svg.exploded .node-i{transform:translate(46px,30px)}
+.triad-svg.exploded .node-v{transform:translate(0,-38px)}
+.triad-svg.exploded .node-o{transform:translate(-48px,32px)}
+.triad-svg.exploded .node-i{transform:translate(48px,32px)}
 .triad-svg.exploded .edge{opacity:.18}
 .triad-svg .draw{stroke-dasharray:1;stroke-dashoffset:1}
 .triad-svg.revealed .draw{animation:drawline .7s var(--e-out) forwards}
 @keyframes drawline{to{stroke-dashoffset:0}}
 @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* the study sheet: each figure carries its margin */
+.srow{display:grid;grid-template-columns:minmax(0,1fr) 236px;gap:34px;align-items:start}
+.smargin{padding-top:4px;min-width:0}
+.mnote{border-top:1px solid var(--hairline);padding:10px 0 16px;font-size:13px;line-height:1.65;color:var(--ink-soft)}
+.mnote .mk{display:block;font-family:var(--font-mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:6px}
+.mnote.rev .mk{color:var(--object)}
+.admiss{font-family:var(--font-mono);font-size:12px;color:var(--ink-soft);margin:10px 0 0;max-width:420px;line-height:1.6}
+.admiss .bad{color:var(--object);font-weight:700}
+.triad-svg .vtext{font-family:var(--font-mono)}
+.triad-svg .struck{text-decoration:line-through;text-decoration-color:var(--object);text-decoration-thickness:2px}
 
 .ledger{margin:26px 0 0;border-top:1px solid var(--hairline)}
 .ledger-row{
@@ -221,20 +225,6 @@ input[type="range"].peel::-moz-range-thumb{width:14px;height:14px;background:var
 }
 .chain li:last-child::after{display:none}
 .chain li .cs{font-family:var(--font-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);display:block;margin-bottom:4px}
-
-details.margin-note{
-  border:1px solid var(--hairline);border-radius:2px;background:var(--paper);
-  margin:10px 0;font-size:14px;
-}
-details.margin-note summary{
-  cursor:pointer;min-height:48px;display:flex;align-items:center;gap:10px;
-  padding:12px 16px;font-family:var(--font-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;
-  color:var(--ink-soft);list-style:none;
-}
-details.margin-note summary::-webkit-details-marker{display:none}
-details.margin-note summary::before{content:"+";font-size:16px;color:var(--ink)}
-details.margin-note[open] summary::before{content:"\2013"}
-details.margin-note .note-body{padding:0 16px 16px 38px;color:var(--ink);font-size:14px;line-height:1.7}
 .provenance{font-family:var(--font-mono);font-size:12px;color:var(--ink-faint);margin-top:26px;line-height:1.8}
 .provenance a{color:var(--ink-soft)}
 
@@ -286,6 +276,8 @@ footer.site .fnote{font-family:var(--font-mono);font-size:11px;letter-spacing:.1
 
 @media (max-width:900px){
   .triad-wrap{grid-template-columns:1fr}
+  .srow{grid-template-columns:1fr}
+  .smargin{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0 22px}
   .primer-grid,.colophon-grid{grid-template-columns:1fr}
 }
 @media (max-width:720px){
@@ -455,10 +447,9 @@ footer.site .fnote{font-family:var(--font-mono);font-size:11px;letter-spacing:.1
           <h3>Sources</h3>
           <p>The taxonomy follows the <a href="https://plato.stanford.edu/entries/peirce-semiotics/">Stanford Encyclopedia of Philosophy: Peirce's Theory of Signs</a>: the sign triad, the three trichotomies, the ten admissible classes, and the semiosis chain.</p>
           <p>The ten species and their glosses follow Peirce's 1903 Syllabus; the qualisign, sinsign, legisign, rheme, dicent, and delome (argument) definitions follow the same source.</p>
-          <p>The working method, staged dissection, exploded views, margin questions, and visible revision, follows the study habits of Leonardo's journals, without a drop of pastiche.</p>
         </div>
       </div>
-      <p class="wit">First compositions always err; every sound reading begins by correcting the page. Where this instrument misreads your words, amend the record: the derivation trail shows exactly which test failed.</p>
+      <p class="wit">First compositions always err; every sound reading begins by correcting the page. Where this instrument misreads your words, amend the record: each triad corner carries its verdict and its test.</p>
     </div>
   </section>
 </main>
@@ -877,46 +868,45 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
     }
     return lines.slice(0,2);
   }
-  function svgContent(lines, x, y){
-    var out="";
-    for(var i=0;i<lines.length;i++){
-      out+='<text x="'+x+'" y="'+(y+i*15)+'" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" fill="rgba(27,29,32,.62)">'+esc(lines[i])+'</text>';
-    }
-    return out;
-  }
-  function edgeLabel(x, y, s){
-    return '<text x="'+x+'" y="'+y+'" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" letter-spacing="2" fill="#1b1d20" opacity="0.75" paint-order="stroke" stroke="#f4f1e8" stroke-width="4">'+esc(s)+'</text>';
-  }
-
   function triadSVG(r){
-    r = r || {vShort:[""], oShort:[""], iShort:[""], objectRelation:"", interp:""};
+    r = r || {};
+    var LVL2 = {qualisign:1,sinsign:2,legisign:3,icon:1,index:2,symbol:3,rheme:1,dicent:2,delome:3};
+    var V = r.vehicle||"legisign", O = r.objectRelation||"symbol", R = r.interp||"dicent";
+    /* visible revision: the verdict that breaks the dependence rule is struck */
+    var strike = null;
+    if(r.classNo==null && r.vehicle){
+      strike = LVL2[R]>LVL2[O] ? "i" : (LVL2[O]>LVL2[V] ? "o" : null);
+    }
+    function rej(list, chosen){
+      return "not "+list.filter(function(x){ return x!==chosen; }).join(" \u00b7 not ");
+    }
+    function corner(node, cx, cy, dLabel, chosen, list, color, subs){
+      var s = '<g class="node node-'+node+'" data-node="'+node+'">';
+      s += '<circle cx="'+cx+'" cy="'+cy+'" r="30" fill="#f4f1e8" stroke="'+color+'" stroke-width="2.5"/>';
+      s += '<circle cx="'+cx+'" cy="'+cy+'" r="6" fill="'+color+'"/>';
+      s += '<text x="'+cx+'" y="'+(cy+52)+'" text-anchor="middle" class="vtext" font-size="10" letter-spacing="2" fill="rgba(27,29,32,.64)">'+dLabel+'</text>';
+      s += '<text x="'+cx+'" y="'+(cy+78)+'" text-anchor="middle" class="vtext'+(strike===node?" struck":"")+'" font-size="17" font-weight="700" fill="'+color+'">'+esc(chosen.toUpperCase())+'</text>';
+      s += '<text x="'+cx+'" y="'+(cy+96)+'" text-anchor="middle" class="vtext" font-size="10" fill="rgba(27,29,32,.42)">'+esc(rej(list, chosen))+'</text>';
+      if(subs){
+        var lines = svgLines(subs, 26), k;
+        for(k=0;k<lines.length && k<2;k++){
+          s += '<text x="'+cx+'" y="'+(cy+114+k*14)+'" text-anchor="middle" class="vtext" font-size="10" fill="rgba(27,29,32,.42)">'+esc(lines[k])+'</text>';
+        }
+      }
+      return s+'</g>';
+    }
+    var subs = (r.subordinates||[]).map(function(x){ return String(x).split(" (")[0]; });
+    var subsLine = subs.length ? "also at work: "+subs.join(" \u00b7 ") : null;
     return ''+
-    '<svg class="triad-svg" id="triad" data-peel="3" viewBox="0 0 400 380" role="img" aria-label="Triadic diagram: vehicle, object, interpretant">'+
+    '<svg class="triad-svg" id="triad" data-peel="3" viewBox="-50 0 560 410" role="img" aria-label="Triadic diagram: three corners, three verdicts">'+
       '<defs><marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">'+
       '<path d="M0,0 L10,5 L0,10 z" fill="#1b1d20" opacity="0.55"/></marker></defs>'+
-      '<line class="edge edge-vi draw" x1="217.4" y1="99.2" x2="294.6" y2="228.8" stroke="#1b1d20" stroke-width="1.4" opacity="0.6" marker-end="url(#arr)" pathLength="1" style="animation-delay:.55s"/>'+
-      '<line class="edge edge-vo draw" x1="105.4" y1="228.8" x2="182.6" y2="99.2" stroke="#1b1d20" stroke-width="1.4" opacity="0.6" marker-end="url(#arr)" pathLength="1" style="animation-delay:.7s"/>'+
-      '<line class="edge edge-oi draw" x1="122" y1="258" x2="278" y2="258" stroke="#1b1d20" stroke-width="1.2" opacity="0.45" stroke-dasharray="5 5" pathLength="1" style="animation-delay:.85s"/>'+
-      edgeLabel(144,176,r.objectRelation)+
-      edgeLabel(258,176,r.interp)+
-      '<g class="node node-v" data-node="v" style="transition-delay:.1s">'+
-        '<circle cx="200" cy="70" r="30" fill="#f4f1e8" stroke="#2f5d7d" stroke-width="2.5"/>'+
-        '<circle cx="200" cy="70" r="6" fill="#2f5d7d"/>'+
-        '<text x="200" y="120" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" letter-spacing="2" fill="rgba(27,29,32,.64)">VEHICLE</text>'+
-        svgContent(svgLines(r.vShort.join(" \u00b7 "),26),200,138)+
-      '</g>'+
-      '<g class="node node-o" data-node="o" style="transition-delay:.25s">'+
-        '<circle cx="88" cy="258" r="30" fill="#f4f1e8" stroke="#a63d22" stroke-width="2.5"/>'+
-        '<circle cx="88" cy="258" r="6" fill="#a63d22"/>'+
-        '<text x="88" y="308" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" letter-spacing="2" fill="rgba(27,29,32,.64)">OBJECT</text>'+
-        svgContent(svgLines(r.oShort.join(" \u00b7 "),20),88,326)+
-      '</g>'+
-      '<g class="node node-i" data-node="i" style="transition-delay:.4s">'+
-        '<circle cx="312" cy="258" r="30" fill="#f4f1e8" stroke="#6b5a1e" stroke-width="2.5"/>'+
-        '<circle cx="312" cy="258" r="6" fill="#6b5a1e"/>'+
-        '<text x="312" y="308" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" letter-spacing="2" fill="rgba(27,29,32,.64)">INTERPRETANT</text>'+
-        svgContent(svgLines(r.iShort.join(" \u00b7 "),20),312,326)+
-      '</g>'+
+      '<line class="edge edge-vi draw" x1="246.6" y1="95" x2="338.4" y2="233" stroke="#1b1d20" stroke-width="1.4" opacity="0.6" marker-end="url(#arr)" pathLength="1" style="animation-delay:.55s"/>'+
+      '<line class="edge edge-vo draw" x1="121.6" y1="233" x2="213.4" y2="95" stroke="#1b1d20" stroke-width="1.4" opacity="0.6" marker-end="url(#arr)" pathLength="1" style="animation-delay:.7s"/>'+
+      '<line class="edge edge-oi draw" x1="135" y1="258" x2="325" y2="258" stroke="#1b1d20" stroke-width="1.2" opacity="0.45" stroke-dasharray="5 5" pathLength="1" style="animation-delay:.85s"/>'+
+      corner("v", 230, 70, "D1 \u00b7 THE SIGN IN ITSELF", V, ["qualisign","sinsign","legisign"], "#2f5d7d", null)+
+      corner("o", 105, 258, "D2 \u00b7 SIGN TO ITS OBJECT", O, ["icon","index","symbol"], "#a63d22", subsLine)+
+      corner("i", 355, 258, "D3 \u00b7 SIGN TO INTERPRETANT", R, ["rheme","dicent","delome"], "#6b5a1e", null)+
     '</svg>';
   }
 
@@ -935,15 +925,27 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
         '" aria-label="Class '+c.n+": "+esc(c.name)+'">'+c.n+'</button>';
     }).join("");
 
-    var chips = r.trail.map(function(s,i){
-      return (i?'<span class="tarrow" aria-hidden="true">&rarr;</span>':'')+
-        '<button type="button" class="tchip'+(i===r.trail.length-1?" tend":"")+'" data-t="'+esc(s.test)+'">'+esc(s.label)+'</button>';
-    }).join("");
-
     var chainItems = r.chain.map(function(c){
       return '<li><span class="cs">'+esc(c.slot)+'</span>'+esc(c.text)+'</li>';
     }).join("");
-    var questions = r.questions.map(function(q){ return '<li>'+esc(q)+'</li>'; }).join("");
+
+    /* the dependence rule, checked in the open, and the margin notes */
+    var LVL2 = {qualisign:1,sinsign:2,legisign:3,icon:1,index:2,symbol:3,rheme:1,dicent:2,delome:3};
+    var lvR=LVL2[r.interp], lvO=LVL2[r.objectRelation], lvV=LVL2[r.vehicle];
+    var admiss, revNote="";
+    if(r.classNo){
+      admiss='<p class="admiss">Dependence check: '+esc(r.interp)+' ('+lvR+') &le; '+esc(r.objectRelation)+' ('+lvO+') &le; '+esc(r.vehicle)+' ('+lvV+'): admissible.</p>';
+    }else{
+      var viol = lvR>lvO ? (r.interp+' ('+lvR+') outranks '+r.objectRelation+' ('+lvO+')')
+                         : (r.objectRelation+' ('+lvO+') outranks '+r.vehicle+' ('+lvV+')');
+      admiss='<p class="admiss">Dependence check: <span class="bad">'+esc(r.interp)+' ('+lvR+') &le; '+esc(r.objectRelation)+' ('+lvO+') &le; '+esc(r.vehicle)+' ('+lvV+')</span>: broken, '+esc(viol)+'. No admissible class.</p>';
+      revNote='<div class="mnote rev"><span class="mk">Revision</span>A broken reading is a misreading, not a verdict to repair by demotion. Here '+esc(viol)+': the later trichotomy cannot outrank the earlier. Re-examine the earliest call, D1, before the later ones.</div>';
+    }
+    var whyThree='<div class="mnote"><span class="mk">Why three</span>Because a sign is not a pair but a relation: the marks, what they stand for, and what they grow in the mind. Drop any corner and the other two go silent.</div>';
+    var whyTen='<div class="mnote"><span class="mk">Why ten</span>Twenty-seven combinations are possible; the dependence rule rejects seventeen: the later trichotomies cannot outrank the earlier.</div>';
+    var openNotes=r.questions.slice(0,3).map(function(q){
+      return '<div class="mnote"><span class="mk">Open</span>'+esc(q)+'</div>';
+    }).join("");
 
     return ''+
     '<section class="canvas" id="canvas" aria-label="Dissection">'+
@@ -958,9 +960,10 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
         '<p class="entity-strip">'+strip+'</p>'+
       '</div>'+
       '<div class="canvas-row">'+
-        '<span class="field-label">The triad, populated</span>'+
-        '<div class="triad-wrap"><div>'+triadSVG(r)+
-        '<p class="triad-cap">Solid arrows: determination. The object determines the sign; the sign determines the interpretant. The dashed edge: the object determines the interpretant mediately, through the sign.</p></div>'+
+        '<span class="field-label">Three corners, three verdicts</span>'+
+        '<div class="srow"><div class="smain">'+triadSVG(r)+
+        '<p class="triad-cap">Solid arrows: determination. The object determines the sign; the sign determines the interpretant. The dashed edge: the object determines the interpretant mediately, through the sign.</p>'+
+        admiss+
         '<div class="triad-controls">'+
           '<span class="field-label">Dissection</span>'+
           '<label class="toggle-row"><input type="checkbox" id="explode"> Exploded view</label>'+
@@ -968,32 +971,25 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
           '<input type="range" class="peel" id="peel" min="0" max="3" value="3" aria-label="Layer peel: vehicle, object, interpretant, whole">'+
           '<div class="peel-marks"><span>Vehicle</span><span>Object</span><span>Interpr.</span><span>Whole</span></div>'+
         '</div></div>'+
+        '<aside class="smargin">'+revNote+whyThree+'</aside></div>'+
       '</div>'+
       '<div class="canvas-row">'+
         '<span class="field-label">Species: the ten classes</span>'+
-        '<div class="scale" role="group" aria-label="The ten classes">'+cells+'</div>'+
+        '<div class="srow"><div class="smain"><div class="scale" role="group" aria-label="The ten classes">'+cells+'</div></div>'+
+        '<aside class="smargin">'+whyTen+'</aside></div>'+
       '</div>'+
       '<div class="canvas-row">'+
-        '<span class="field-label">Derivation: each decision and its test</span>'+
-        '<div class="trail">'+chips+'</div>'+
+        '<span class="field-label">Semiosis: the chain</span>'+
+        '<div class="srow"><div class="smain">'+
+        '<p style="font-size:14px;color:var(--ink-soft);margin:0 0 6px">The early account: every interpretant becomes a new sign. The later account: semiosis converges on a final interpretant, and there need be no further sign. Two links shown; the rest is inquiry.</p>'+
+        '<ol class="chain">'+chainItems+'</ol>'+
+        '</div>'+
+        '<aside class="smargin">'+openNotes+'</aside></div>'+
       '</div>'+
-      '<p class="inspector" id="inspector">Tap an entity, a triad node, a class, or a step: its test appears here.</p>'+
+      '<p class="inspector" id="inspector">Tap an entity, a triad corner, or a class: its verdict and test appear here.</p>'+
     '</section>'+
     '<section class="further">'+
-      '<h3 style="font-family:var(--font-display);font-size:22px;margin:0 0 4px">Semiosis: the chain</h3>'+
-      '<p style="font-size:14px;color:var(--ink-soft);margin:0 0 6px">The early account: every interpretant becomes a new sign. The later account: semiosis converges on a final interpretant, and there need be no further sign. Two links shown; the rest is inquiry.</p>'+
-      '<ol class="chain">'+chainItems+'</ol>'+
-      '<h3 style="font-family:var(--font-display);font-size:22px;margin:30px 0 10px">Open questions</h3>'+
-      '<ul style="margin:0 0 6px;padding-left:22px;font-size:15px;line-height:1.8">'+questions+'</ul>'+
-      '<div style="margin-top:26px">'+
-        '<details class="margin-note"><summary>Why three parts and not two?</summary>'+
-        '<div class="note-body">Because a sign is not a pair but a relation: the marks, what they stand for, and what they grow in the mind. Drop any corner and the other two go silent.</div></details>'+
-        '<details class="margin-note"><summary>Why only ten species?</summary>'+
-        '<div class="note-body">Twenty seven combinations are possible; the admissibility rule rejects seventeen. The later trichotomies cannot outrank the earlier: the interpretant\'s classification depends on the object\'s, which depends on the vehicle\'s.</div></details>'+
-        '<details class="margin-note"><summary>What is semiosis?</summary>'+
-        '<div class="note-body">The chaining of signs is the early account: every interpretant becomes a new sign for a further interpretant, without fixed end. The later account is end-directed: semiosis converges on a final interpretant, and there need be no further sign. Whether the infinite chain survives in the later work is disputed.</div></details>'+
-      '</div>'+
-      '<p class="provenance">Taxonomy: <a href="https://plato.stanford.edu/entries/peirce-semiotics/">SEP: Peirce\'s Theory of Signs</a> (the triad; the three trichotomies; the ten classes). Engine: surface-marker heuristics; every decision above carries its test. Build v20260916-signs4.</p>'+
+      '<p class="provenance">Taxonomy: <a href="https://plato.stanford.edu/entries/peirce-semiotics/">SEP: Peirce\'s Theory of Signs</a> (the triad; the three trichotomies; the ten classes). Engine: surface-marker heuristics; every decision above carries its test. Build v20260916-signs5.</p>'+
     '</section>';
   }
 
@@ -1009,10 +1005,13 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
       el.addEventListener("click",go);
       el.addEventListener("keydown",function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); go(); } });
     });
+    var testOf={};
+    r.ledger.forEach(function(l){ testOf[l.k]=l.test; });
     var nodeInfo={
-      v:"Vehicle: "+r.tokenLine+" "+r.replicaLine+" Verdict: "+r.vehicle+". "+r.vehicleWhy,
-      o:"Object: "+r.immediateObj+" "+r.dynamicObj+" Epistemic status: "+r.epistemic+(r.mismatch?" "+r.mismatch:""),
-      i:"Interpretant: "+r.immI+" Situated reading: "+r.dynI+" Cross-cut: "+r.crosscut
+      v:"D1, the sign in itself: "+r.vehicle+". "+r.vehicleWhy+" Test: "+(testOf["Vehicle"]||""),
+      o:"D2, the sign to its object: "+r.objectRelation+". "+r.objectWhy+" Test: "+(testOf["Object relation"]||"")+
+        (r.subordinates.length ? " Also at work: "+r.subordinates.join("; ")+"." : ""),
+      i:"D3, the sign to its interpretant: "+r.interp+". "+r.interpWhy+" Test: "+(testOf["Interpretant"]||"")
     };
     Array.prototype.forEach.call(document.querySelectorAll("#triad [data-node]"), function(g){
       g.style.cursor="pointer";
@@ -1022,9 +1021,6 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
       c.addEventListener("click",function(){
         say("Class "+c.getAttribute("data-cn")+": "+c.getAttribute("data-cname")+". "+c.getAttribute("data-cplain")+".");
       });
-    });
-    Array.prototype.forEach.call(document.querySelectorAll(".tchip"), function(c){
-      c.addEventListener("click",function(){ say(c.textContent+": "+c.getAttribute("data-t")); });
     });
     var svg=$("triad");
     if(svg) wireTriad(svg);
