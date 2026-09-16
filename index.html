@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<meta name="build-version" content="v20260916-signs10">
+<meta name="build-version" content="v20260916-signs11">
 <title>Signs: An Instrument for Taking Texts Apart</title>
 <meta name="description" content="Inscribe a text. The instrument dissects it in Peirce's terms: the vehicle, the object, the interpretant, then names the species.">
 <meta property="og:title" content="Signs: An Instrument for Taking Texts Apart">
@@ -24,20 +24,22 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Signs">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#f4f1e8">
+<meta name="theme-color" content="#eee9de">
 <link rel="manifest" href="manifest.json">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23f4f1e8'/%3E%3Cg stroke='%231b1d20' stroke-width='1.6'%3E%3Cline x1='16' y1='8' x2='8' y2='23'/%3E%3Cline x1='16' y1='8' x2='24' y2='23'/%3E%3Cline x1='8' y1='23' x2='24' y2='23'/%3E%3C/g%3E%3Ccircle cx='16' cy='8' r='3.4' fill='%232f5d7d'/%3E%3Ccircle cx='8' cy='23' r='3.4' fill='%23a63d22'/%3E%3Ccircle cx='24' cy='23' r='3.4' fill='%236b5a1e'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23eee9de'/%3E%3Cg stroke='%231b1d20' stroke-width='1.6'%3E%3Cline x1='16' y1='8' x2='8' y2='23'/%3E%3Cline x1='16' y1='8' x2='24' y2='23'/%3E%3Cline x1='8' y1='23' x2='24' y2='23'/%3E%3C/g%3E%3Ccircle cx='16' cy='8' r='3.4' fill='%23315f76'/%3E%3Ccircle cx='8' cy='23' r='3.4' fill='%239b4539'/%3E%3Ccircle cx='24' cy='23' r='3.4' fill='%237a583a'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --paper:#f4f1e8; --paper-2:#eae5d3; --paper-3:#e2dcc6;
+  --paper:#eee9de; --paper-2:#e6e0cc; --paper-3:#d9d2b8;
   --ink:#1b1d20; --ink-soft:rgba(27,29,32,.64); --ink-faint:rgba(27,29,32,.42);
   --hairline:rgba(27,29,32,.16); --hairline-soft:rgba(27,29,32,.09);
-  --vehicle:#2f5d7d; --object:#a63d22; --interpretant:#6b5a1e;
-  --t-instant:90ms; --t-quick:180ms; --t-standard:280ms; --t-expressive:450ms;
-  --e-out:cubic-bezier(.16,1,.3,1); --e-in:cubic-bezier(.7,0,.84,0);
+  --vehicle:#315f76; --object:#9b4539; --interpretant:#7a583a;
+  --ease:cubic-bezier(.2, 0, 0, 1);
+  --fast:150ms; --medium:300ms; --slow:500ms;
+  --t-instant:150ms; --t-quick:150ms; --t-standard:300ms; --t-expressive:500ms;
+  --e-out:var(--ease); --e-in:var(--ease);
   --font-display:"Fraunces",Georgia,"Times New Roman",serif;
   --font-body:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,sans-serif;
   --font-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
@@ -55,7 +57,7 @@ body{
 
 header.site{
   position:sticky;top:0;z-index:50;height:64px;
-  background:rgba(244,241,232,.94);backdrop-filter:blur(8px);
+  background:rgba(238,233,222,.94);backdrop-filter:blur(8px);
   border-bottom:1px solid var(--hairline);
 }
 header.site .wrap{height:64px;display:flex;align-items:center;justify-content:space-between}
@@ -133,130 +135,107 @@ textarea.specimen::placeholder{color:var(--ink-faint)}
 .chip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 
 .plates{margin-top:8px}
-.canvas{
+/* ---- the bench: answer first, evidence in place ---- */
+.bench{
   background:var(--paper-2);border:1px solid var(--hairline);border-radius:3px;
-  padding:30px 30px 24px;margin-top:22px;scroll-margin-top:84px;
-  opacity:0;transform:translateY(12px);
-  transition:opacity var(--t-standard) var(--e-out),transform var(--t-standard) var(--e-out);
+  padding:30px 30px 26px;margin-top:22px;scroll-margin-top:84px;
 }
-.canvas.on{opacity:1;transform:none}
-.canvas-head .specimen-quote{font-family:var(--font-display);font-size:26px;line-height:1.4;margin:10px 0 10px;font-weight:600}
-.species-line{font-size:15px;margin:0}
-.species-line strong{font-family:var(--font-mono);font-size:13px;letter-spacing:.08em}
-.species-plain{display:block;color:var(--ink-soft);font-size:13.5px;margin-top:5px;line-height:1.55}
-.canvas-row{margin-top:26px;padding-top:22px;border-top:1px solid var(--hairline)}
-.canvas-row>.field-label{display:block;margin-bottom:12px}
-.entity-strip{font-size:19px;line-height:2.15;margin:0;max-width:720px}
-.ent{border-bottom:2px solid;padding-bottom:1px;cursor:pointer}
-.ent-index{border-color:var(--object)}
-.ent-icon{border-color:var(--vehicle)}
-.ent-symbol{border-bottom:1px dotted #8a8577}
-.ent:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
-.scale{display:grid;grid-template-columns:repeat(10,1fr);gap:6px}
-.cell{
-  font-family:var(--font-mono);font-size:13px;padding:10px 0;min-height:44px;
-  text-align:center;background:var(--paper);border:1px solid var(--hairline);border-radius:2px;
-  cursor:pointer;color:var(--ink-soft);
+.scope{font-family:var(--font-mono);font-size:12px;letter-spacing:.06em;color:var(--ink-soft);margin:0 0 26px;line-height:2.1}
+.scope .folio{font-weight:700;color:var(--ink);letter-spacing:.14em;margin-right:14px}
+.badge{display:inline-block;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;border:1.5px solid;border-radius:2px;padding:5px 10px;margin-left:14px;vertical-align:1px;white-space:nowrap}
+.badge.ok{color:var(--vehicle);border-color:var(--vehicle)}
+.badge.bad{color:var(--object);border-color:var(--object)}
+.answer{margin:0 0 30px}
+.answer-kicker{font-family:var(--font-mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-faint);margin:0 0 8px}
+.answer-name{font-family:var(--font-display);font-weight:600;font-size:46px;line-height:1.05;margin:0 0 10px;letter-spacing:-.01em;transition:box-shadow var(--fast) var(--ease)}
+.answer.lit .answer-name{box-shadow:inset 0 -8px 0 rgba(122,88,58,.30)}
+.answer-def{font-size:16px;color:var(--ink);margin:0 0 12px;max-width:620px}
+.answer-class{font-family:var(--font-mono);font-size:12px;letter-spacing:.1em;margin:0;color:var(--ink-soft)}
+.answer-class .cap{color:var(--ink-faint);letter-spacing:.04em;margin-left:10px}
+.words-row{margin:0 0 30px}
+.words{margin:0 0 8px;font-size:19px;line-height:2.2;max-width:760px}
+.word{
+  font:inherit;color:var(--ink);background:transparent;border:none;border-bottom:2px solid transparent;
+  padding:1px 2px;margin:0 .35em 0 0;cursor:pointer;
+  transition:background-color var(--fast) var(--ease),color var(--fast) var(--ease),box-shadow var(--fast) var(--ease),opacity var(--fast) var(--ease),border-color var(--fast) var(--ease);
 }
-.cell.lit{background:var(--ink);color:var(--paper);border-color:var(--ink);font-weight:700}
+.word:hover{border-bottom-color:var(--hairline)}
+.word.active{background:var(--ink);color:var(--paper)}
+.word.hl-v{box-shadow:inset 0 -3px 0 var(--vehicle);color:var(--vehicle)}
+.word.hl-o{box-shadow:inset 0 -3px 0 var(--object);color:var(--object)}
+.word.hl-i{box-shadow:inset 0 -3px 0 var(--interpretant);color:var(--interpretant)}
+.word.dim{opacity:.28}
+.words-cap{font-size:13px;color:var(--ink-faint);margin:0}
+.word-note{font-size:14px;margin:10px 0 0;min-height:24px;color:var(--ink);line-height:1.6}
+.word-note .wr{font-family:var(--font-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft);margin-right:10px}
+.depth-row{margin:0 0 30px}
+.depth{display:flex;margin:0 0 8px}
+.dbtn{
+  font-family:var(--font-mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;
+  background:transparent;border:1px solid var(--hairline);border-left:none;color:var(--ink-soft);
+  padding:11px 18px;min-height:44px;cursor:pointer;
+  transition:background-color var(--fast) var(--ease),color var(--fast) var(--ease),border-color var(--fast) var(--ease),transform var(--fast) var(--ease);
+}
+.dbtn:first-child{border-left:1px solid var(--hairline);border-radius:2px 0 0 2px}
+.dbtn:last-child{border-radius:0 2px 2px 0}
+.dbtn[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.dbtn:active{transform:translateY(1px)}
+.depth-cap{font-size:13px;color:var(--ink-faint);margin:0;max-width:640px}
+.darts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:26px;margin:0}
+.dart{
+  border-top:3px solid var(--hairline);padding:14px 2px 6px;cursor:pointer;min-width:0;
+  transition:opacity var(--fast) var(--ease),background-color var(--fast) var(--ease);
+}
+.dart:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.dart-v{border-top-color:var(--vehicle)}
+.dart-o{border-top-color:var(--object)}
+.dart-i{border-top-color:var(--interpretant)}
+.dart-kicker{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;margin:0 0 10px;color:var(--ink-faint)}
+.dart-v .dart-kicker{color:var(--vehicle)}
+.dart-o .dart-kicker{color:var(--object)}
+.dart-i .dart-kicker{color:var(--interpretant)}
+.dart-role{font-size:14px;color:var(--ink-soft);margin:0 0 4px}
+.dart-verdict{font-family:var(--font-display);font-weight:600;font-size:32px;margin:0 0 4px;letter-spacing:.01em}
+.dart-v .dart-verdict{color:var(--vehicle)}
+.dart-o .dart-verdict{color:var(--object)}
+.dart-i .dart-verdict{color:var(--interpretant)}
+.dart-verdict.struck{text-decoration:line-through;text-decoration-color:var(--object);text-decoration-thickness:2px}
+.dart-sub{font-size:13.5px;color:var(--ink-soft);margin:0 0 4px;font-style:italic}
+.dart-alt{font-family:var(--font-mono);font-size:12px;color:var(--ink-faint);margin:10px 0 0}
+.dart-alt s{text-decoration-color:var(--object);text-decoration-thickness:1.5px}
+.dart-test{font-size:13.5px;color:var(--ink-soft);margin:8px 0 0;line-height:1.6}
+.dart-subord{font-size:13px;color:var(--ink-soft);margin:8px 0 0;font-style:italic}
+.dart-proof{font-family:var(--font-mono);font-size:12px;color:var(--ink-soft);margin:10px 0 0;line-height:1.7}
+.dart.dim{opacity:.28}
+.dart.traced{background:rgba(27,29,32,.05)}
+.disclose-ev,.disclose-proof{display:grid;grid-template-rows:0fr;opacity:0;transition:grid-template-rows var(--medium) var(--ease),opacity var(--medium) var(--ease)}
+.disclose-ev>.disclose-in,.disclose-proof>.disclose-in{overflow:hidden;min-height:0}
+.bench[data-depth="evidence"] .disclose-ev,.bench[data-depth="proof"] .disclose-ev{grid-template-rows:1fr;opacity:1}
+.bench[data-depth="proof"] .disclose-proof{grid-template-rows:1fr;opacity:1}
+.constraint-row{margin:26px 0 0;padding-top:20px;border-top:1px solid var(--hairline)}
+.bench[data-depth="verdict"] .constraint-row{display:none}
+.constraint{font-family:var(--font-mono);font-size:15px;margin:0 0 8px}
+.constraint s{text-decoration-color:var(--object);text-decoration-thickness:2px}
+.constraint .bad{color:var(--object);font-weight:700}
+.constraint-note{font-size:13.5px;color:var(--ink-soft);margin:0;max-width:680px;line-height:1.6}
+.matrix-row{margin:26px 0 0;padding-top:20px;border-top:1px solid var(--hairline)}
+.matrix{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:6px;margin-top:12px}
+.mcell{
+  font-family:var(--font-mono);font-size:11px;line-height:1.5;color:var(--ink-soft);
+  background:var(--paper);border:1px solid var(--hairline);border-radius:2px;
+  padding:10px 4px;min-height:54px;cursor:pointer;min-width:0;
+  transition:background-color var(--fast) var(--ease),color var(--fast) var(--ease),border-color var(--fast) var(--ease),transform var(--fast) var(--ease);
+}
+.mcell .mn{display:block;font-weight:700;font-size:13px}
+.mcell.sel{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.mcell:active{transform:translateY(1px)}
 .inspector{
-  margin:24px 0 0;padding:14px 16px;border:1px solid var(--hairline);border-radius:2px;
+  margin:26px 0 0;padding:14px 16px;border:1px solid var(--hairline);border-radius:2px;
   background:var(--paper);font-size:14px;line-height:1.65;min-height:54px;color:var(--ink);
 }
-.further{margin-top:36px}
-.verdict-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:6px}
-.verdict-chip{
-  font-family:var(--font-mono);font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
-  border:1.5px solid;border-radius:2px;padding:9px 14px;background:var(--paper);
-}
-.verdict-chip.v-vehicle{color:var(--vehicle);border-color:var(--vehicle)}
-.verdict-chip.v-object{color:var(--object);border-color:var(--object)}
-.verdict-chip.v-interpretant{color:var(--interpretant);border-color:var(--interpretant)}
-.verdict-chip.v-verdict{color:var(--object);border-color:var(--object);font-size:13px}
-.verdict-why{font-size:14px;color:var(--ink-soft);max-width:560px;line-height:1.6}
-
-.triad-wrap{display:grid;grid-template-columns:1fr 280px;gap:28px;align-items:start}
-.triad-svg{width:100%;height:auto;display:block;background:var(--paper);border:1px solid var(--hairline);border-radius:3px}
-.triad-controls{font-size:14px}
-.triad-cap{font-size:12px;color:var(--ink-soft);margin:10px 0 0;max-width:340px;line-height:1.6}
-.triad-controls .field-label{margin:18px 0 8px}
-.triad-controls .field-label:first-child{margin-top:0}
-input[type="range"].scrub{width:100%;min-height:44px;-webkit-appearance:none;appearance:none;background:transparent;cursor:pointer}
-input[type="range"].scrub::-webkit-slider-runnable-track{height:2px;background:var(--ink)}
-input[type="range"].scrub::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:18px;height:18px;margin-top:-8px;background:var(--paper);border:2px solid var(--ink);border-radius:0}
-input[type="range"].scrub::-moz-range-track{height:2px;background:var(--ink)}
-input[type="range"].scrub::-moz-range-thumb{width:14px;height:14px;background:var(--paper);border:2px solid var(--ink);border-radius:0}
-.triad-svg text{paint-order:stroke;stroke:var(--paper);stroke-width:5px}
-.peel-marks{display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint)}
-.triad-svg .node{opacity:0;transform-box:fill-box;transform-origin:center;transition:opacity var(--t-standard) var(--e-out),transform var(--t-expressive) var(--e-out)}
-.triad-svg.revealed .node{opacity:1}
-.triad-svg .edge{transition:opacity var(--t-standard) var(--e-out)}
-.triad-svg.revealed[data-peel="0"] .node-o,.triad-svg.revealed[data-peel="0"] .node-i,
-.triad-svg.revealed[data-peel="0"] .edge-oi,.triad-svg.revealed[data-peel="0"] .edge-vi{opacity:.1}
-.triad-svg.revealed[data-peel="1"] .node-i,.triad-svg.revealed[data-peel="1"] .edge-oi,.triad-svg.revealed[data-peel="1"] .edge-vi{opacity:.1}
-.triad-svg.revealed[data-peel="2"] .edge-oi{opacity:.1}
-/* the bench: continuous exploded view driven by --ex on .smain */
-.smain{--ex:0}
-.smain .node-v{transform:translate(0,calc(var(--ex) * -38px))}
-.smain .node-o{transform:translate(calc(var(--ex) * -52px),calc(var(--ex) * 34px))}
-.smain .node-i{transform:translate(calc(var(--ex) * 52px),calc(var(--ex) * 34px))}
-.smain .edge{opacity:calc(1 - var(--ex)*0.82)}
-.smain.scrubbing .triad-svg .node{transition:opacity var(--t-standard) var(--e-out),transform .08s linear}
-/* specimen trays: pulled out as the corners separate */
-.trays{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:20px;
-  opacity:var(--ex);transform:translateY(calc((1 - var(--ex)) * 18px))}
-.trays .tray{pointer-events:none}
-.smain.trays-live .trays .tray{pointer-events:auto}
-.tray{border:1px solid var(--hairline);border-radius:2px;background:var(--paper);padding:14px 16px 16px;font-size:13.5px;line-height:1.6}
-.tray .tk{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;display:block;margin-bottom:8px}
-.tray-d1{border-top:3px solid var(--vehicle)} .tray-d1 .tk{color:var(--vehicle)}
-.tray-d2{border-top:3px solid var(--object)} .tray-d2 .tk{color:var(--object)}
-.tray-d3{border-top:3px solid var(--interpretant)} .tray-d3 .tk{color:var(--interpretant)}
-.tray .tverdict{font-family:var(--font-display);font-weight:560;font-size:27px;margin:0 0 2px;letter-spacing:.01em;text-transform:uppercase}
-.tray .trej{color:var(--ink-faint);font-size:12.5px;font-family:var(--font-mono)}
-.tray .trej s{text-decoration-color:var(--object);text-decoration-thickness:1.5px}
-.tray .ttest{color:var(--ink-soft);font-size:13px;margin-top:10px}
-.tray .tsub{color:var(--ink-soft);font-size:12.5px;margin-top:8px;font-style:italic}
-@media (max-width:900px){.trays{grid-template-columns:1fr}}
-/* evidence tracing: corners cross-highlight in place */
-.canvas{position:relative}
-.ent{transition:opacity .25s,background-color .2s,box-shadow .2s}
-.ent.dim{opacity:.25}
-.ent.hl-v{background:rgba(47,93,125,.13);box-shadow:inset 0 0 0 1px rgba(47,93,125,.65);color:var(--vehicle)}
-.ent.hl-o{background:rgba(166,61,34,.13);box-shadow:inset 0 0 0 1px rgba(166,61,34,.65);color:var(--object)}
-.ent.hl-i{background:rgba(107,90,30,.15);box-shadow:inset 0 0 0 1px rgba(107,90,30,.65);color:var(--interpretant)}
-#triad .node.traced>circle:first-of-type{stroke-width:5}
-.specimen-quote{border-bottom:3px solid transparent;transition:border-color .25s}
-.specimen-quote.lit{border-bottom-color:var(--interpretant)}
-.btn{font-family:var(--font-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;
-  background:var(--ink);color:var(--paper);border:1px solid var(--ink);border-radius:2px;
-  padding:12px 18px;min-height:44px;cursor:pointer;margin-top:18px}
-.btn:active{transform:translateY(1px)}
-.triad-svg .draw{stroke-dasharray:1;stroke-dashoffset:1}
-.triad-svg.revealed .draw{animation:drawline .7s var(--e-out) forwards}
-@keyframes drawline{to{stroke-dashoffset:0}}
-@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-
-/* the study sheet: each figure carries its margin */
-.srow{display:grid;grid-template-columns:minmax(0,1fr) 236px;gap:34px;align-items:start}
-.smargin{padding-top:4px;min-width:0}
-.mnote{border-top:1px solid var(--hairline);padding:10px 0 16px;font-size:13px;line-height:1.65;color:var(--ink-soft)}
-.mnote .mk{display:block;font-family:var(--font-mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:6px}
-.mnote.rev .mk{color:var(--object)}
-.admiss{font-family:var(--font-mono);font-size:12px;color:var(--ink-soft);margin:10px 0 0;max-width:420px;line-height:1.6}
-.admiss .bad{color:var(--object);font-weight:700}
-.triad-svg .vtext{font-family:var(--font-mono)}
-.triad-svg .struck{text-decoration:line-through;text-decoration-color:var(--object);text-decoration-thickness:2px}
-
-.ledger{margin:26px 0 0;border-top:1px solid var(--hairline)}
-.ledger-row{
-  display:grid;grid-template-columns:150px 1fr;gap:6px 18px;
-  padding:13px 0;border-bottom:1px solid var(--hairline-soft);
-  font-family:var(--font-mono);font-size:13px;line-height:1.6;
-}
-.ledger-row .lk{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);padding-top:3px}
-.ledger-row .lv .test{display:block;color:var(--ink-faint);font-size:12px;margin-top:3px}
-.ledger-row .lv .flag{color:var(--object)}
+.caveat{font-size:12.5px;color:var(--ink-faint);margin:10px 0 0;max-width:700px;line-height:1.6}
+.semiosis-row{margin:26px 0 0;padding-top:20px;border-top:1px solid var(--hairline)}
+.semiosis-cap{font-size:14px;color:var(--ink-soft);margin:0 0 6px}
 
 .chain{margin:22px 0 0;padding:0;list-style:none;counter-reset:step}
 .chain li{
@@ -276,10 +255,6 @@ input[type="range"].scrub::-moz-range-thumb{width:14px;height:14px;background:va
 .provenance{font-family:var(--font-mono);font-size:12px;color:var(--ink-faint);margin-top:26px;line-height:1.8}
 .provenance a{color:var(--ink-soft)}
 
-.species{margin:6px 0 4px}
-.kicker{font-family:var(--font-mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft)}
-.species h4{font-family:var(--font-display);font-size:34px;font-weight:600;margin:8px 0 6px;color:var(--object)}
-.species .classno{font-family:var(--font-mono);font-size:13px;color:var(--ink-soft)}
 
 .table-scroll{overflow-x:auto;border:1px solid var(--hairline);border-radius:3px;background:var(--paper-2)}
 table.classes{width:100%;border-collapse:collapse;min-width:680px;font-size:13px}
@@ -335,10 +310,13 @@ footer.site .fnote{font-family:var(--font-mono);font-size:11px;letter-spacing:.1
   .hero .lede{font-size:17px}
   section.block{padding:52px 0}
   section.block h2{font-size:30px}
-  .canvas{padding:22px 18px 18px}
-  .canvas-head .specimen-quote{font-size:22px}
-  .entity-strip{font-size:17px}
-  .ledger-row{grid-template-columns:1fr;gap:2px}
+  .bench{padding:22px 18px 18px}
+  .answer-name{font-size:34px}
+  .words{font-size:17px}
+  .darts{grid-template-columns:1fr}
+  .matrix{grid-template-columns:repeat(5,minmax(0,1fr))}
+  .scope .folio{display:block;margin:0 0 4px}
+  .badge{margin:10px 0 0}
   nav.main{gap:16px}
   nav.main a{font-size:11px;white-space:nowrap}
   header.site .wrap{padding-left:18px;padding-right:0}
@@ -348,14 +326,11 @@ footer.site .fnote{font-family:var(--font-mono);font-size:11px;letter-spacing:.1
     mask-image:linear-gradient(to right,#000 86%,transparent);
   }
   nav.main::-webkit-scrollbar{display:none}
-  .species h4{font-size:27px}
 }
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
   html{scroll-behavior:auto}
-  .canvas{opacity:1;transform:none}
-  .triad-svg .draw{stroke-dashoffset:0}
-  .triad-svg .node{opacity:1}
+}
 }
 </style>
 </head>
@@ -367,9 +342,9 @@ footer.site .fnote{font-family:var(--font-mono);font-size:11px;letter-spacing:.1
         <g stroke="#1b1d20" stroke-width="1.6">
           <line x1="16" y1="8" x2="8" y2="23"/><line x1="16" y1="8" x2="24" y2="23"/><line x1="8" y1="23" x2="24" y2="23"/>
         </g>
-        <circle cx="16" cy="8" r="3.4" fill="#2f5d7d"/>
-        <circle cx="8" cy="23" r="3.4" fill="#a63d22"/>
-        <circle cx="24" cy="23" r="3.4" fill="#6b5a1e"/>
+        <circle cx="16" cy="8" r="3.4" fill="#315f76"/>
+        <circle cx="8" cy="23" r="3.4" fill="#9b4539"/>
+        <circle cx="24" cy="23" r="3.4" fill="#7a583a"/>
       </svg>
       <span class="word">SIGNS</span>
     </a>
@@ -400,7 +375,7 @@ footer.site .fnote{font-family:var(--font-mono);font-size:11px;letter-spacing:.1
       <div class="col-narrow">
         <p class="eyebrow">The instrument</p>
         <h2 id="instrument-h">Inscribe a specimen</h2>
-        <p class="sub">One text at a time. The instrument lays the sentence on one bench: its entities, its triad, its species, and every decision it made.</p>
+        <p class="sub">One text at a time. The instrument lays the sentence out in the open: its words, its three verdicts, its species, and every decision it made.</p>
 
         <label class="specimen-label" for="specimen">Specimen text</label>
         <textarea class="specimen" id="specimen" rows="3" maxlength="600"
@@ -509,9 +484,9 @@ footer.site .fnote{font-family:var(--font-mono);font-size:11px;letter-spacing:.1
         <g stroke="#1b1d20" stroke-width="1.6">
           <line x1="16" y1="8" x2="8" y2="23"/><line x1="16" y1="8" x2="24" y2="23"/><line x1="8" y1="23" x2="24" y2="23"/>
         </g>
-        <circle cx="16" cy="8" r="3.4" fill="#2f5d7d"/>
-        <circle cx="8" cy="23" r="3.4" fill="#a63d22"/>
-        <circle cx="24" cy="23" r="3.4" fill="#6b5a1e"/>
+        <circle cx="16" cy="8" r="3.4" fill="#315f76"/>
+        <circle cx="8" cy="23" r="3.4" fill="#9b4539"/>
+        <circle cx="24" cy="23" r="3.4" fill="#7a583a"/>
       </svg>
       <span class="word">SIGNS</span>
     </div>
@@ -907,268 +882,245 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
     reveal(state.result);
   });
 
-  function svgLines(s, max){
-    var words=String(s).split(" "), lines=[""], i, w;
-    for(i=0;i<words.length;i++){
-      w=words[i];
-      if((lines[lines.length-1]+" "+w).trim().length>max){ lines.push(w); }
-      else{ lines[lines.length-1]=(lines[lines.length-1]+" "+w).trim(); }
-    }
-    return lines.slice(0,2);
-  }
-  function triadSVG(r){
-    r = r || {};
-    var LVL2 = {qualisign:1,sinsign:2,legisign:3,icon:1,index:2,symbol:3,rheme:1,dicent:2,delome:3};
-    var V = r.vehicle||"legisign", O = r.objectRelation||"symbol", R = r.interp||"dicent";
-    /* visible revision: the verdict that breaks the dependence rule is struck */
-    var strike = null;
-    if(r.classNo==null && r.vehicle){
-      strike = LVL2[R]>LVL2[O] ? "i" : (LVL2[O]>LVL2[V] ? "o" : null);
-    }
-    function rej(list, chosen){
-      return "not "+list.filter(function(x){ return x!==chosen; }).join(" \u00b7 not ");
-    }
-    function corner(node, cx, cy, dLabel, chosen, list, color, subs){
-      var s = '<g class="node node-'+node+'" data-node="'+node+'">';
-      s += '<circle cx="'+cx+'" cy="'+cy+'" r="30" fill="#f4f1e8" stroke="'+color+'" stroke-width="2.5"/>';
-      s += '<circle cx="'+cx+'" cy="'+cy+'" r="6" fill="'+color+'"/>';
-      s += '<text x="'+cx+'" y="'+(cy+52)+'" text-anchor="middle" class="vtext" font-size="10" letter-spacing="2" fill="rgba(27,29,32,.64)">'+dLabel+'</text>';
-      s += '<text x="'+cx+'" y="'+(cy+78)+'" text-anchor="middle" class="vtext'+(strike===node?" struck":"")+'" font-size="17" font-weight="700" fill="'+color+'">'+esc(chosen.toUpperCase())+'</text>';
-      s += '<text x="'+cx+'" y="'+(cy+96)+'" text-anchor="middle" class="vtext" font-size="10" fill="rgba(27,29,32,.42)">'+esc(rej(list, chosen))+'</text>';
-      if(subs){
-        var lines = svgLines(subs, 26), k;
-        for(k=0;k<lines.length && k<2;k++){
-          s += '<text x="'+cx+'" y="'+(cy+114+k*14)+'" text-anchor="middle" class="vtext" font-size="10" fill="rgba(27,29,32,.42)">'+esc(lines[k])+'</text>';
-        }
-      }
-      return s+'</g>';
-    }
-    var subs = (r.subordinates||[]).map(function(x){ return String(x).split(" (")[0]; });
-    var subsLine = subs.length ? "also at work: "+subs.join(" \u00b7 ") : null;
+  var folioN=0;
+  var SHORT=["Qualisign","Iconic sinsign","Rhematic indexical sinsign","Dicent sinsign","Iconic legisign","Rhematic indexical legisign","Dicent indexical legisign","Rhematic symbol","Dicent symbol","Argument"];
+  var CAPW={qualisign:"Qualisign",sinsign:"Sinsign",legisign:"Legisign",icon:"Icon",index:"Index",symbol:"Symbol",rheme:"Rheme",dicent:"Dicent",delome:"Delome"};
+  function cap1(s){ return String(s).charAt(0).toUpperCase()+String(s).slice(1); }
 
-    return ''+
-    '<svg class="triad-svg" id="triad" data-peel="3" viewBox="-50 0 560 410" role="img" aria-label="Triadic diagram: three corners, three verdicts">'+
-      '<defs><marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">'+
-      '<path d="M0,0 L10,5 L0,10 z" fill="#1b1d20" opacity="0.55"/></marker></defs>'+
-      '<line class="edge edge-vi draw" x1="246.6" y1="95" x2="338.4" y2="233" stroke="#1b1d20" stroke-width="1.4" opacity="0.6" marker-end="url(#arr)" pathLength="1" style="animation-delay:.55s"/>'+
-      '<line class="edge edge-vo draw" x1="121.6" y1="233" x2="213.4" y2="95" stroke="#1b1d20" stroke-width="1.4" opacity="0.6" marker-end="url(#arr)" pathLength="1" style="animation-delay:.7s"/>'+
-      '<line class="edge edge-oi draw" x1="135" y1="258" x2="325" y2="258" stroke="#1b1d20" stroke-width="1.2" opacity="0.45" stroke-dasharray="5 5" pathLength="1" style="animation-delay:.85s"/>'+
-      corner("v", 230, 70, "D1 \u00b7 THE SIGN IN ITSELF", V, ["qualisign","sinsign","legisign"], "#2f5d7d", null)+
-      corner("o", 105, 258, "D2 \u00b7 SIGN TO ITS OBJECT", O, ["icon","index","symbol"], "#a63d22", subsLine)+
-      corner("i", 355, 258, "D3 \u00b7 SIGN TO INTERPRETANT", R, ["rheme","dicent","delome"], "#6b5a1e", null)+
-    '</svg>';
-  }
-
-  function canvasHTML(r){
-    var strip="", pos=0;
-    r.entities.forEach(function(e){
-      strip+=esc(r.text.slice(pos,e.start));
-      strip+='<span class="ent ent-'+e.kind+'" tabindex="0" role="button" data-k="'+e.kind+'" data-g="'+esc(e.gloss)+'">'+esc(e.text)+'</span>';
-      pos=e.start+e.len;
-    });
-    strip+=esc(r.text.slice(pos));
-
-    var cells = SIGNS.CLASSES.map(function(c){
-      return '<button type="button" class="cell'+(c.n===r.classNo?" lit":"")+'" data-cn="'+c.n+
-        '" data-cname="'+esc(c.name)+'" data-cplain="'+esc(c.plain)+
-        '" aria-label="Class '+c.n+": "+esc(c.name)+'">'+c.n+'</button>';
-    }).join("");
-
-    var chainItems = r.chain.map(function(c){
-      return '<li><span class="cs">'+esc(c.slot)+'</span>'+esc(c.text)+'</li>';
-    }).join("");
-
-    /* the dependence rule, checked in the open, and the margin notes */
-    var LVL2 = {qualisign:1,sinsign:2,legisign:3,icon:1,index:2,symbol:3,rheme:1,dicent:2,delome:3};
-    var lvR=LVL2[r.interp], lvO=LVL2[r.objectRelation], lvV=LVL2[r.vehicle];
-    var admiss, revNote="";
-    if(r.classNo){
-      admiss='<p class="admiss">Dependence check: '+esc(r.interp)+' ('+lvR+') &le; '+esc(r.objectRelation)+' ('+lvO+') &le; '+esc(r.vehicle)+' ('+lvV+'): admissible.</p>';
-    }else{
-      var viol = lvR>lvO ? (r.interp+' ('+lvR+') outranks '+r.objectRelation+' ('+lvO+')')
-                         : (r.objectRelation+' ('+lvO+') outranks '+r.vehicle+' ('+lvV+')');
-      admiss='<p class="admiss">Dependence check: <span class="bad">'+esc(r.interp)+' ('+lvR+') &le; '+esc(r.objectRelation)+' ('+lvO+') &le; '+esc(r.vehicle)+' ('+lvV+')</span>: broken, '+esc(viol)+'. No admissible class.</p>';
-      revNote='<div class="mnote rev"><span class="mk">Revision</span>A broken reading is a misreading, not a verdict to repair by demotion. Here '+esc(viol)+': the later trichotomy cannot outrank the earlier. Re-examine the earliest call, D1, before the later ones.</div>';
-    }
-    var whyThree='<div class="mnote"><span class="mk">Why three</span>Because a sign is not a pair but a relation: the marks, what they stand for, and what they grow in the mind. Drop any corner and the other two go silent.</div>';
-    var whyTen='<div class="mnote"><span class="mk">Why ten</span>Twenty-seven combinations are possible; the dependence rule rejects seventeen: the later trichotomies cannot outrank the earlier.</div>';
-    var openNotes=r.questions.slice(0,3).map(function(q){
-      return '<div class="mnote"><span class="mk">Open</span>'+esc(q)+'</div>';
-    }).join("");
-
+  function benchHTML(r){
+    folioN++;
+    var folio="S."+("00"+folioN).slice(-3);
+    var LVL2={qualisign:1,sinsign:2,legisign:3,icon:1,index:2,symbol:3,rheme:1,dicent:2,delome:3};
+    var lvV=LVL2[r.vehicle], lvO=LVL2[r.objectRelation], lvR=LVL2[r.interp];
+    var ok=!!r.classNo;
     var testOf={};
     r.ledger.forEach(function(l){ testOf[l.k]=l.test; });
-    function tray(cls, tag, verdict, others, test, sub){
-      return '<div class="tray '+cls+'"><span class="tk">'+tag+'</span>'+
-        '<p class="tverdict">'+esc(verdict)+'</p>'+
-        '<p class="trej">not <s>'+others.join('</s> &middot; not <s>')+'</s></p>'+
-        '<p class="ttest">'+esc(test)+'</p>'+
-        (sub?'<p class="tsub">'+esc(sub)+'</p>':'')+'</div>';
+    var strike=!ok?(lvR>lvO?"i":(lvO>lvV?"o":null)):null;
+    var viol=!ok?(lvR>lvO?(r.interp+" ("+lvR+") outranks "+r.objectRelation+" ("+lvO+")")
+                            :(r.objectRelation+" ("+lvO+") outranks "+r.vehicle+" ("+lvV+")")):null;
+
+    /* words, each mapped to the entity span that produced it */
+    var roleOf={index:"Points",icon:"Pictures",symbol:"Means by convention"};
+    var cornerOf={index:"o",icon:"o",symbol:"v"};
+    var ws=wordsOf(r.text), pos=0;
+    var wordsHTML=ws.map(function(w){
+      var at=r.text.indexOf(w,pos); if(at<0) at=pos; pos=at+w.length;
+      var kind="symbol", gloss="Works by convention: this span means what it does by habit and law, neither pointing nor picturing.";
+      for(var k=0;k<r.entities.length;k++){ var e=r.entities[k];
+        if(at>=e.start&&at<e.start+e.len){ kind=e.kind; gloss=e.gloss; break; } }
+      return '<button type="button" class="word" data-kind="'+kind+'" data-corner="'+cornerOf[kind]+
+        '" data-role="'+esc(roleOf[kind])+'" data-gloss="'+esc(gloss)+'">'+esc(w)+'</button>';
+    }).join(" ");
+
+    /* decision articles */
+    function altLine(list,chosen){
+      return "not "+list.filter(function(x){return x!==chosen;}).map(function(x){return "<s>"+x+"</s>";}).join(" &middot; not ");
     }
-    var traysHTML='<div class="trays" id="trays" aria-label="Specimen trays">'+
-      tray("tray-d1","D1 &middot; the sign in itself",r.vehicle,
-        ["qualisign","sinsign","legisign"].filter(function(w){return w!==r.vehicle;}),
-        testOf["Vehicle"]||"")+
-      tray("tray-d2","D2 &middot; the sign to its object",r.objectRelation,
-        ["icon","index","symbol"].filter(function(w){return w!==r.objectRelation;}),
-        testOf["Object relation"]||"",
-        r.subordinates.length?("Also at work: "+r.subordinates.join("; ")+"."):"")+
-      tray("tray-d3","D3 &middot; the sign to its interpretant",r.interp,
-        ["rheme","dicent","delome"].filter(function(w){return w!==r.interp;}),
-        testOf["Interpretant"]||"")+
-    '</div>';
+    function dart(key,tag,verdict,role,sub,alts,test,subord,proof){
+      return '<article class="dart dart-'+key+'" data-corner="'+key+'" tabindex="0" role="button" aria-label="'+esc(tag+": "+verdict)+'">'+
+        '<p class="dart-kicker">'+esc(tag)+'</p>'+
+        '<p class="dart-role">'+esc(role)+'</p>'+
+        '<p class="dart-verdict'+(strike===key?' struck':'')+'">'+esc(CAPW[verdict]||verdict)+'</p>'+
+        '<p class="dart-sub">'+esc(sub)+'</p>'+
+        '<div class="disclose-ev"><div class="disclose-in">'+
+          '<p class="dart-alt">'+altLine(alts,verdict)+'</p>'+
+          '<p class="dart-test">'+esc(test)+'</p>'+
+          (subord?'<p class="dart-subord">'+esc(subord)+'</p>':'')+
+        '</div></div>'+
+        '<div class="disclose-proof"><div class="disclose-in">'+
+          '<p class="dart-proof">'+esc(proof)+'</p>'+
+        '</div></div>'+
+      '</article>';
+    }
+    var dartsHTML=
+      dart("v","D1 \u00b7 the sign in itself",r.vehicle,
+        r.vehicle==="legisign"?"The repeatable form":"This particular occurrence",
+        r.vehicle==="legisign"?"A type instantiated by this token":"An event, unrepeatable as an occurrence",
+        ["qualisign","sinsign","legisign"],testOf["Vehicle"]||"",
+        null,
+        "D1 rank "+lvV+". The classification belongs to the sign under this reading.")+
+      dart("o","D2 \u00b7 the sign to its object",r.objectRelation,
+        r.objectRelation==="symbol"?"Convention carries the reference":r.objectRelation==="index"?"Pointing carries the reference":"Likeness carries the reference",
+        r.objectRelation==="symbol"?"Words signify by learned convention":r.objectRelation==="index"?"Names and deictics anchor to the occasion":"The token signifies by resemblance",
+        ["icon","index","symbol"],testOf["Object relation"]||"",
+        r.subordinates.length?("Also at work: "+r.subordinates.join("; ")+"."):null,
+        "D2 rank "+lvO+". Context can supply a particular object without making the linguistic sign itself an index.")+
+      dart("i","D3 \u00b7 the sign to its interpretant",r.interp,
+        r.interp==="delome"?"Reasons toward a conclusion":r.interp==="dicent"?"Presents a fact for assessment":"Presents a term for contemplation",
+        r.interp==="delome"?"Premises working to a conclusion":r.interp==="dicent"?"Capable of being taken as true or false":"Neither true nor false; a qualitative possibility",
+        ["rheme","dicent","delome"],testOf["Interpretant"]||"",
+        null,
+        "D3 rank "+lvR+". This is a candidate reading of an utterance in context, not an intrinsic property of a string alone.");
+
+    /* dependence check, from the live ranks */
+    function eqPart(term,rank,isStruck){
+      var s=esc(term)+" ("+rank+")";
+      return isStruck?'<s class="bad">'+s+'</s>':s;
+    }
+    var constraintHTML='<p class="constraint">'+
+        eqPart(r.interp,lvR,strike==="i")+" &le; "+
+        eqPart(r.objectRelation,lvO,strike==="o")+" &le; "+
+        eqPart(r.vehicle,lvV,false)+'</p>'+
+      (ok
+        ? '<p class="constraint-note">The ranks satisfy the dependence rule, leaving one admissible class.</p>'
+        : '<p class="constraint-note">Broken: '+esc(viol)+'. A broken reading is a misreading, not a verdict to repair by demotion. Re-examine the earliest call, D1, before the later ones.</p>')+
+      '<div class="disclose-proof"><div class="disclose-in">'+
+        '<p class="dart-proof">Scope: one ordinary reading of the whole sentence. A different reading can move the verdicts.</p>'+
+        r.questions.slice(0,3).map(function(q){ return '<p class="dart-proof">Open: '+esc(q)+'</p>'; }).join("")+
+      '</div></div>';
+
+    /* the ten classes */
+    var cells=SIGNS.CLASSES.map(function(c){
+      return '<button type="button" class="mcell'+(c.n===r.classNo?" sel":"")+'" data-cn="'+c.n+
+        '" data-cname="'+esc(c.name)+'" data-cplain="'+esc(c.plain)+
+        '" aria-label="Class '+c.n+": "+esc(c.name)+'"><span class="mn">'+("0"+c.n).slice(-2)+"</span>"+esc(SHORT[c.n-1])+"</button>";
+    }).join("");
+
+    var chainItems=r.chain.map(function(c){
+      return '<li><span class="cs">'+esc(c.slot)+"</span>"+esc(c.text)+"</li>";
+    }).join("");
+
+    var answerName=ok?SHORT[r.classNo-1]:"No admissible class";
 
     return ''+
-    '<section class="canvas" id="canvas" aria-label="Dissection">'+
-      '<div class="canvas-head">'+
-        '<span class="kicker">Dissection</span>'+
-        '<p class="specimen-quote">&ldquo;'+esc(r.text)+'&rdquo;</p>'+
-        '<p class="species-line"><strong>'+(r.classNo?("CLASS "+r.classNo+" OF 10"):"NO ADMISSIBLE CLASS")+'</strong> &middot; '+esc(r.className)+
-        '<span class="species-plain">'+esc(r.classPlain)+'</span></p>'+
+    '<section class="bench" id="bench" data-depth="evidence" aria-label="Dissection result">'+
+      '<p class="scope"><span class="folio">'+folio+'</span>Scope: the whole sentence, under one ordinary declarative reading.'+
+        (ok?'<span class="badge ok">admissible reading</span>':'<span class="badge bad">no admissible class</span>')+'</p>'+
+      '<div class="answer" id="answerBlock">'+
+        '<p class="answer-kicker">Species</p>'+
+        '<h3 class="answer-name">'+esc(answerName)+'</h3>'+
+        '<p class="answer-def">'+esc(r.classPlain)+'</p>'+
+        (ok
+          ? '<p class="answer-class">CLASS '+r.classNo+' OF 10 &middot; '+esc(r.className)+'<span class="cap">visible before interaction</span></p>'
+          : '<p class="answer-class">NO ADMISSIBLE CLASS<span class="cap">the reading breaks the dependence rule</span></p>')+
       '</div>'+
-      '<div class="canvas-row">'+
-        '<span class="field-label">Entities: what the sentence is made of</span>'+
-        '<p class="entity-strip">'+strip+'</p>'+
+      '<div class="words-row">'+
+        '<span class="field-label">Specimen</span>'+
+        '<p class="words">'+wordsHTML+'</p>'+
+        '<p class="words-cap">Select a word. Related evidence changes ink in place.</p>'+
+        '<p class="word-note" id="wordNote" aria-live="polite"></p>'+
       '</div>'+
-      '<div class="canvas-row">'+
-        '<span class="field-label">Three corners, three verdicts</span>'+
-        '<div class="srow"><div class="smain">'+triadSVG(r)+
-        '<p class="triad-cap">Solid arrows: determination. The object determines the sign; the sign determines the interpretant. The dashed edge: the object determines the interpretant mediately, through the sign.</p>'+
-        admiss+
-        '<div class="triad-controls">'+
-          '<span class="field-label">Dissection</span>'+
-          '<label class="field-label" for="explode">Exploded view</label>'+
-          '<input type="range" class="scrub" id="explode" min="0" max="100" value="0" aria-label="Exploded view: pull the three corners apart">'+
-          '<div class="peel-marks"><span>Assembled</span><span>Exploded</span></div>'+
-          '<span class="field-label">Layer peel</span>'+
-          '<input type="range" class="scrub" id="peel" min="0" max="3" value="3" aria-label="Layer peel: vehicle, object, interpretant, whole">'+
-          '<div class="peel-marks"><span>Vehicle</span><span>Object</span><span>Interpr.</span><span>Whole</span></div>'+
+      '<div class="depth-row">'+
+        '<span class="field-label" id="depthLabel">Depth</span>'+
+        '<div class="depth" role="group" aria-labelledby="depthLabel">'+
+          '<button type="button" class="dbtn" data-depth="verdict" aria-pressed="false">Verdict</button>'+
+          '<button type="button" class="dbtn" data-depth="evidence" aria-pressed="true">Evidence</button>'+
+          '<button type="button" class="dbtn" data-depth="proof" aria-pressed="false">Proof</button>'+
         '</div>'+
-        traysHTML+
-        '</div>'+
-        '<aside class="smargin">'+revNote+whyThree+'</aside></div>'+
+        '<p class="depth-cap">The answer and the three verdicts never hide. Evidence and proof open in place, under the verdict they support.</p>'+
       '</div>'+
-      '<div class="canvas-row">'+
+      '<div class="darts">'+dartsHTML+'</div>'+
+      '<div class="constraint-row">'+
+        '<span class="field-label">Dependence check</span>'+
+        constraintHTML+
+      '</div>'+
+      '<div class="matrix-row">'+
         '<span class="field-label">Species: the ten classes</span>'+
-        '<div class="srow"><div class="smain"><div class="scale" role="group" aria-label="The ten classes">'+cells+'</div></div>'+
-        '<aside class="smargin">'+whyTen+'</aside></div>'+
+        '<div class="matrix" role="group" aria-label="The ten classes">'+cells+'</div>'+
       '</div>'+
-      '<div class="canvas-row">'+
+      '<p class="inspector" id="inspector">The answer is already present. Interaction only reveals why it holds.</p>'+
+      '<p class="caveat">A Peircean class belongs to a sign as interpreted in context. It does not mechanically assign a separate class to every word.</p>'+
+      '<div class="semiosis-row">'+
         '<span class="field-label">Semiosis: the chain</span>'+
-        '<div class="srow"><div class="smain">'+
-        '<p style="font-size:14px;color:var(--ink-soft);margin:0 0 6px">The early account: every interpretant becomes a new sign. The later account: semiosis converges on a final interpretant, and there need be no further sign. Two links shown; the rest is inquiry.</p>'+
+        '<p class="semiosis-cap">The early account: every interpretant becomes a new sign. The later account: semiosis converges on a final interpretant, and there need be no further sign. Two links shown; the rest is inquiry.</p>'+
         '<ol class="chain">'+chainItems+'</ol>'+
-        '</div>'+
-        '<aside class="smargin">'+openNotes+'</aside></div>'+
       '</div>'+
-      '<p class="inspector" id="inspector">Tap a triad corner to light up its evidence in the sentence.</p>'+
     '</section>'+
     '<section class="further">'+
-      '<p class="provenance">Taxonomy: <a href="https://plato.stanford.edu/entries/peirce-semiotics/">SEP: Peirce\'s Theory of Signs</a> (the triad; the three trichotomies; the ten classes). Engine: surface-marker heuristics; every decision above carries its test. Build v20260916-signs10.</p>'+
+      '<p class="provenance">Taxonomy: <a href="https://plato.stanford.edu/entries/peirce-semiotics/">SEP: Peirce\'s Theory of Signs</a> (the triad; the three trichotomies; the ten classes). Engine: surface-marker heuristics; every decision above carries its test. Build v20260916-signs11.</p>'+
     '</section>';
   }
 
-  function wireCanvas(r){
-    var insp=$("inspector");
+  function wireBench(r){
+    var bench=$("bench"), insp=$("inspector"), note=$("wordNote"), answer=$("answerBlock");
+    var DEF="The answer is already present. Interaction only reveals why it holds.";
     function say(t){ if(insp) insp.textContent=t; }
-    Array.prototype.forEach.call(document.querySelectorAll(".ent"), function(el){
-      function go(){
-        var k=el.getAttribute("data-k");
-        var pre=k==="index"?"Index: ":k==="icon"?"Icon: ":"Symbol: ";
-        say(pre+el.textContent+": "+el.getAttribute("data-g"));
-      }
-      el.addEventListener("click",go);
-      el.addEventListener("keydown",function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); go(); } });
+    var wordOn=null, cornerOn=null;
+    var words=Array.prototype.slice.call(bench.querySelectorAll(".word"));
+    var darts=Array.prototype.slice.call(bench.querySelectorAll(".dart"));
+    function clearWord(){
+      wordOn=null;
+      words.forEach(function(w){ w.classList.remove("active"); });
+      darts.forEach(function(d){ d.classList.remove("dim"); });
+      if(note) note.innerHTML="";
+    }
+    function clearCorner(){
+      cornerOn=null;
+      darts.forEach(function(d){ d.classList.remove("traced","dim"); });
+      words.forEach(function(w){ w.classList.remove("hl-v","hl-o","hl-i","dim"); });
+      if(answer) answer.classList.remove("lit");
+    }
+    words.forEach(function(w){
+      w.addEventListener("click",function(){
+        if(wordOn===w){ clearWord(); say(DEF); return; }
+        clearWord(); clearCorner(); wordOn=w;
+        w.classList.add("active");
+        var corner=w.getAttribute("data-corner");
+        darts.forEach(function(d){ if(d.getAttribute("data-corner")!==corner) d.classList.add("dim"); });
+        var role=w.getAttribute("data-role"), gloss=w.getAttribute("data-gloss");
+        if(note) note.innerHTML='<span class="wr">'+esc(role)+"</span>"+esc(w.textContent+" \u00b7 "+gloss);
+        say(w.textContent+" \u00b7 "+role+": "+gloss);
+      });
+    });
+    Array.prototype.forEach.call(bench.querySelectorAll(".dbtn"),function(b){
+      b.addEventListener("click",function(){
+        Array.prototype.forEach.call(bench.querySelectorAll(".dbtn"),function(x){ x.setAttribute("aria-pressed","false"); });
+        b.setAttribute("aria-pressed","true");
+        bench.setAttribute("data-depth",b.getAttribute("data-depth"));
+        say(DEF);
+      });
     });
     var testOf={};
     r.ledger.forEach(function(l){ testOf[l.k]=l.test; });
     var nodeInfo={
       v:"D1, the sign in itself: "+r.vehicle+". "+r.vehicleWhy+" Test: "+(testOf["Vehicle"]||""),
-      o:"D2, the sign to its object: "+r.objectRelation+". "+r.objectWhy+" Test: "+(testOf["Object relation"]||"")+
-        (r.subordinates.length ? " Also at work: "+r.subordinates.join("; ")+"." : ""),
+      o:"D2, the sign to its object: "+r.objectRelation+" (dominant). "+r.objectWhy+" Test: "+(testOf["Object relation"]||"")+
+        (r.subordinates.length?(" Also at work: "+r.subordinates.join("; ")+"."):""),
       i:"D3, the sign to its interpretant: "+r.interp+". "+r.interpWhy+" Test: "+(testOf["Interpretant"]||"")
     };
-    Array.prototype.forEach.call(document.querySelectorAll("#triad [data-node]"), function(g){
-      g.style.cursor="pointer";
-      g.addEventListener("click",function(){
-        var n=g.getAttribute("data-node");
-        say(nodeInfo[n]); traceCorner(n,g);
-      });
-    });
-    Array.prototype.forEach.call(document.querySelectorAll(".cell"), function(c){
-      c.addEventListener("click",function(){
-        say("Class "+c.getAttribute("data-cn")+": "+c.getAttribute("data-cname")+". "+c.getAttribute("data-cplain")+".");
-      });
-    });
-    var svg=$("triad");
-
-    /* ---- the bench: corner cross-highlighting ---- */
-    var cornerActive=null;
-    function clearThreads(){
-      Array.prototype.forEach.call(document.querySelectorAll(".ent"), function(el){ el.classList.remove("dim","hl-v","hl-o","hl-i"); });
-      Array.prototype.forEach.call(document.querySelectorAll("#triad .node.traced"), function(el){ el.classList.remove("traced"); });
-      var q=document.querySelector(".specimen-quote"); if(q) q.classList.remove("lit");
-      cornerActive=null;
-    }
-    if(window.__signsClear) window.removeEventListener("resize", window.__signsClear);
-    window.__signsClear=clearThreads; window.addEventListener("resize", clearThreads);
-    /* tap a corner: the exact evidence behind its verdict lights up in place, no lines */
-    function traceCorner(n, g){
-      if(cornerActive===n){ clearThreads(); return; }
-      clearThreads(); cornerActive=n;
-      if(g) g.classList.add("traced");
-      var hl="hl-"+n;
-      var ents=Array.prototype.slice.call(document.querySelectorAll(".ent"));
-      if(n==="v"){ ents.forEach(function(e){ e.classList.add(hl); }); }
-      else if(n==="o"){
-        var strong=ents.filter(function(e){ return e.getAttribute("data-k")!=="symbol"; });
-        (strong.length?strong:ents).forEach(function(e){ e.classList.add(hl); });
-        ents.forEach(function(e){ if(e.getAttribute("data-k")==="symbol") e.classList.add("dim"); });
-      }else{
-        var q=document.querySelector(".specimen-quote");
-        if(q) q.classList.add("lit");
-        ents.forEach(function(e){ e.classList.add("dim"); });
-      }
-    }
-    function wireTriad(svg){
-      var smain=svg.closest(".smain");
-      var explode=$("explode"), peel=$("peel");
-      function setEx(){
-        var ex=explode.value/100;
-        smain.style.setProperty("--ex",ex.toFixed(3));
-        smain.classList.toggle("trays-live",ex>0.3);
-        clearThreads();
-      }
-      if(explode){
-        explode.addEventListener("input",setEx);
-        explode.addEventListener("pointerdown",function(){ smain.classList.add("scrubbing"); });
-        ["pointerup","pointercancel","blur"].forEach(function(ev){
-          explode.addEventListener(ev,function(){ smain.classList.remove("scrubbing"); });
+    function traceCorner(key){
+      if(cornerOn===key){ clearCorner(); say(DEF); return; }
+      clearCorner(); clearWord(); cornerOn=key;
+      var dart=bench.querySelector('.dart[data-corner="'+key+'"]');
+      if(dart) dart.classList.add("traced");
+      if(key==="v"){ words.forEach(function(w){ w.classList.add("hl-v"); }); }
+      else if(key==="o"){
+        words.forEach(function(w){
+          if(w.getAttribute("data-kind")==="symbol") w.classList.add("dim");
+          else w.classList.add("hl-o");
         });
+      }else{
+        if(answer) answer.classList.add("lit");
+        words.forEach(function(w){ w.classList.add("dim"); });
       }
-      if(peel) peel.addEventListener("input",function(){ svg.setAttribute("data-peel",peel.value); });
+      say(nodeInfo[key]);
     }
-    if(svg) wireTriad(svg);
-  }
-
-  function reveal(r){
-    plates.innerHTML = canvasHTML(r);
-    wireCanvas(r);
-    requestAnimationFrame(function(){
-      requestAnimationFrame(function(){
-        var cv=$("canvas");
-        if(cv) cv.classList.add("on");
-        var svg = $("triad");
-        if(svg){
-          svg.classList.add("revealed");
-          setTimeout(function(){
-            var nodes = svg.querySelectorAll(".node");
-            for(var j=0;j<nodes.length;j++) nodes[j].style.transitionDelay = "0ms";
-          }, 1400);
+    darts.forEach(function(d){
+      var key=d.getAttribute("data-corner");
+      d.addEventListener("click",function(){ traceCorner(key); });
+      d.addEventListener("keydown",function(e){
+        if(e.key==="Enter"||e.key===" "){ e.preventDefault(); traceCorner(key); }
+      });
+    });
+    Array.prototype.forEach.call(bench.querySelectorAll(".mcell"),function(c){
+      c.addEventListener("click",function(){
+        var n=+c.getAttribute("data-cn");
+        if(r.classNo&&n===r.classNo){
+          say("Class "+n+" is selected. "+cap1(r.vehicle)+" + "+r.objectRelation+" + "+r.interp+" is one admissible Peircean combination.");
+        }else if(r.classNo){
+          say("Class "+n+": "+c.getAttribute("data-cname")+". That combination does not match these three verdicts.");
+        }else{
+          say("Class "+n+": "+c.getAttribute("data-cname")+". No verdict triple here is admissible; the reading breaks the dependence rule.");
         }
       });
     });
-    plates.scrollIntoView({behavior: reducedMotion() ? "auto" : "smooth", block:"start"});
+  }
+
+  function reveal(r){
+    plates.innerHTML=benchHTML(r);
+    wireBench(r);
+    var b=$("bench");
+    if(b) b.scrollIntoView({behavior:reducedMotion()?"auto":"smooth",block:"start"});
   }
 })();
 </script>
