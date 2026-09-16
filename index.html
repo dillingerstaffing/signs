@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<meta name="build-version" content="v20260916-signs15">
+<meta name="build-version" content="v20260916-signs16">
 <title>Signs: An Instrument for Taking Texts Apart</title>
 <meta name="description" content="Inscribe a text. The instrument dissects it in Peirce's terms: the sign, the object, the interpretant, then names the class.">
 <meta property="og:title" content="Signs: An Instrument for Taking Texts Apart">
@@ -200,10 +200,7 @@ textarea.specimen::placeholder{color:var(--ink-faint)}
 .dart-o .dart-kicker{color:var(--object)}
 .dart-i .dart-kicker{color:var(--interpretant)}
 .dart-role{font-size:14px;color:var(--ink-soft);margin:0 0 4px}
-.dart-verdict{font-family:var(--font-display);font-weight:600;font-size:32px;margin:0 0 4px;letter-spacing:.01em}
-.dart-v .dart-verdict{color:var(--vehicle)}
-.dart-o .dart-verdict{color:var(--object)}
-.dart-i .dart-verdict{color:var(--interpretant)}
+.dart-verdict{font-family:var(--font-display);font-weight:600;font-size:32px;margin:0 0 4px;letter-spacing:.01em;color:var(--ink)}
 .dart-verdict.struck{text-decoration:line-through;text-decoration-color:var(--object);text-decoration-thickness:2px}
 .dart-sub{font-size:13.5px;color:var(--ink-soft);margin:0 0 4px;font-style:italic}
 .dart-alt{font-family:var(--font-mono);font-size:12px;color:var(--ink-faint);margin:10px 0 0}
@@ -300,7 +297,7 @@ table.classes .cname{font-family:var(--font-mono);font-weight:700;white-space:no
 table.classes .cex{color:var(--ink-soft);font-family:var(--font-mono);font-size:12px}
 
 .primer-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;margin-top:34px}
-.primer-card{background:var(--paper-2);border:1px solid var(--hairline);border-radius:3px;padding:26px}
+.primer-card{border-top:1px solid var(--hairline);padding:20px 0 0}
 .primer-card .pnum{font-family:var(--font-display);font-size:26px;color:var(--ink-faint)}
 .primer-card h3{font-family:var(--font-display);font-size:22px;font-weight:600;margin:8px 0 10px}
 .primer-card p{font-size:15px;margin:0 0 12px;color:var(--ink)}
@@ -315,10 +312,9 @@ table.classes .cex{color:var(--ink-soft);font-family:var(--font-mono);font-size:
 .colophon-grid p{font-size:15px;margin:0 0 12px}
 .colophon-grid a{color:var(--ink);text-decoration:underline;text-decoration-color:var(--hairline);text-underline-offset:3px}
 .colophon-grid a:hover{text-decoration-color:var(--ink)}
-.wit{
-  margin-top:34px;padding:20px 22px;border-left:3px solid var(--object);
-  background:var(--paper-2);font-size:15px;font-style:italic;max-width:640px;
-}
+.wit{margin-top:34px;padding-top:16px;border-top:1px solid var(--hairline);max-width:640px}
+.wit .wcap{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-faint);margin:0 0 8px}
+.wit p{font-family:var(--font-display);font-size:16px;line-height:1.6;margin:0;color:var(--ink)}
 footer.site{padding:40px 0 56px}
 footer.site .wrap{display:flex;align-items:center;gap:14px;justify-content:space-between;flex-wrap:wrap}
 footer.site .fbrand{display:flex;align-items:center;gap:12px}
@@ -326,9 +322,6 @@ footer.site .word{font-family:var(--font-mono);font-size:13px;letter-spacing:.22
 footer.site .fnote{font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;color:var(--ink-faint);text-transform:uppercase}
 
 @media (max-width:900px){
-  .triad-wrap{grid-template-columns:1fr}
-  .srow{grid-template-columns:1fr}
-  .smargin{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0 22px}
   .primer-grid,.colophon-grid{grid-template-columns:1fr}
 }
 @media (max-width:720px){
@@ -512,7 +505,7 @@ footer.site .fnote{font-family:var(--font-mono);font-size:11px;letter-spacing:.1
           <p>The ten classes and their glosses follow Peirce's 1903 Syllabus; the qualisign, sinsign, legisign, rheme, dicent, and delome (argument) definitions follow the same source.</p>
         </div>
       </div>
-      <p class="wit">First compositions always err; every sound reading begins by correcting the page. Where this instrument misreads your words, amend the record: each triad corner carries its verdict and its test.</p>
+      <div class="wit"><p class="wcap">A working note</p><p>First compositions always err; every sound reading begins by correcting the page. Where this instrument misreads your words, amend the record: each triad corner carries its verdict and its test.</p></div>
     </div>
   </section>
 </main>
@@ -1124,7 +1117,7 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
       '</div>'+
     '</section>'+
     '<section class="further">'+
-      '<p class="provenance">Taxonomy: <a href="https://plato.stanford.edu/entries/peirce-semiotics/">SEP: Peirce\'s Theory of Signs</a> (the triad; the three trichotomies; the ten classes). Engine: surface-marker heuristics; every decision above carries its test. Build v20260916-signs15.</p>'+
+      '<p class="provenance">Taxonomy: <a href="https://plato.stanford.edu/entries/peirce-semiotics/">SEP: Peirce\'s Theory of Signs</a> (the triad; the three trichotomies; the ten classes). Engine: surface-marker heuristics; every decision above carries its test. Build v20260916-signs16.</p>'+
     '</section>';
   }
 
