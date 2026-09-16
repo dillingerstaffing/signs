@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<meta name="build-version" content="v20260916-signs12">
+<meta name="build-version" content="v20260916-signs13">
 <title>Signs: An Instrument for Taking Texts Apart</title>
 <meta name="description" content="Inscribe a text. The instrument dissects it in Peirce's terms: the sign, the object, the interpretant, then names the class.">
 <meta property="og:title" content="Signs: An Instrument for Taking Texts Apart">
@@ -1232,7 +1232,7 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
       '</div>'+
     '</section>'+
     '<section class="further">'+
-      '<p class="provenance">Taxonomy: <a href="https://plato.stanford.edu/entries/peirce-semiotics/">SEP: Peirce\'s Theory of Signs</a> (the triad; the three trichotomies; the ten classes). Engine: surface-marker heuristics; every decision above carries its test. Build v20260916-signs12.</p>'+
+      '<p class="provenance">Taxonomy: <a href="https://plato.stanford.edu/entries/peirce-semiotics/">SEP: Peirce\'s Theory of Signs</a> (the triad; the three trichotomies; the ten classes). Engine: surface-marker heuristics; every decision above carries its test. Build v20260916-signs13.</p>'+
     '</section>';
   }
 
@@ -1406,6 +1406,34 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
     if(rzT) clearTimeout(rzT);
     rzT=setTimeout(function(){ drawIdentity(); },150);
   });
+})();
+</script>
+<script>
+// Invisible auto-update: check build version on load and on foreground, reload once if changed
+(function () {
+  var currentVersion = document.querySelector('meta[name="build-version"]');
+  currentVersion = currentVersion && currentVersion.content;
+  if (!currentVersion) return;
+  var checking = false, reloaded = false;
+  function checkBuild() {
+    if (document.visibilityState !== 'visible' || checking || reloaded) return;
+    checking = true;
+    fetch('?vcheck=' + Date.now(), { cache: 'no-store' }).then(function (r) {
+      if (!r.ok) { checking = false; return null; }
+      return r.text();
+    }).then(function (html) {
+      if (!html) return;
+      var doc = new DOMParser().parseFromString(html, 'text/html');
+      var tag = doc.querySelector('meta[name="build-version"]');
+      var fetched = tag && tag.content;
+      if (fetched && fetched !== currentVersion) { reloaded = true; window.location.reload(); }
+      else checking = false;
+    }).catch(function () { checking = false; });
+  }
+  document.addEventListener('visibilitychange', checkBuild);
+  // A fresh launch (the home-screen app) may never fire visibilitychange,
+  // so check once shortly after load as well.
+  setTimeout(checkBuild, 2500);
 })();
 </script>
 </body>
