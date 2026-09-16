@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<meta name="build-version" content="v20260916-signs3">
+<meta name="build-version" content="v20260916-signs4">
 <title>Signs: An Instrument for Taking Texts Apart</title>
 <meta name="description" content="Inscribe a text. The instrument dissects it in Peirce's terms: the vehicle, the object, the interpretant, then names the species.">
 <meta property="og:title" content="Signs: An Instrument for Taking Texts Apart">
@@ -118,7 +118,7 @@ textarea.specimen::placeholder{color:var(--ink-faint)}
 .plates{margin-top:8px}
 .canvas{
   background:var(--paper-2);border:1px solid var(--hairline);border-radius:3px;
-  padding:30px 30px 24px;margin-top:22px;
+  padding:30px 30px 24px;margin-top:22px;scroll-margin-top:84px;
   opacity:0;transform:translateY(12px);
   transition:opacity var(--t-standard) var(--e-out),transform var(--t-standard) var(--e-out);
 }
@@ -133,6 +133,7 @@ textarea.specimen::placeholder{color:var(--ink-faint)}
 .ent{border-bottom:2px solid;padding-bottom:1px;cursor:pointer}
 .ent-index{border-color:var(--object)}
 .ent-icon{border-color:var(--vehicle)}
+.ent-symbol{border-bottom:1px dotted #8a8577}
 .ent:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
 .scale{display:grid;grid-template-columns:repeat(10,1fr);gap:6px}
 .cell{
@@ -153,25 +154,6 @@ textarea.specimen::placeholder{color:var(--ink-faint)}
   background:var(--paper);font-size:14px;line-height:1.65;min-height:54px;color:var(--ink);
 }
 .further{margin-top:36px}
-.plate{
-  background:var(--paper-2);border:1px solid var(--hairline);border-radius:3px;
-  padding:30px;margin:0 0 22px;
-  opacity:0;transform:translateY(12px);
-  transition:opacity var(--t-standard) var(--e-out),transform var(--t-standard) var(--e-out);
-}
-.plate.on{opacity:1;transform:none}
-.plate-head{display:flex;gap:18px;align-items:baseline;margin-bottom:6px;flex-wrap:wrap}
-.plate-num{font-family:var(--font-display);font-size:30px;font-weight:600;color:var(--ink-faint);min-width:52px}
-.plate-head h3{font-family:var(--font-display);font-size:26px;font-weight:600;margin:0}
-.plate-head .slot{font-family:var(--font-mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft)}
-.plate-intro{color:var(--ink-soft);font-size:15px;margin:0 0 22px;max-width:640px}
-.kv{display:grid;grid-template-columns:190px 1fr;gap:8px 18px;margin:0 0 18px}
-.kv dt{
-  font-family:var(--font-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--ink-soft);padding-top:4px;
-}
-.kv dd{margin:0;font-size:15px;line-height:1.65}
-.kv dd .q{color:var(--ink-faint);font-size:13px;display:block;margin-top:4px}
 .verdict-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:6px}
 .verdict-chip{
   font-family:var(--font-mono);font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
@@ -186,6 +168,7 @@ textarea.specimen::placeholder{color:var(--ink-faint)}
 .triad-wrap{display:grid;grid-template-columns:1fr 280px;gap:28px;align-items:start}
 .triad-svg{width:100%;height:auto;display:block;background:var(--paper);border:1px solid var(--hairline);border-radius:3px}
 .triad-controls{font-size:14px}
+.triad-cap{font-size:12px;color:var(--ink-soft);margin:10px 0 0;max-width:340px;line-height:1.6}
 .triad-controls .field-label{margin:18px 0 8px}
 .triad-controls .field-label:first-child{margin-top:0}
 .toggle-row{display:flex;align-items:center;gap:10px;min-height:44px;cursor:pointer;font-size:14px}
@@ -312,13 +295,9 @@ footer.site .fnote{font-family:var(--font-mono);font-size:11px;letter-spacing:.1
   .hero .lede{font-size:17px}
   section.block{padding:52px 0}
   section.block h2{font-size:30px}
-  .plate{padding:22px 18px}
   .canvas{padding:22px 18px 18px}
   .canvas-head .specimen-quote{font-size:22px}
   .entity-strip{font-size:17px}
-  .kv{grid-template-columns:1fr;gap:2px}
-  .kv dt{padding-top:10px}
-  .kv dd{margin-bottom:6px}
   .ledger-row{grid-template-columns:1fr;gap:2px}
   nav.main{gap:16px}
   nav.main a{font-size:11px;white-space:nowrap}
@@ -334,7 +313,6 @@ footer.site .fnote{font-family:var(--font-mono);font-size:11px;letter-spacing:.1
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
   html{scroll-behavior:auto}
-  .plate{opacity:1;transform:none}
   .canvas{opacity:1;transform:none}
   .triad-svg .draw{stroke-dashoffset:0}
   .triad-svg .node{opacity:1}
@@ -435,28 +413,28 @@ footer.site .fnote{font-family:var(--font-mono);font-size:11px;letter-spacing:.1
         <div class="primer-card">
           <div class="pnum">2</div>
           <h3>The triad</h3>
-          <p>A sign is not a thing but a three-place relation. Remove any corner and the rest goes silent: marks without an object are noise, an object with no interpretant is never read.</p>
+          <p>Signification is irreducibly triadic: a sign is whatever functions in the three-place relation. Remove any corner and the rest goes silent: marks without an object are noise, an object with no interpretant is never read.</p>
           <div class="tri-mini">
             <b class="tv">Vehicle</b> (representamen): the marks themselves<br>
             <b class="to">Object</b>: what the marks stand for<br>
             <b class="ti">Interpretant</b>: the understanding produced
           </div>
-          <p style="margin-top:12px">The instrument keeps two refinements. The <b>immediate object</b> is what the text presents; the <b>dynamic object</b> is the real state of affairs, which the text may misdescribe. The <b>immediate interpretant</b> is the meaning the form allows; the <b>dynamic</b> is the reading actually produced; the <b>final</b> is what inquiry would converge on, with no latitude left.</p>
+          <p style="margin-top:12px">The instrument keeps two refinements. The <b>immediate object</b> is the object as grasped at a stage of inquiry, possibly incomplete or wrong; the <b>dynamic object</b> is the object as it is, whatever kind of thing it is, which constrains the sign. The <b>immediate interpretant</b> is the meaning the form allows; the <b>dynamic</b> is the reading actually produced; the <b>final</b> is what inquiry would converge on, with no latitude left.</p>
         </div>
         <div class="primer-card">
           <div class="pnum">3</div>
           <h3>Three questions</h3>
           <p>Ask three questions of any sign, in this order.</p>
           <p><b>In itself, what is it?</b> A mere quality (<code>qualisign</code>), a particular occurrence (<code>sinsign</code>), or a repeatable type (<code>legisign</code>). Most written text is the third: word forms you have seen a thousand times, this inscription their replica.</p>
-          <p><b>To its object, how does it point?</b> By resemblance (<code>icon</code>), by brute connection (<code>index</code>), or by convention (<code>symbol</code>). Few signs are pure; the instrument names the dominant relation and lists the subordinates.</p>
-          <p><b>To its interpretant, what does it deliver?</b> A qualitative possibility (<code>rheme</code>), an assertion about an actual fact (<code>dicent</code>, pronounced dye-sent), or a reasoned inference (<code>delome</code>).</p>
+          <p><b>To its object, how does it stand?</b> By resemblance (<code>icon</code>), by brute connection (<code>index</code>), or by convention (<code>symbol</code>). Few signs are pure; the instrument names the dominant relation and lists the subordinates.</p>
+          <p><b>To its interpretant, what does it deliver?</b> A term that asserts nothing (<code>rheme</code>), a sign represented as concerning actual existence, hence true or false (<code>dicent</code>, pronounced dye-sent), or an argument: premises working to a conclusion (<code>delome</code>).</p>
         </div>
         <div class="primer-card">
           <div class="pnum">4</div>
           <h3>Ten species, and semiosis</h3>
-          <p>The admissibility rule: a sign's dependents cannot outrank it. Order each trichotomy by quality (1), brute fact (2), convention (3); the interpretant's level may not exceed the object's, and the object's may not exceed the vehicle's. Seventeen of twenty seven combinations fail this test.</p>
-          <p>What survives is ten species, from the rhematic iconic qualisign (a mere feeling of red) to the delomic symbolic legisign (a full proof). The instrument checks the rule and demotes, visibly, when a reading would break it.</p>
-          <p>Finally: every interpretant becomes a new sign. Reading never terminates; it chains. The instrument shows two links of the chain and leaves the rest as open questions, which is where inquiry begins.</p>
+          <p>The admissibility rule: the later trichotomies cannot outrank the earlier. Order each trichotomy by quality (1), brute fact (2), convention (3); the interpretant's level may not exceed the object's, and the object's may not exceed the vehicle's. Seventeen of twenty seven combinations fail this test.</p>
+          <p>What survives is ten species, from the rhematic iconic qualisign (a mere feeling of red) to the delomic symbolic legisign (a full proof). When a reading would break the rule, the instrument flags the failure and asks for the earliest call to be re-examined, starting with the vehicle; it never demotes a reading to force a fit.</p>
+          <p>Finally, semiosis. In the early account, every interpretant becomes a new sign, and the chain has no fixed end. In the later account semiosis is end-directed: inquiry converges on a final interpretant, and there need be no further sign. The instrument shows two links of the early chain and leaves the rest as open questions, which is where inquiry begins.</p>
         </div>
       </div>
     </div>
@@ -470,7 +448,7 @@ footer.site .fnote{font-family:var(--font-mono);font-size:11px;letter-spacing:.1
         <div>
           <h3>Method</h3>
           <p>This instrument is heuristic, not an oracle. It reads surface markers: pronouns, names, tenses, similes, moods, inference words. It cannot know your context, and it says so on the bench.</p>
-          <p>Mixture is the norm. Almost every text does iconic, indexical, and symbolic work at once; the instrument names the dominant relation and lists the subordinates rather than forcing purity.</p>
+          <p>Mixture is this instrument's working assumption, a design choice rather than Peirce's doctrine. Almost every text does iconic, indexical, and symbolic work at once; the instrument names the dominant relation and lists the subordinates rather than forcing purity.</p>
           <p>Peirce later sketched a 66-class extension. It was never finished, and scholars dispute it. This instrument implements the completed 1903 system of ten, plus the immediate and dynamic refinements.</p>
         </div>
         <div>
@@ -518,15 +496,15 @@ var CLASS_OF = {
 
 var CLASSES = [
   {n:1, name:"Rhematic iconic qualisign", plain:"A bare quality that may signify by resemblance; asserts nothing.", example:"a feeling of red"},
-  {n:2, name:"Rhematic iconic sinsign", plain:"A single occurrence signifying by resemblance; a likeness that happens once.", example:"an unrepeatable cry that sounds like its cause"},
-  {n:3, name:"Rhematic indexical sinsign", plain:"A single occurrence that points; a term anchored to the occasion.", example:"a spontaneous pointing cry"},
-  {n:4, name:"Dicentic indexical sinsign", plain:"A single occurrence asserting an actual fact about what it points to.", example:"a hail identifying a ship"},
-  {n:5, name:"Rhematic iconic legisign", plain:"A repeatable type signifying by resemblance; a likeness by convention.", example:"a diagram"},
-  {n:6, name:"Rhematic indexical legisign", plain:"A repeatable type that points; a proper name.", example:"a proper name"},
+  {n:2, name:"Rhematic iconic sinsign", plain:"A single occurrence signifying by resemblance; a likeness that happens once.", example:"an individual diagram"},
+  {n:3, name:"Rhematic indexical sinsign", plain:"A single occurrence that points; a term anchored to the occasion.", example:"a spontaneous cry"},
+  {n:4, name:"Dicentic indexical sinsign", plain:"A single occurrence asserting an actual fact about what it points to.", example:"a weather cock"},
+  {n:5, name:"Rhematic iconic legisign", plain:"A repeatable type signifying by resemblance: the likeness is iconic, the repeatability conventional.", example:"a diagram"},
+  {n:6, name:"Rhematic indexical legisign", plain:"A repeatable type that points; a term, not a claim.", example:"a demonstrative pronoun"},
   {n:7, name:"Dicentic indexical legisign", plain:"A repeatable type asserting an actual fact about what it points to.", example:"a street cry"},
   {n:8, name:"Rhematic symbolic legisign", plain:"A repeatable type carrying conventional meaning, taken as a term.", example:"a common noun"},
   {n:9, name:"Dicentic symbolic legisign", plain:"A repeatable type asserting, by convention, an actual fact.", example:"a proposition"},
-  {n:10, name:"Delomic symbolic legisign", plain:"A repeatable type that reasons: premises visibly working to a conclusion.", example:"a syllogism"}
+  {n:10, name:"Delomic symbolic legisign", plain:"A repeatable type that reasons: premises working to a conclusion.", example:"an argument"}
 ];
 
 var STUDIES = [
@@ -537,8 +515,8 @@ var STUDIES = [
   {label:"A proof step", text:"Since ABCD is a square, its diagonals bisect each other; therefore AO = OC."}
 ];
 
-var ONOM = {buzz:1,hiss:1,bang:1,pop:1,sizzle:1,murmur:1,whisper:1,whirr:1,clang:1,thud:1,splash:1,drip:1,hum:1,crackle:1,rustle:1,shhh:1,zzz:1,brrr:1,achoo:1,meow:1,woof:1,moo:1,hush:1,psst:1};
-var INTERJ = {ouch:1,wow:1,hey:1,oh:1,ah:1,alas:1,hurrah:1,oops:1,ugh:1,phew:1,bravo:1,amen:1,eureka:1};
+var ONOM = {buzz:1,hiss:1,bang:1,boom:1,crash:1,pop:1,sizzle:1,murmur:1,whisper:1,whirr:1,clang:1,thud:1,splash:1,drip:1,hum:1,crackle:1,rustle:1,shhh:1,zzz:1,brrr:1,achoo:1,meow:1,woof:1,moo:1,hush:1,psst:1};
+var INTERJ = {ouch:1,wow:1,hey:1,oh:1,ah:1,alas:1,hurrah:1,oops:1,ugh:1,phew:1,bravo:1,amen:1,eureka:1,shhh:1,hush:1,psst:1};
 var PRON = {i:1,you:1,he:1,she:1,it:1,we:1,they:1,me:1,him:1,her:1,us:1,them:1,my:1,your:1,his:1,its:1,our:1,their:1,mine:1,yours:1,hers:1,ours:1,theirs:1,this:1,that:1,these:1,those:1};
 var DEICTIC = {"here":1,there:1,now:1,today:1,tomorrow:1,yesterday:1,tonight:1};
 var STOPW = {a:1,an:1,the:1,and:1,or:1,but:1,if:1,then:1,else:1,of:1,at:1,by:1,for:1,with:1,about:1,into:1,through:1,during:1,before:1,after:1,above:1,below:1,to:1,from:1,up:1,down:1,in:1,out:1,on:1,off:1,over:1,under:1,again:1,further:1,once:1,here:1,there:1,when:1,where:1,why:1,how:1,all:1,any:1,both:1,each:1,few:1,more:1,most:1,other:1,some:1,such:1,no:1,nor:1,not:1,only:1,own:1,same:1,so:1,than:1,too:1,very:1,can:1,will:1,just:1,don:1,should:1,now:1,is:1,are:1,was:1,were:1,be:1,been:1,being:1,has:1,have:1,had:1,do:1,does:1,did:1,would:1,shall:1,may:1,might:1,must:1,as:1,it:1,its:1,i:1,you:1,he:1,she:1,we:1,they:1,this:1,that:1,these:1,those:1,my:1,your:1,his:1,her:1,our:1,their:1};
@@ -556,19 +534,24 @@ function analyze(raw){
   var single = ws.length===1;
   var bare = clean(ws[0]||"").toLowerCase();
 
-  /* ---- D1: the sign in itself ---- */
+  /* ---- D1: the sign in itself ----
+     A typed token is an occurrence. No typed token is ever a mere quality:
+     a quality must be embodied in an occurrence to act as a sign. */
   var alpha = t.replace(/[^A-Za-z]/g,"");
   var upperRatio = alpha.length ? (t.replace(/[^A-Z]/g,"").length/alpha.length) : 0;
-  var elongated = /(.)\1\1/.test(t);
   var vehicle, vehicleWhy, vehicleTest;
-  if(single && (ONOM[bare] || /^(sh+h+|z+z+|br+r+|hm+m+)$/.test(bare))){
-    vehicle="qualisign";
-    vehicleWhy="A bare quality does the signifying: the sound-shape itself, apart from any particular thing it might attach to.";
-    vehicleTest="Is the signifying element a mere quality? Yes: a single sound token with no lexical content.";
-  }else if((single && (INTERJ[bare] || /!$/.test(t))) || (alpha.length>3 && upperRatio>0.6) || elongated){
+  if(single && INTERJ[bare]){
+    vehicle="legisign";
+    vehicleWhy="A repeatable word type does the work: a conventional interjection, recognized by habit. This inscription is one sinsign replica of that type.";
+    vehicleTest="Is the signifying element a repeatable type? Yes: a conventional interjection; the token is one occurrence of the type, never a bare quality.";
+  }else if(single && (ONOM[bare] || /^(sh+h+|z+z+|br+r+|hm+m+)$/.test(bare))){
     vehicle="sinsign";
-    vehicleWhy="This particular occurrence does the work: its force lives in the token, unrepeatable as an event, not in a repeatable type.";
-    vehicleTest="Is the signifying element a particular occurrence? Yes: token features (case, spelling, force) carry the meaning.";
+    vehicleWhy="This particular occurrence does the work: a one-off sound event, unrepeatable as an event. A quality must be embodied in an occurrence to act as a sign, so a typed token is never a mere quality.";
+    vehicleTest="Is the signifying element a particular occurrence? Yes: a one-off sound token; typed tokens are occurrences, never bare qualities.";
+  }else if(alpha.length>3 && upperRatio>0.6){
+    vehicle="sinsign";
+    vehicleWhy="This particular occurrence does the work: the shouting capitals make the token an event, not a reusable type.";
+    vehicleTest="Is the signifying element a particular occurrence? Yes: token features (case) carry the meaning.";
   }else{
     vehicle="legisign";
     vehicleWhy="A repeatable type does the work: word and sentence forms recognized by convention. This inscription is one sinsign replica of that type.";
@@ -585,10 +568,10 @@ function analyze(raw){
     sws.forEach(function(w,i){
       var c = clean(w);
       if(i>0 && /^[A-Z][a-z]+$/.test(c) && c!=="I") addProper(c);
-      if(/^[A-Z]{2,}$/.test(c) && c.length>1 && !PRON[c.toLowerCase()]) addProper(c);
+      if(/^[A-Z]{2,}$/.test(c) && c.length>1 && !PRON[c.toLowerCase()] && !ONOM[c.toLowerCase()] && !INTERJ[c.toLowerCase()]) addProper(c);
     });
   });
-  if(single && /^[A-Z][a-z]*$/.test(clean(ws[0]))) addProper(clean(ws[0]));
+  if(single && /^[A-Z][a-z]*$/.test(clean(ws[0])) && !INTERJ[bare]) addProper(clean(ws[0]));
   var pronHits = lows.filter(function(w){ return PRON[w]; });
   var deicticHits = lows.filter(function(w){ return DEICTIC[w]; });
   var indexCount = pronHits.length + deicticHits.length + proper.length;
@@ -602,7 +585,7 @@ function analyze(raw){
   var contentWords = lows.filter(function(w){ return w.length>3 && !STOPW[w]; });
 
   /* ---- D2: the sign to its object ---- */
-  var isBareReferring = ws.length<=3 && (proper.length>0 || pronHits.length>0 || INTERJ[bare]);
+  var isBareReferring = ws.length<=3 && (proper.length>0 || pronHits.length>0);
   var dominant, domWhy, domTest, subordinates=[];
   function markerList(){
     var m = [];
@@ -611,7 +594,12 @@ function analyze(raw){
     proper.slice(0,3).forEach(function(p){ m.push("'"+p+"'"); });
     return m.join(", ");
   }
-  if(hasSimile){
+  if(single && ONOM[bare] && vehicle==="sinsign"){
+    dominant="icon";
+    domWhy="A one-off sound event signifying by likeness: the sound-shape resembles what it names.";
+    domTest="Does it signify by resemblance? Yes: the token sounds like its cause.";
+    subordinates.push("symbolic (the borrowed word form)");
+  }else if(hasSimile){
     dominant="icon";
     domWhy="A simile frame makes resemblance do the work: the text asks to be read as like something else.";
     domTest="Does it signify by resemblance? Yes: "+(simileWord ? "the frame \""+simileWord+"\"" : "a likeness marker (like, as if, looks like)")+".";
@@ -630,7 +618,7 @@ function analyze(raw){
     if(onomHits.length>0) subordinates.push("iconic ("+onomHits.slice(0,2).join(", ")+")");
   }
   ledger.push({k:"Object relation", v:dominant+" (dominant)", test:domTest});
-  subordinates.forEach(function(s){ ledger.push({k:"Subordinate", v:s, test:"Mixture is the norm; subordinate work is named, not forced into the dominant slot."}); });
+  subordinates.forEach(function(s){ ledger.push({k:"Subordinate", v:s, test:"Mixture is the instrument's working assumption (a design choice, not Peirce's doctrine): subordinate work is named, not forced into the dominant slot."}); });
 
   /* ---- D3: the sign to its interpretant ---- */
   var hasInfer = /\b(therefore|hence|it follows|q\.?\s?e\.?\s?d\.?|prove[sd]? that)\b/i.test(t) ||
@@ -646,20 +634,20 @@ function analyze(raw){
   var interp, interpWhy, interpTest;
   if(hasInfer){
     interp="delome";
-    interpWhy="Inference markers carry the text: premises visibly work toward a conclusion.";
+    interpWhy="Inference markers carry the text: premises work toward a conclusion.";
     interpTest="Does it present a reasoned inference? Yes: "+(/therefore/i.test(t)?"\"therefore\"":/\bsince\b/i.test(t)?"\"since\" with a conclusion":"an inference frame")+".";
   }else if(dominant==="icon" && hasSimile){
     interp="rheme";
     interpWhy="The line's work is qualitative: it presents a likeness to contemplate and asserts no verifiable fact. A dicentic reading is available but unwarranted.";
     interpTest="Does it assert an actual fact? No: the simile frame offers a qualitative possibility, not a claim to check.";
   }else if(endsQ){
-    interp="dicent";
-    interpWhy="The question form puts an actual state of affairs at issue.";
-    interpTest="Does it engage an actual fact? Yes: the interrogative demands an answer about how things are.";
+    interp="rheme";
+    interpWhy="No assertion is made: a question is neither true nor false, so Peirce's 1903 test for the dicent does not apply. How interrogatives fit the ten classes is an open problem; the rheme slot is the honest default.";
+    interpTest="Does it assert an actual fact? No: a question asserts nothing; the 1903 dicent must be true or false.";
   }else if(imperative || (endsBang && ws.length<=6)){
-    interp="dicent";
-    interpWhy="The command or exclamation form addresses an actual occasion: someone, somewhere, now.";
-    interpTest="Does it engage an actual fact? Yes: it acts on an occasion, not on a mere possibility.";
+    interp="rheme";
+    interpWhy="No assertion is made: a command or exclamation is neither true nor false. Peirce's 1903 test for the dicent does not apply; where such forms fit the ten classes is an open question.";
+    interpTest="Does it assert an actual fact? No: it acts on an occasion without asserting.";
   }else if(isFragment){
     interp="rheme";
     interpWhy="No assertion is made: a term is presented for contemplation, with no claim about any fact.";
@@ -671,22 +659,22 @@ function analyze(raw){
   }
   ledger.push({k:"Interpretant", v:interp, test:interpTest});
 
-  /* ---- D4: the admissibility gate ---- */
+  /* ---- D4: the admissibility gate ----
+     The rule is interpretant <= object <= vehicle. An inadmissible triple is a
+     mistaken reading, not a reading to repair by demotion: the honest move is
+     to re-examine the earliest call first, starting with D1. */
   var V=vehicle, O=dominant, R=interp;
-  function demoteR(){ if(R==="delome") R="dicent"; else if(R==="dicent") R="rheme"; }
-  function demoteO(){ if(O==="symbol") O="index"; else if(O==="index") O="icon"; }
-  function gateNote(before, after, slot){
-    ledger.push({k:"Admissibility", v:before+" demoted to "+after,
-      test:"Dependents never outrank what they depend on: the rule demotes the "+slot+", visibly, instead of forcing the reading."});
+  var admissible = LVL[R]<=LVL[O] && LVL[O]<=LVL[V];
+  if(admissible){
+    ledger.push({k:"Admissibility", v:LVL[R]+" <= "+LVL[O]+" <= "+LVL[V]+" : admissible",
+      test:"Dependents never outrank what they depend on: interpretant <= object <= vehicle."});
+  }else{
+    ledger.push({k:"Admissibility", v:"no admissible class",
+      test:"Dependents never outrank what they depend on: "+R+" ("+LVL[R]+") / "+O+" ("+LVL[O]+") / "+V+" ("+LVL[V]+") breaks the rule. An inadmissible reading is a mistaken reading, so re-examine the earliest call first, starting with D1. The instrument does not demote readings to force a fit."});
   }
-  var b0=R; while(LVL[R] > LVL[O]) demoteR(); if(R!==b0) gateNote(b0,R,"interpretant");
-  var b1=O; while(LVL[O] > LVL[V]) demoteO(); if(O!==b1) gateNote(b1,O,"object relation");
-  var b2=R; while(LVL[R] > LVL[O]) demoteR(); if(R!==b2) gateNote(b2,R,"interpretant");
-  ledger.push({k:"Admissibility", v:LVL[R]+" <= "+LVL[O]+" <= "+LVL[V]+" : admissible",
-    test:"Dependents never outrank what they depend on: interpretant <= object <= vehicle."});
 
-  var classNo = CLASS_OF[R+"|"+O+"|"+V];
-  var classInfo = CLASSES[classNo-1];
+  var classNo = admissible ? CLASS_OF[R+"|"+O+"|"+V] : null;
+  var classInfo = admissible ? CLASSES[classNo-1] : {name:"No admissible class", plain:"The derived reading breaks the dependence rule, so no species fits. Re-examine the earliest call, starting with the vehicle."};
 
   /* ambiguity worth recording */
   if(dominant==="symbol" && /\b(at|in|on)\s+the\s+\w+\s*[.!?]?\s*$/.test(t) && /(reading|says|reads|marked|labeled)/i.test(t)){
@@ -705,32 +693,32 @@ function analyze(raw){
   uniqPron.slice(0,3).forEach(function(p){ refs.push("'"+p+"'"); });
 
   var immediateObj = refs.length
-    ? "What the text presents: "+refs.join("; ")+"."
-    : ("No determinate referent is presented; the text offers "+(dominant==="icon"?"a likeness to contemplate":(R==="rheme"?"a term for contemplation":"a claim awaiting a referent"))+".");
+    ? "The object as grasped at this stage of inquiry: "+refs.join("; ")+" (possibly incomplete or wrong)."
+    : ("No determinate referent is presented at this stage of inquiry; the text offers "+(dominant==="icon"?"a likeness to contemplate":(R==="rheme"?"a term for contemplation":"a claim awaiting a referent"))+".");
   var future = /\b(will|shall|going to)\b/i.test(t);
   var counterfactual = /\bif\b.*\bwould\b/i.test(t) || /\bwere\b/i.test(t) && /\bif\b/i.test(t) || /\bwould have\b/i.test(t);
   var dynamicObj, epistemic;
   if(counterfactual){
-    dynamicObj="Possibly no dynamic object at all: the text may present what never was.";
-    epistemic="Counterfactual; nothing to verify.";
+    dynamicObj="The state of affairs the text purports to be about, marked counterfactual: what never was, presented as if it were.";
+    epistemic="Counterfactual: nothing actual to check the presentation against.";
   }else if(future){
-    dynamicObj="A future state of affairs: real, but not yet fixed.";
+    dynamicObj="The future state of affairs the sign purports to be about: the object as it will be, which inquiry aims at.";
     epistemic="Verifiable only after the fact; unknown now.";
   }else if(proper.length){
     dynamicObj="The actual bearer of the name, whatever inquiry finds there.";
     epistemic="Fixed by inquiry, not by this text.";
   }else{
-    dynamicObj="Whatever real state of affairs would satisfy the claim.";
+    dynamicObj="The object as it is, whatever kind of thing it is: the real state of affairs the sign is about, which constrains the sign and which inquiry aims at.";
     epistemic="Not fixed by the text alone.";
   }
-  var mismatch = counterfactual ? "The immediate object may misdescribe the dynamic object: the text presents what never was." : null;
+  var mismatch = counterfactual ? "The immediate object misdescribes the dynamic object: the presented scenario never obtained." : null;
 
   /* ---- interpretants ---- */
   var immI, dynI;
-  if(endsQ){ immI="Any competent reader takes this as a question about "+topic+"."; dynI="the speaker seeks an answer about "+topic+"."; }
-  else if(imperative || (endsBang && ws.length<=6)){ immI="The form presents a directive: someone is to do something."; dynI="the speaker directs action here and now."; }
+  if(endsQ){ immI="Any competent reader takes this as a question about "+topic+"."; dynI="the reader is put to answer about "+topic+": the effect produced is the question taken up, not a claim believed."; }
+  else if(imperative || (endsBang && ws.length<=6)){ immI="The form presents a directive: someone is to do something."; dynI="the reader is moved to act: the effect produced is the directive taken up here and now."; }
   else if(isFragment){ immI="A term is presented for contemplation, with no assertion attached."; dynI="attention is directed to "+topic+" as a qualitative possibility."; }
-  else { immI="A claim is put forward about "+topic+"; any reader takes it as asserted."; dynI="the speaker asserts the text's claim about "+topic+"."; }
+  else { immI="A claim is put forward about "+topic+"; any reader takes it as asserted."; dynI="the reader takes the text's claim about "+topic+" as given for now."; }
 
   var questions=[];
   uniqPron.forEach(function(p){ questions.push("Who or what is '"+p+"'? The text does not say."); });
@@ -740,16 +728,12 @@ function analyze(raw){
   if(!questions.length) questions.push("What would all competent inquiry converge on, with no latitude left?");
   else questions.push("What would all competent inquiry converge on, with no latitude left?");
 
-  var crosscut;
-  if(R==="delome") crosscut="logical: the text works by giving reasons.";
-  else if(dominant==="icon") crosscut="emotional: the text works by stirring a quality of feeling.";
-  else if(imperative || endsBang) crosscut="energetic: the text works by moving someone to act.";
-  else crosscut="logical: the text works by conveying a thought.";
+  var crosscut="Second division, contested: the received view reads emotional / energetic / logical as another name for immediate / dynamic / final; Short reads it as a cross-cutting division. No rule assigns a text to exactly one of the three."
 
   var chain=[
     {slot:"Sign 1", text:"The specimen: \""+trunc(t,90)+"\" Its immediate object: "+trunc(immediateObj,110)},
-    {slot:"Interpretant becomes sign 2", text:"This reading ("+dynI+") is itself a new sign. Its refined immediate object: "+trunc(dynamicObj,110)},
-    {slot:"Final interpretant", text:"Inquiry converges when: "+questions[0]}
+    {slot:"The early account: interpretant becomes sign 2", text:"This reading ("+dynI+") is itself a new sign, starting the chain the early account describes. Its refined immediate object: "+trunc(dynamicObj,110)},
+    {slot:"Final interpretant", text:"The final interpretant is the interpretation inquiry would settle on in the limit. Here it stays open; the sharpest open form is: "+questions[0]}
   ];
 
   /* ---- entities: the spans that do the signifying work ---- */
@@ -763,7 +747,7 @@ function analyze(raw){
       entities.push({start:m.index, len:m[0].length, text:m[0], kind:kind, gloss:gloss});
     }
   }
-  proper.forEach(function(p){ addEntity("\\b"+escRe(p)+"\\b","index","Names a particular; points by brute contact with its bearer."); });
+  proper.forEach(function(p){ addEntity("\\b"+escRe(p)+"\\b","index","Names a particular; points by existential connection: the naming history ties it to its bearer."); });
   var seenPron={};
   pronHits.forEach(function(p){ if(seenPron[p])return; seenPron[p]=1;
     addEntity("\\b"+escRe(p)+"\\b","index","Points to the occasion of utterance: the speaker, the addressee, the here and now."); });
@@ -773,7 +757,6 @@ function analyze(raw){
   var seenOn={};
   onomHits.forEach(function(w){ if(seenOn[w])return; seenOn[w]=1;
     addEntity("\\b"+escRe(w)+"\\b","icon","Means by its sound-shape: the quality resembles what it names."); });
-  if(vehicle==="qualisign") addEntity("^[\\s\\S]+$","icon","A bare quality does the signifying: the sound-shape itself, apart from any bearer.");
   if(simileWord) addEntity(escRe(simileWord),"icon","Means by likeness: the text asks to be read as like something else.");
   entities.sort(function(a,b){ return a.start-b.start || b.len-a.len; });
   var dedup=[];
@@ -781,17 +764,34 @@ function analyze(raw){
     var last=dedup[dedup.length-1];
     if(!last || e.start>=last.start+last.len) dedup.push(e);
   });
+  /* mark the uncovered spans as symbolic: full coverage, so the strip shows
+     what the whole sentence is made of, not only the pointing and picturing */
+  var syms=[], pos=0;
+  dedup.forEach(function(e){
+    if(e.start>pos) syms.push([pos, e.start]);
+    pos=Math.max(pos, e.start+e.len);
+  });
+  if(pos<t.length) syms.push([pos, t.length]);
+  syms.forEach(function(s){
+    var txt=t.slice(s[0], s[1]);
+    if(!/[A-Za-z0-9]/.test(txt)) return;
+    var lead=txt.match(/^\W+/), trailWs=txt.match(/\W+$/);
+    var a=s[0]+(lead?lead[0].length:0), b=s[1]-(trailWs?trailWs[0].length:0);
+    if(b<=a) return;
+    dedup.push({start:a, len:b-a, text:t.slice(a,b), kind:"symbol",
+      gloss:"Works by convention: this span means what it does by habit and law, neither pointing nor picturing."});
+  });
+  dedup.sort(function(a,b){ return a.start-b.start || b.len-a.len; });
   entities=dedup;
 
   /* ---- short lines for the populated triad ---- */
-  var vShort = vehicle==="legisign" ? ["word types","this replica"]
-             : vehicle==="sinsign" ? ["this occurrence"] : ["the sound-shape"];
+  var vShort = vehicle==="legisign" ? ["word types","this replica"] : ["this occurrence"];
   var oShort = refs.length ? [refs[0].length>26 ? refs[0].slice(0,26)+"..." : refs[0]]
                            : (dominant==="icon" ? ["a likeness"] : ["no fixed referent"]);
   if(refs.length>1) oShort.push("+"+(refs.length-1)+" more");
   var iShort = interp==="delome" ? ["reasons to a conclusion"]
-             : interp==="rheme" ? ["presents a term"]
-             : endsQ ? ["puts a fact at issue"] : (imperative||endsBang) ? ["directs action"] : ["asserts a claim"];
+             : interp==="rheme" ? (endsQ ? ["asks, asserts nothing"] : (imperative||endsBang) ? ["acts without asserting"] : ["presents a term"])
+             : ["asserts a claim"];
 
   /* ---- derivation trail ---- */
   var trail=[
@@ -799,20 +799,19 @@ function analyze(raw){
     {label:dominant+" (dominant)", test:domTest}
   ];
   subordinates.forEach(function(s){
-    trail.push({label:"sub: "+s.split(" (")[0], test:"Mixture is the norm; subordinate work is named, not forced into the dominant slot."});
+    trail.push({label:"sub: "+s.split(" (")[0], test:"Mixture is the instrument's working assumption (a design choice, not Peirce's doctrine): subordinate work is named, not forced into the dominant slot."});
   });
   trail.push({label:interp, test:interpTest});
-  trail.push({label:"class "+classNo, test:"Admissibility holds: interpretant <= object <= vehicle. "+classInfo.name+"."});
+  trail.push(classNo
+    ? {label:"class "+classNo, test:"Admissibility holds: interpretant <= object <= vehicle. "+classInfo.name+"."}
+    : {label:"no admissible class", test:"The derived reading breaks the dependence rule; re-examine the earliest call, starting with D1."});
   var tokenLine, replicaLine;
   if(V==="legisign"){
     tokenLine="Types used: "+ws.length+" word tokens drawn from conventional word types.";
     replicaLine="This inscription is a sinsign replica of those types: one more occurrence of forms you have seen a thousand times.";
-  }else if(V==="sinsign"){
+  }else{
     tokenLine="Tokens: "+ws.length+" word token(s); the force lives in this occurrence.";
     replicaLine="As an event it is unrepeatable; as a type it borrows its shape from convention.";
-  }else{
-    tokenLine="A single quality token; no type, no occurrence, only the sound-shape.";
-    replicaLine="Nothing to replicate: the quality itself does the work.";
   }
 
   return {
@@ -868,10 +867,6 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
     state.result = SIGNS.analyze(t);
     reveal(state.result);
   });
-
-  function kvRow(k, v, note){
-    return '<dt>'+esc(k)+'</dt><dd>'+esc(v)+(note ? '<span class="q">'+esc(note)+'</span>' : '')+'</dd>';
-  }
 
   function svgLines(s, max){
     var words=String(s).split(" "), lines=[""], i, w;
@@ -929,7 +924,7 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
     var strip="", pos=0;
     r.entities.forEach(function(e){
       strip+=esc(r.text.slice(pos,e.start));
-      strip+='<span class="ent ent-'+e.kind+'" tabindex="0" role="button" data-g="'+esc(e.gloss)+'">'+esc(e.text)+'</span>';
+      strip+='<span class="ent ent-'+e.kind+'" tabindex="0" role="button" data-k="'+e.kind+'" data-g="'+esc(e.gloss)+'">'+esc(e.text)+'</span>';
       pos=e.start+e.len;
     });
     strip+=esc(r.text.slice(pos));
@@ -955,7 +950,7 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
       '<div class="canvas-head">'+
         '<span class="kicker">Dissection</span>'+
         '<p class="specimen-quote">&ldquo;'+esc(r.text)+'&rdquo;</p>'+
-        '<p class="species-line"><strong>CLASS '+r.classNo+' OF 10</strong> &middot; '+esc(r.className)+
+        '<p class="species-line"><strong>'+(r.classNo?("CLASS "+r.classNo+" OF 10"):"NO ADMISSIBLE CLASS")+'</strong> &middot; '+esc(r.className)+
         '<span class="species-plain">'+esc(r.classPlain)+'</span></p>'+
       '</div>'+
       '<div class="canvas-row">'+
@@ -964,7 +959,8 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
       '</div>'+
       '<div class="canvas-row">'+
         '<span class="field-label">The triad, populated</span>'+
-        '<div class="triad-wrap"><div>'+triadSVG(r)+'</div>'+
+        '<div class="triad-wrap"><div>'+triadSVG(r)+
+        '<p class="triad-cap">Solid arrows: determination. The object determines the sign; the sign determines the interpretant. The dashed edge: the object determines the interpretant mediately, through the sign.</p></div>'+
         '<div class="triad-controls">'+
           '<span class="field-label">Dissection</span>'+
           '<label class="toggle-row"><input type="checkbox" id="explode"> Exploded view</label>'+
@@ -985,7 +981,7 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
     '</section>'+
     '<section class="further">'+
       '<h3 style="font-family:var(--font-display);font-size:22px;margin:0 0 4px">Semiosis: the chain</h3>'+
-      '<p style="font-size:14px;color:var(--ink-soft);margin:0 0 6px">Every interpretant becomes a new sign. Two links shown; the rest is inquiry.</p>'+
+      '<p style="font-size:14px;color:var(--ink-soft);margin:0 0 6px">The early account: every interpretant becomes a new sign. The later account: semiosis converges on a final interpretant, and there need be no further sign. Two links shown; the rest is inquiry.</p>'+
       '<ol class="chain">'+chainItems+'</ol>'+
       '<h3 style="font-family:var(--font-display);font-size:22px;margin:30px 0 10px">Open questions</h3>'+
       '<ul style="margin:0 0 6px;padding-left:22px;font-size:15px;line-height:1.8">'+questions+'</ul>'+
@@ -993,11 +989,11 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
         '<details class="margin-note"><summary>Why three parts and not two?</summary>'+
         '<div class="note-body">Because a sign is not a pair but a relation: the marks, what they stand for, and what they grow in the mind. Drop any corner and the other two go silent.</div></details>'+
         '<details class="margin-note"><summary>Why only ten species?</summary>'+
-        '<div class="note-body">Twenty seven combinations are possible; the admissibility rule rejects seventeen. A dependent cannot outrank what it depends on: quality under brute fact under convention.</div></details>'+
+        '<div class="note-body">Twenty seven combinations are possible; the admissibility rule rejects seventeen. The later trichotomies cannot outrank the earlier: the interpretant\'s classification depends on the object\'s, which depends on the vehicle\'s.</div></details>'+
         '<details class="margin-note"><summary>What is semiosis?</summary>'+
-        '<div class="note-body">The chaining of signs: every interpretant becomes a new sign for a further interpretant. Reading never terminates; it only converges, and the final interpretant is the limit of inquiry.</div></details>'+
+        '<div class="note-body">The chaining of signs is the early account: every interpretant becomes a new sign for a further interpretant, without fixed end. The later account is end-directed: semiosis converges on a final interpretant, and there need be no further sign. Whether the infinite chain survives in the later work is disputed.</div></details>'+
       '</div>'+
-      '<p class="provenance">Taxonomy: <a href="https://plato.stanford.edu/entries/peirce-semiotics/">SEP: Peirce\'s Theory of Signs</a> (the triad; the three trichotomies; the ten classes). Engine: surface-marker heuristics; every decision above carries its test. Build v20260916-signs3.</p>'+
+      '<p class="provenance">Taxonomy: <a href="https://plato.stanford.edu/entries/peirce-semiotics/">SEP: Peirce\'s Theory of Signs</a> (the triad; the three trichotomies; the ten classes). Engine: surface-marker heuristics; every decision above carries its test. Build v20260916-signs4.</p>'+
     '</section>';
   }
 
@@ -1005,7 +1001,11 @@ window.__signs = {analyze:analyze, CLASSES:CLASSES, STUDIES:STUDIES};
     var insp=$("inspector");
     function say(t){ if(insp) insp.textContent=t; }
     Array.prototype.forEach.call(document.querySelectorAll(".ent"), function(el){
-      function go(){ say(el.textContent+": "+el.getAttribute("data-g")); }
+      function go(){
+        var k=el.getAttribute("data-k");
+        var pre=k==="index"?"Index: ":k==="icon"?"Icon: ":"Symbol: ";
+        say(pre+el.textContent+": "+el.getAttribute("data-g"));
+      }
       el.addEventListener("click",go);
       el.addEventListener("keydown",function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); go(); } });
     });
