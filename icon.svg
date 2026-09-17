@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180">
+  <!-- Signs home-screen mark: the Peircean triad.
+       Paper #ece6d5 full bleed; ink #241f17 hairline triangle;
+       one sanguine vertex #8c3f22, two ink vertices. No text. -->
+  <rect width="180" height="180" fill="#ece6d5"/>
+  <path d="M 90 45 L 44 125 L 136 125 Z"
+        fill="none" stroke="#241f17" stroke-width="4" stroke-linejoin="miter"/>
+  <circle cx="90" cy="45" r="8" fill="#8c3f22"/>
+  <circle cx="44" cy="125" r="8" fill="#241f17"/>
+  <circle cx="136" cy="125" r="8" fill="#241f17"/>
+</svg>
