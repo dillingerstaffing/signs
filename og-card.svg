@@ -1,18 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
-  <rect width="1200" height="630" fill="#f4f1e8"/>
-  <text x="90" y="88" font-family="'Courier New', monospace" font-size="27" letter-spacing="7" fill="#7a6a2f">PEIRCE&#8217;S SEMIOTICS, AS AN INSTRUMENT</text>
-  <text x="82" y="300" font-family="Georgia, 'Times New Roman', serif" font-size="150" fill="#141311">Signs</text>
-  <line x1="92" y1="352" x2="162" y2="352" stroke="#141311" stroke-width="4"/>
-  <text x="90" y="418" font-family="Georgia, 'Times New Roman', serif" font-size="38" fill="#4a5560">Every text is a machine of signs.</text>
-  <text x="90" y="468" font-family="Georgia, 'Times New Roman', serif" font-size="38" fill="#4a5560">This instrument takes yours apart</text>
-  <text x="90" y="518" font-family="Georgia, 'Times New Roman', serif" font-size="38" fill="#4a5560">and names the class.</text>
-  <text x="90" y="572" font-family="'Courier New', monospace" font-size="25" letter-spacing="2" fill="#8a867c">dillingerstaffing.github.io/signs</text>
-  <g stroke="#1d1c18" stroke-width="8">
-    <line x1="960" y1="160" x2="810" y2="465"/>
-    <line x1="960" y1="160" x2="1110" y2="465"/>
-    <line x1="810" y1="465" x2="1110" y2="465"/>
-  </g>
-  <circle cx="960" cy="160" r="58" fill="#2f5d7d"/>
-  <circle cx="810" cy="465" r="58" fill="#a63d22"/>
-  <circle cx="1110" cy="465" r="58" fill="#6b5a1e"/>
+  <rect width="1200" height="630" fill="#ece6d5"/>
+  <rect x="24" y="24" width="1152" height="582" fill="none" stroke="#a59b87" stroke-width="2"/>
+  <text x="72" y="100" font-family="'Courier New', monospace" font-size="26" letter-spacing="7" fill="#5d574c">PEIRCE&#8217;S SEMIOTICS, AS AN INSTRUMENT</text>
+  <text x="68" y="235" font-family="Georgia, 'Times New Roman', serif" font-size="100" fill="#241f17">Signs</text>
+  <rect x="72" y="272" width="300" height="6" fill="#8c3f22"/>
+<text x="72" y="340" font-family="Georgia, 'Times New Roman', serif" font-size="34" fill="#241f17">Every text is a machine of signs.</text><text x="72" y="388" font-family="Georgia, 'Times New Roman', serif" font-size="34" fill="#241f17">This instrument takes yours apart</text><text x="72" y="436" font-family="Georgia, 'Times New Roman', serif" font-size="34" fill="#241f17">and names the class.</text>
+  <text x="72" y="562" font-family="'Courier New', monospace" font-size="24" letter-spacing="2" fill="#5d574c">dillingerstaffing.github.io/signs</text>
+  <g transform="translate(900,185) scale(1.4444)"><path d="M 90 45 L 44 125 L 136 125 Z" fill="none" stroke="#241f17" stroke-width="4" stroke-linejoin="miter"/><circle cx="90" cy="45" r="8" fill="#8c3f22"/><circle cx="44" cy="125" r="8" fill="#241f17"/><circle cx="136" cy="125" r="8" fill="#241f17"/></g>
 </svg>
